@@ -17,6 +17,7 @@ void EmptyLinkFunctionForGeneratedCodeCreature() {}
 	MYPROJECT_API UClass* Z_Construct_UClass_ACreature();
 	ENGINE_API UClass* Z_Construct_UClass_APawn();
 	UPackage* Z_Construct_UPackage__Script_MyProject();
+	ENGINE_API UClass* Z_Construct_UClass_UStaticMeshComponent_NoRegister();
 // End Cross Module References
 	void ACreature::StaticRegisterNativesACreature()
 	{
@@ -31,6 +32,11 @@ void EmptyLinkFunctionForGeneratedCodeCreature() {}
 #if WITH_METADATA
 		static const UE4CodeGen_Private::FMetaDataPairParam Class_MetaDataParams[];
 #endif
+#if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_Mesh_MetaData[];
+#endif
+		static const UE4CodeGen_Private::FObjectPropertyParams NewProp_Mesh;
+		static const UE4CodeGen_Private::FPropertyParamsBase* const PropPointers[];
 		static const FCppClassTypeInfoStatic StaticCppClassTypeInfo;
 		static const UE4CodeGen_Private::FClassParams ClassParams;
 	};
@@ -45,6 +51,17 @@ void EmptyLinkFunctionForGeneratedCodeCreature() {}
 		{ "ModuleRelativePath", "Creature.h" },
 	};
 #endif
+#if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_ACreature_Statics::NewProp_Mesh_MetaData[] = {
+		{ "Category", "Creature" },
+		{ "EditInline", "true" },
+		{ "ModuleRelativePath", "Creature.h" },
+	};
+#endif
+	const UE4CodeGen_Private::FObjectPropertyParams Z_Construct_UClass_ACreature_Statics::NewProp_Mesh = { UE4CodeGen_Private::EPropertyClass::Object, "Mesh", RF_Public|RF_Transient|RF_MarkAsNative, (EPropertyFlags)0x0040000000080009, 1, nullptr, STRUCT_OFFSET(ACreature, Mesh), Z_Construct_UClass_UStaticMeshComponent_NoRegister, METADATA_PARAMS(Z_Construct_UClass_ACreature_Statics::NewProp_Mesh_MetaData, ARRAY_COUNT(Z_Construct_UClass_ACreature_Statics::NewProp_Mesh_MetaData)) };
+	const UE4CodeGen_Private::FPropertyParamsBase* const Z_Construct_UClass_ACreature_Statics::PropPointers[] = {
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ACreature_Statics::NewProp_Mesh,
+	};
 	const FCppClassTypeInfoStatic Z_Construct_UClass_ACreature_Statics::StaticCppClassTypeInfo = {
 		TCppClassTypeTraits<ACreature>::IsAbstract,
 	};
@@ -53,7 +70,7 @@ void EmptyLinkFunctionForGeneratedCodeCreature() {}
 		DependentSingletons, ARRAY_COUNT(DependentSingletons),
 		0x009000A0u,
 		nullptr, 0,
-		nullptr, 0,
+		Z_Construct_UClass_ACreature_Statics::PropPointers, ARRAY_COUNT(Z_Construct_UClass_ACreature_Statics::PropPointers),
 		nullptr,
 		&StaticCppClassTypeInfo,
 		nullptr, 0,
@@ -68,7 +85,7 @@ void EmptyLinkFunctionForGeneratedCodeCreature() {}
 		}
 		return OuterClass;
 	}
-	IMPLEMENT_CLASS(ACreature, 1810474047);
+	IMPLEMENT_CLASS(ACreature, 2402953532);
 	static FCompiledInDefer Z_CompiledInDefer_UClass_ACreature(Z_Construct_UClass_ACreature, &ACreature::StaticClass, TEXT("/Script/MyProject"), TEXT("ACreature"), false, nullptr, nullptr, nullptr);
 	DEFINE_VTABLE_PTR_HELPER_CTOR(ACreature);
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
