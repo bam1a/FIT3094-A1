@@ -3,7 +3,7 @@
   <ItemGroup>
     <None Include="..\..\MyProject.uproject" />
     <Filter Include="Source">
-      <UniqueIdentifier>{B6573C27-A989-4764-B03C-B9B9C39D4C27}</UniqueIdentifier>
+      <UniqueIdentifier>{D0E2A26E-71F2-46D1-9B13-66A061E2BA1E}</UniqueIdentifier>
     </Filter>
     <None Include="..\..\Source\MyProject.Target.cs">
       <Filter>Source</Filter>
@@ -12,7 +12,7 @@
       <Filter>Source</Filter>
     </None>
     <Filter Include="Config">
-      <UniqueIdentifier>{C26F36A9-9A83-40EA-8465-6701237B3A11}</UniqueIdentifier>
+      <UniqueIdentifier>{E0278A82-06A2-436E-A3EB-DDF6A4456485}</UniqueIdentifier>
     </Filter>
     <None Include="..\..\Config\DefaultEditor.ini">
       <Filter>Config</Filter>
@@ -24,7 +24,7 @@
       <Filter>Config</Filter>
     </None>
     <Filter Include="Source\MyProject">
-      <UniqueIdentifier>{2376858E-B6A1-4C0E-B1E8-07548F9C5B47}</UniqueIdentifier>
+      <UniqueIdentifier>{291B8615-7626-40E8-A3D4-CBD95C198B3C}</UniqueIdentifier>
     </Filter>
     <None Include="..\..\Source\MyProject\MyProject.Build.cs">
       <Filter>Source\MyProject</Filter>
@@ -41,5 +41,21 @@
     <ClInclude Include="..\..\Source\MyProject\MyProjectGameModeBase.h">
       <Filter>Source\MyProject</Filter>
     </ClInclude>
+    <ClCompile Include="..\..\Source\MyProject\StateMachine.cpp">
+      <Filter>Source\MyProject</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\MyProject\StateMachine.h">
+      <Filter>Source\MyProject</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Source\MyProject\Creature.h">
+      <Filter>Source\MyProject</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\Source\MyProject\Creature.cpp">
+      <Filter>Source\MyProject</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
