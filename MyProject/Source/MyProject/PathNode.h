@@ -1,0 +1,62 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+#pragma once
+
+#include "CoreMinimal.h"
+#include "GameFramework/Actor.h"
+#include "PathNode.generated.h"
+
+UCLASS()
+class MYPROJECT_API APathNode : public AActor
+{
+	GENERATED_BODY()
+	
+public:	
+	// Sets default values for this actor's properties
+	APathNode();
+
+	static enum Node_Type {
+		PATH=0,
+		CORRIDOR,
+		WATER,
+		SHELTER,
+		FOOD
+	};
+
+protected:
+	//the bounding box mesh(if have)
+	UPROPERTY(EditAnywhere)
+		UStaticMeshComponent* Mesh;
+
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+	
+	//position of the node
+	FVector nPosition;
+
+	//connected path of the node(can be keep cognito if no neighbour.)
+	UPROPERTY(EditAnywhere, Category = NodeSettings)
+	TArray<APathNode*> neighbourNode;
+	
+	//valid radius of the node,set it in editor.
+	UPROPERTY(EditAnywhere, Category = NodeSettings)
+		Node_Type nNodeType;
+
+	//valid radius of the node
+	UPROPERTY(EditAnywhere, Category = NodeSettings)
+		float nValidRadius;
+
+
+public:	
+	//assessor
+	//getPosition: return a position
+	FVector GetPosition() { return nPosition; };
+	//getNeighbourNode: return neighbour nodes(in pointer form)
+	TArray<APathNode*>* GetNeighbourNode() { return &neighbourNode; };
+
+	//mutator
+
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
+
+};

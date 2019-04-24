@@ -3,6 +3,7 @@
 #pragma once
 
 #include "StateMachine.h"
+#include "PathNode.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
 #include "Creature.generated.h"
@@ -27,7 +28,7 @@ public:
 		STATE_STANDBY
 	};
 
-	enum Creature_Type {
+	static enum Creature_Type {
 		CREATURE = 0,
 		COLLECTOR,
 		HUNTER,
@@ -89,7 +90,7 @@ public:
 	//def
 	void SetDef(int inDef) { cDef = inDef; };
 	//sight
-	void SetSight(int inSight) { cSight = inSight };
+	void SetSight(int inSight) { cSight = inSight; };
 	//generation
 	void SetGen(int inGen) { cGen = inGen; };
 	//reproduction count
@@ -101,10 +102,12 @@ public:
 
 
 private:
+
+
+protected:
 	UPROPERTY(EditAnywhere)
 		UStaticMeshComponent* Mesh;
 
-protected:
 	StateMachine<Creature_State, ACreature>* m_StateMachine;
 
 

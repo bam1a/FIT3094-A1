@@ -52,9 +52,15 @@
     <ClInclude Include="..\..\Source\MyProject\Creature.h">
       <Filter>Source\MyProject</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\MyProject\PathNode.h">
+      <Filter>Source\MyProject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Source\MyProject\Creature.cpp">
+      <Filter>Source\MyProject</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\MyProject\PathNode.cpp">
       <Filter>Source\MyProject</Filter>
     </ClCompile>
   </ItemGroup>

@@ -58,7 +58,7 @@ void EmptyLinkFunctionForGeneratedCodeCreature() {}
 		{ "ModuleRelativePath", "Creature.h" },
 	};
 #endif
-	const UE4CodeGen_Private::FObjectPropertyParams Z_Construct_UClass_ACreature_Statics::NewProp_Mesh = { UE4CodeGen_Private::EPropertyClass::Object, "Mesh", RF_Public|RF_Transient|RF_MarkAsNative, (EPropertyFlags)0x0040000000080009, 1, nullptr, STRUCT_OFFSET(ACreature, Mesh), Z_Construct_UClass_UStaticMeshComponent_NoRegister, METADATA_PARAMS(Z_Construct_UClass_ACreature_Statics::NewProp_Mesh_MetaData, ARRAY_COUNT(Z_Construct_UClass_ACreature_Statics::NewProp_Mesh_MetaData)) };
+	const UE4CodeGen_Private::FObjectPropertyParams Z_Construct_UClass_ACreature_Statics::NewProp_Mesh = { UE4CodeGen_Private::EPropertyClass::Object, "Mesh", RF_Public|RF_Transient|RF_MarkAsNative, (EPropertyFlags)0x0020080000080009, 1, nullptr, STRUCT_OFFSET(ACreature, Mesh), Z_Construct_UClass_UStaticMeshComponent_NoRegister, METADATA_PARAMS(Z_Construct_UClass_ACreature_Statics::NewProp_Mesh_MetaData, ARRAY_COUNT(Z_Construct_UClass_ACreature_Statics::NewProp_Mesh_MetaData)) };
 	const UE4CodeGen_Private::FPropertyParamsBase* const Z_Construct_UClass_ACreature_Statics::PropPointers[] = {
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ACreature_Statics::NewProp_Mesh,
 	};
@@ -85,7 +85,7 @@ void EmptyLinkFunctionForGeneratedCodeCreature() {}
 		}
 		return OuterClass;
 	}
-	IMPLEMENT_CLASS(ACreature, 2402953532);
+	IMPLEMENT_CLASS(ACreature, 797669337);
 	static FCompiledInDefer Z_CompiledInDefer_UClass_ACreature(Z_Construct_UClass_ACreature, &ACreature::StaticClass, TEXT("/Script/MyProject"), TEXT("ACreature"), false, nullptr, nullptr, nullptr);
 	DEFINE_VTABLE_PTR_HELPER_CTOR(ACreature);
 PRAGMA_ENABLE_DEPRECATION_WARNINGS

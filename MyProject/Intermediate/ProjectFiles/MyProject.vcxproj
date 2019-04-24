@@ -512,7 +512,9 @@
     <ClInclude Include="..\..\Source\MyProject\MyProject.h" />
     <ClCompile Include="..\..\Source\MyProject\MyProjectGameModeBase.cpp" />
     <ClInclude Include="..\..\Source\MyProject\MyProjectGameModeBase.h" />
+    <ClCompile Include="..\..\Source\MyProject\PathNode.cpp" />
     <ClCompile Include="..\..\Source\MyProject\StateMachine.cpp" />
+    <ClInclude Include="..\..\Source\MyProject\PathNode.h" />
     <ClInclude Include="..\..\Source\MyProject\StateMachine.h" />
   </ItemGroup>
   <PropertyGroup>
