@@ -7,7 +7,6 @@
 #include "CoreMinimal.h"
 #include "ConstructorHelpers.h"
 #include <EngineGlobals.h>
-#include <cmath>
 #include "GameFramework/Pawn.h"
 #include "Creature.generated.h"
 
@@ -80,7 +79,7 @@ public:
 	//position
 	FVector GetPos() { return cPosition; };
 	//last state
-	Creature_State GetLastState(){ return cLastState; };
+	Creature_State GetLastState() { return cLastState; };
 
 	//mutator:
 	//current state
@@ -88,7 +87,7 @@ public:
 		m_StateMachine->ChangeState(state);
 	}
 	//speed
-	void SetSpeed(float inSpeed) { cSpeed=inSpeed; };
+	void SetSpeed(float inSpeed) { cSpeed = inSpeed; };
 	//Power
 	void SetPower(int inPower) { cPower = inPower; };
 	//HP
@@ -110,7 +109,6 @@ public:
 
 
 private:
-
 
 protected:
 	UPROPERTY(EditAnywhere)
@@ -188,8 +186,8 @@ protected:
 	void State_Standby_OnExit(void);
 
 	//other functions
-	bool checkPosValid(FVector checkPos);
 	FVector genRandomLocation(FVector initPos, float inRange);
 	void move(float DeltaTime, bool isDash);
+	bool checkPosValid(FVector checkPos, float sweepArea);
 
 };

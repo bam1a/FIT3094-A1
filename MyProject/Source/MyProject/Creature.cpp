@@ -1,6 +1,12 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Creature.h"
+#include "Wall.h"
+#include "ConstructorHelpers.h"
+#include <EngineGlobals.h>
+#include "DrawDebugHelpers.h"
+#include "Engine/GameEngine.h"
+
 
 // Sets default values
 ACreature::ACreature()
@@ -152,43 +158,56 @@ void ACreature::stateRegister()
 }
 
 void ACreature::State_Wander_OnEnter(void) {
-//generate a target location
-cTargetPosition = genRandomLocation(FVector::ZeroVector, 2000.f);
+	//generate a target location
+	cTargetPosition = genRandomLocation(FVector::ZeroVector, 2000.f);
 
 }
-void ACreature::State_Wander_OnTick(float f_DeltaTime){
+void ACreature::State_Wander_OnTick(float f_DeltaTime) {
 	//if creature arrive nearby the location, change another random location
 	//maybe also if the path array length is not zero, and the index is the last node, will be find a new path
 	FVector vectorToTarget = cTargetPosition - cPosition;
-	
-	if (FVector::Distance(cTargetPosition,cPosition)<100.f) {
-		cTargetPosition = genRandomLocation(FVector::ZeroVector,2000.f);
+
+	if (FVector::Distance(cTargetPosition, cPosition)<100.f) {
+		cTargetPosition = genRandomLocation(FVector::ZeroVector, 2000.f);
 	}
 
-//and let the actor let it move
-	move(f_DeltaTime, true);
+	//and let the actor move
+	move(f_DeltaTime, false);
 }
-void ACreature::State_Wander_OnExit(void){ SetLastState(m_StateMachine->GetCurrentState()); }
+void ACreature::State_Wander_OnExit(void) { SetLastState(m_StateMachine->GetCurrentState()); }
 
-void ACreature::State_Flee_OnEnter(void){}
-void ACreature::State_Flee_OnTick(float f_DeltaTime){}
-void ACreature::State_Flee_OnExit(void){ SetLastState(m_StateMachine->GetCurrentState()); }
+void ACreature::State_Flee_OnEnter(void) {}
+void ACreature::State_Flee_OnTick(float f_DeltaTime) {
+	//if the target is less than its sight's twice or it's not die, keep fleeing
+	if (FVector::Distance(cTargetCreature->GetPos(), cPosition)>(cSight * 2) || cTargetCreature != nullptr) {
+		//get the target's position and get the fleeing direction
+		cTargetPosition = cPosition - cTargetCreature->GetPos();
+		//and let the actor move
+		move(f_DeltaTime, true);
+	}
+	//otherwise get back to wandering mode.
+	m_StateMachine->ChangeState(STATE_WANDER);
 
-void ACreature::State_Spawn_OnEnter(void){}
-void ACreature::State_Spawn_OnTick(float f_DeltaTime){}
-void ACreature::State_Spawn_OnExit(void){ SetLastState(m_StateMachine->GetCurrentState()); }
+}
+void ACreature::State_Flee_OnExit(void) { SetLastState(m_StateMachine->GetCurrentState()); }
 
-void ACreature::State_Die_OnEnter(void){}
-void ACreature::State_Die_OnTick(float f_DeltaTime){
+void ACreature::State_Spawn_OnEnter(void) {}
+//generate a new same creature with a slightly different status based on parent status.
+//do it in different creature types.
+void ACreature::State_Spawn_OnTick(float f_DeltaTime) {}
+void ACreature::State_Spawn_OnExit(void) { SetLastState(m_StateMachine->GetCurrentState()); }
+
+void ACreature::State_Die_OnEnter(void) {}
+void ACreature::State_Die_OnTick(float f_DeltaTime) {
 	Destroy();
 }
-void ACreature::State_Die_OnExit(void){ SetLastState(m_StateMachine->GetCurrentState()); }
+void ACreature::State_Die_OnExit(void) { SetLastState(m_StateMachine->GetCurrentState()); }
 
-void ACreature::State_Hit_OnEnter(void){
+void ACreature::State_Hit_OnEnter(void) {
 	//reset the timer
 	cTimer = 0.f;
 }
-void ACreature::State_Hit_OnTick(float f_DeltaTime){
+void ACreature::State_Hit_OnTick(float f_DeltaTime) {
 	//set the lag time be 3s
 	cTime = 3.f;
 	//if time's up, change the status back to normal(might be overloaded when needed.
@@ -199,8 +218,8 @@ void ACreature::State_Hit_OnTick(float f_DeltaTime){
 		cTimer += f_DeltaTime;
 	}
 }
-void ACreature::State_Hit_OnExit(void){ SetLastState(m_StateMachine->GetCurrentState()); }
+void ACreature::State_Hit_OnExit(void) { SetLastState(m_StateMachine->GetCurrentState()); }
 
-void ACreature::State_Standby_OnEnter(void){}
-void ACreature::State_Standby_OnTick(float f_DeltaTime){}//this function is mainly used for hider for keep staying it in place and do some operation in some cond.
-void ACreature::State_Standby_OnExit(void){ SetLastState(m_StateMachine->GetCurrentState()); }
+void ACreature::State_Standby_OnEnter(void) {}
+void ACreature::State_Standby_OnTick(float f_DeltaTime) {}//this function is mainly used for hider for keep staying it in place and do some operation in some cond.
+void ACreature::State_Standby_OnExit(void) { SetLastState(m_StateMachine->GetCurrentState()); }
