@@ -43,7 +43,7 @@ public:
 	//initialize without parameters?
 	void initialize();
 	//initialize with parameters
-	void initialize(float inSpeed, float inSize, int inPower, int inDef, int inHP, float inSight);
+	void initialize(float inSpeed, float inSize, int inPower, int inDef, int inHP, float inSight, FVector inPos);
 
 protected:
 	// Called when the game starts or when spawned
@@ -108,8 +108,6 @@ public:
 	//last state
 	void SetLastState(Creature_State inState) { cLastState = inState; };
 
-	FVector genRandomLocation();
-	void move(float DeltaTime, bool isDash);
 
 private:
 
@@ -145,16 +143,18 @@ protected:
 	cPosition: current position(actually can replaced by GetActorByLocation but just in case.
 	cVelocity: the velocity vector of the creature
 	cLastState: last state
-	cFleeTarget: the fleeing target
+	cTargetCreature: the fleeing/attacking target
+	cTimer: the increment timer for different kind of use(eg: hit lag, etc.), 1 second=1.0f.
+	cTime: the target time of the timer
 	*/
-	float cSpeed, cSize, cSight;
+	float cSpeed, cSize, cSight, cTimer, cTime;
 	int cPower, cHP, cDef, cGen, cReproCount;
 
 	FVector cPosition, cTargetPosition, cLastPosition, cVelocity;
 	Creature_State cLastState;
+	ACreature* cTargetCreature;
 	//TArray<Node> cPathNode;
 	//int cTargetNodeID;
-	//FVector cFleeTarget
 	/////////////////////////////////////////////////////////////////////////////////////////
 	//state machine's state events
 
@@ -187,5 +187,9 @@ protected:
 	void State_Standby_OnTick(float f_DeltaTime);
 	void State_Standby_OnExit(void);
 
+	//other functions
 	bool checkPosValid(FVector checkPos);
+	FVector genRandomLocation(FVector initPos, float inRange);
+	void move(float DeltaTime, bool isDash);
+
 };

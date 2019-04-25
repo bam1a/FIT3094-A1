@@ -46,7 +46,7 @@ void ACreature::initialize()
 
 }
 
-void ACreature::initialize(float inSpeed, float inSize, int inPower, int inDef, int inHP, float inSight)
+void ACreature::initialize(float inSpeed, float inSize, int inPower, int inDef, int inHP, float inSight, FVector inPos)
 {
 	cSpeed = inSpeed;
 	cSize = inSize;
@@ -55,9 +55,17 @@ void ACreature::initialize(float inSpeed, float inSize, int inPower, int inDef, 
 	cHP = inHP;
 	cSight = inSight;
 
+	SetActorLocation(inPos);
+	cPosition = GetActorLocation();
+	//set position (last position should be same in this moment)
+	cLastPosition = cPosition;
+
 	//StateMachine setup and register
 	//do it in new function as it'll be inherited by others
 	stateRegister();
+
+	//set default state
+	m_StateMachine->ChangeState(STATE_WANDER);
 
 
 }
@@ -96,11 +104,11 @@ void ACreature::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 }
 
-FVector ACreature::genRandomLocation()
+FVector ACreature::genRandomLocation(FVector initPos, float inRange)
 {
 	FVector outVector;
-	outVector.X = FMath::FRandRange(-2000, 2000);
-	outVector.Y = FMath::FRandRange(-2000, 2000);
+	outVector.X = initPos.X + FMath::FRandRange((inRange*-1.f), inRange);
+	outVector.Y = initPos.Y + FMath::FRandRange((inRange*-1.f), inRange);
 	outVector.Z = 0.f;
 	//check if the location is valid, if not do it until it's valid<--maybe in a new function?
 	return outVector;
@@ -145,7 +153,7 @@ void ACreature::stateRegister()
 
 void ACreature::State_Wander_OnEnter(void) {
 //generate a target location
-cTargetPosition = genRandomLocation();
+cTargetPosition = genRandomLocation(FVector::ZeroVector, 2000.f);
 
 }
 void ACreature::State_Wander_OnTick(float f_DeltaTime){
@@ -154,7 +162,7 @@ void ACreature::State_Wander_OnTick(float f_DeltaTime){
 	FVector vectorToTarget = cTargetPosition - cPosition;
 	
 	if (FVector::Distance(cTargetPosition,cPosition)<100.f) {
-		cTargetPosition = genRandomLocation();
+		cTargetPosition = genRandomLocation(FVector::ZeroVector,2000.f);
 	}
 
 //and let the actor let it move
@@ -171,13 +179,28 @@ void ACreature::State_Spawn_OnTick(float f_DeltaTime){}
 void ACreature::State_Spawn_OnExit(void){ SetLastState(m_StateMachine->GetCurrentState()); }
 
 void ACreature::State_Die_OnEnter(void){}
-void ACreature::State_Die_OnTick(float f_DeltaTime){}
+void ACreature::State_Die_OnTick(float f_DeltaTime){
+	Destroy();
+}
 void ACreature::State_Die_OnExit(void){ SetLastState(m_StateMachine->GetCurrentState()); }
 
-void ACreature::State_Hit_OnEnter(void){}
-void ACreature::State_Hit_OnTick(float f_DeltaTime){}
+void ACreature::State_Hit_OnEnter(void){
+	//reset the timer
+	cTimer = 0.f;
+}
+void ACreature::State_Hit_OnTick(float f_DeltaTime){
+	//set the lag time be 3s
+	cTime = 3.f;
+	//if time's up, change the status back to normal(might be overloaded when needed.
+	if (cTimer >= cTime) {
+		m_StateMachine->ChangeState(cLastState);
+	}
+	else {
+		cTimer += f_DeltaTime;
+	}
+}
 void ACreature::State_Hit_OnExit(void){ SetLastState(m_StateMachine->GetCurrentState()); }
 
 void ACreature::State_Standby_OnEnter(void){}
-void ACreature::State_Standby_OnTick(float f_DeltaTime){}
+void ACreature::State_Standby_OnTick(float f_DeltaTime){}//this function is mainly used for hider for keep staying it in place and do some operation in some cond.
 void ACreature::State_Standby_OnExit(void){ SetLastState(m_StateMachine->GetCurrentState()); }
