@@ -186,7 +186,7 @@ protected:
 	void State_Standby_OnExit(void);
 
 	//other functions
-	FVector genRandomLocation(FVector initPos, float inRange);
+	FVector genRandomLocation(FVector initPos, float inRange, bool isNeedValidCheck=false, float inCheckRange=1.f);
 	void move(float DeltaTime, bool isDash);
 	bool checkPosValid(FVector checkPos, float sweepArea);
 

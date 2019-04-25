@@ -110,13 +110,22 @@ void ACreature::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 }
 
-FVector ACreature::genRandomLocation(FVector initPos, float inRange)
+FVector ACreature::genRandomLocation(FVector initPos, float inRange, bool isNeedValidCheck, float inCheckRange)
 {
 	FVector outVector;
 	outVector.X = initPos.X + FMath::FRandRange((inRange*-1.f), inRange);
 	outVector.Y = initPos.Y + FMath::FRandRange((inRange*-1.f), inRange);
 	outVector.Z = 0.f;
+
 	//check if the location is valid, if not do it until it's valid<--maybe in a new function?
+	//condition to do: the valid check switch is label as true
+	if (isNeedValidCheck) {
+		while (!checkPosValid(initPos, inCheckRange)) {
+			outVector.X = initPos.X + FMath::FRandRange((inRange*-1.f), inRange);
+			outVector.Y = initPos.Y + FMath::FRandRange((inRange*-1.f), inRange);
+			outVector.Z = 0.f;
+		}
+	}
 	return outVector;
 }
 
@@ -149,11 +158,12 @@ bool ACreature::checkPosValid(FVector checkPos, float sweepArea)
 	FCollisionShape CheckSphere = FCollisionShape::MakeSphere(sweepArea);
 
 	//perform a“SweepMultiByChannel”which creates a shape based onthe last parameter, located at the position in the 2nd/3rd parameter.2nd/3rd parameter are the start and end points of a“Sweep”of the shape.
-	//Anyobjects that overlap are then stored in the first parameter(our TArray)
+	//Any objects that overlap are then stored in the first parameter(our TArray)
 	bool isHit = GetWorld()->SweepMultiByChannel(OutHits, location, location, FQuat::Identity, ECC_WorldStatic, CheckSphere);
 
 	if (isHit) {
-		//loop throughall our objects(autocasting them),get their mesh component and then if that was successful, apply a force to that object. The force has a start, size, amount, falloff anda booleanchecking if to NOT use mass.
+		//loop throughall our objects(autocasting them),get their mesh component and then if that was successful, apply a force to that object. 
+		//The force has a start, size, amount, falloff and a boolean checking if to NOT use mass.
 		for (auto& Hit : OutHits) {
 			//if it has a wall, or a creature, or a food pallet, return false
 			AWall* wall = Cast<AWall>((Hit.GetActor()));
@@ -194,7 +204,7 @@ void ACreature::stateRegister()
 
 void ACreature::State_Wander_OnEnter(void) {
 	//generate a target location
-	cTargetPosition = genRandomLocation(FVector::ZeroVector, 2000.f);
+	cTargetPosition = genRandomLocation(FVector::ZeroVector, 2000.f,true,cSize);
 
 }
 void ACreature::State_Wander_OnTick(float f_DeltaTime) {
@@ -202,8 +212,8 @@ void ACreature::State_Wander_OnTick(float f_DeltaTime) {
 	//maybe also if the path array length is not zero, and the index is the last node, will be find a new path
 	FVector vectorToTarget = cTargetPosition - cPosition;
 
-	if (FVector::Distance(cTargetPosition, cPosition)<100.f) {
-		cTargetPosition = genRandomLocation(FVector::ZeroVector, 2000.f);
+	if (FVector::Distance(cTargetPosition, cPosition) < cSize) {
+		cTargetPosition = genRandomLocation(FVector::ZeroVector, 2000.f, true, cSize);
 	}
 
 	//and let the actor move
