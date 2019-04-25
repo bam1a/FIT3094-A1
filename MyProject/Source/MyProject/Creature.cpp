@@ -138,6 +138,41 @@ void ACreature::move(float DeltaTime, bool isDash)
 
 }
 
+bool ACreature::checkPosValid(FVector checkPos, float sweepArea)
+{
+	//sweep the position according to the sweeping area
+
+	//array of“FHitResult”that is going to store all the objects our hit detection registers
+	TArray<FHitResult>OutHits;
+	//get our locationandcreate a sphere collider.
+	FVector location = checkPos;
+	FCollisionShape CheckSphere = FCollisionShape::MakeSphere(sweepArea);
+
+	//perform a“SweepMultiByChannel”which creates a shape based onthe last parameter, located at the position in the 2nd/3rd parameter.2nd/3rd parameter are the start and end points of a“Sweep”of the shape.
+	//Anyobjects that overlap are then stored in the first parameter(our TArray)
+	bool isHit = GetWorld()->SweepMultiByChannel(OutHits, location, location, FQuat::Identity, ECC_WorldStatic, CheckSphere);
+
+	if (isHit) {
+		//loop throughall our objects(autocasting them),get their mesh component and then if that was successful, apply a force to that object. The force has a start, size, amount, falloff anda booleanchecking if to NOT use mass.
+		for (auto& Hit : OutHits) {
+			//if it has a wall, or a creature, or a food pallet, return false
+			AWall* wall = Cast<AWall>((Hit.GetActor()));
+			if (wall) {
+				return false;
+			}
+			ACreature* creature = Cast<ACreature>((Hit.GetActor()));
+			if (creature) {
+				return false;
+			}
+		}
+	}
+	else {
+		return true;
+
+	}
+	return true;
+}
+
 void ACreature::stateRegister()
 {
 	m_StateMachine = new StateMachine<Creature_State, ACreature>(this, STATE_DO_NOTHING);
