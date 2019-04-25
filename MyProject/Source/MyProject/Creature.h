@@ -5,6 +5,9 @@
 #include "StateMachine.h"
 #include "PathNode.h"
 #include "CoreMinimal.h"
+#include "ConstructorHelpers.h"
+#include <EngineGlobals.h>
+#include <cmath>
 #include "GameFramework/Pawn.h"
 #include "Creature.generated.h"
 
@@ -35,7 +38,12 @@ public:
 		HIDER
 	};
 
+	//create a blank creature without anything started
 	ACreature();
+	//initialize without parameters?
+	void initialize();
+	//initialize with parameters
+	void initialize(float inSpeed, float inSize, int inPower, int inDef, int inHP, float inSight);
 
 protected:
 	// Called when the game starts or when spawned
@@ -100,6 +108,8 @@ public:
 	//last state
 	void SetLastState(Creature_State inState) { cLastState = inState; };
 
+	FVector genRandomLocation();
+	void move(float DeltaTime, bool isDash);
 
 private:
 
@@ -119,10 +129,10 @@ protected:
 	//parameters
 	/*
 	core parameters:
-	cSpeed: creature speed, (Affects movement speed positively
+	cSpeed: creature speed, (Affects movement speed positively)
 	cPower: attacking power
 	cHP:heart point
-	cSize: size (Affects movement speed negatively)
+	cSize: size (Affects movement speed negatively[friction?] + the size radius of itself.)
 	cDef: natural defences
 	cSight: range of sight
 
@@ -133,18 +143,19 @@ protected:
 	cTargetNodeID: the node in the pathNode array will be going to
 	cTargetPosition: the position targeting at
 	cPosition: current position(actually can replaced by GetActorByLocation but just in case.
+	cVelocity: the velocity vector of the creature
 	cLastState: last state
 	cFleeTarget: the fleeing target
 	*/
 	float cSpeed, cSize, cSight;
 	int cPower, cHP, cDef, cGen, cReproCount;
-	FVector cPosition;
+
+	FVector cPosition, cTargetPosition, cLastPosition, cVelocity;
 	Creature_State cLastState;
 	//TArray<Node> cPathNode;
 	//int cTargetNodeID;
-	//FVector cTargetPosition;
 	//FVector cFleeTarget
-
+	/////////////////////////////////////////////////////////////////////////////////////////
 	//state machine's state events
 
 	//STATE_DO_NOTHING:doing nothing
@@ -176,5 +187,5 @@ protected:
 	void State_Standby_OnTick(float f_DeltaTime);
 	void State_Standby_OnExit(void);
 
-
+	bool checkPosValid(FVector checkPos);
 };

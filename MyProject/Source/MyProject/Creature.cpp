@@ -11,13 +11,49 @@ ACreature::ACreature()
 	//we want our RootComponent to be the mesh(We will be applying physics to it)
 	RootComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("RootComponent"));
 	//get the shape of our Enemy from within the starter content folder
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> Wedge(TEXT("/game/StarterContent/Shapes/Shape_Wedge_A.Shape_Wedge_A"));
-
+	//static ConstructorHelpers::FObjectFinder<UStaticMesh> Wedge(TEXT("/game/StarterContent/Shapes/Shape_Wedge_A.Shape_Wedge_A"));
 	//andset our Mesh property to reference the RootComponent
 	Mesh = Cast<UStaticMeshComponent>(RootComponent);
+
 	//set our shape as the static mesh, and turn our Physics on.
-	Mesh->SetStaticMesh(Wedge.Object);
+	//Mesh->SetStaticMesh(Wedge.Object);
 	Mesh->SetSimulatePhysics(true);
+
+	initialize();
+
+
+}
+
+void ACreature::initialize()
+{
+	cSpeed = 10.f;
+	cSize = 10.f;
+	cPower = 10;
+	cDef = 10;
+	cHP = 10;
+	cSight = 10.f;
+
+	cPosition = GetActorLocation();
+	//set position (last position should be same in this moment)
+	cLastPosition = cPosition;
+
+	//StateMachine setup and register
+	//do it in new function as it'll be inherited by others
+	stateRegister();
+
+	//set default state
+	m_StateMachine->ChangeState(STATE_WANDER);
+
+}
+
+void ACreature::initialize(float inSpeed, float inSize, int inPower, int inDef, int inHP, float inSight)
+{
+	cSpeed = inSpeed;
+	cSize = inSize;
+	cPower = inPower;
+	cDef = inDef;
+	cHP = inHP;
+	cSight = inSight;
 
 	//StateMachine setup and register
 	//do it in new function as it'll be inherited by others
@@ -38,6 +74,17 @@ void ACreature::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	//get the velocity by checking the last and current position
+	cVelocity = cPosition - cLastPosition;
+	cVelocity = cVelocity / DeltaTime;
+	//as it's a 2d plane, force the velocity of z axis only be 0.
+	cVelocity.Z = 0.f;
+
+	//update the position and last position parameter
+	cLastPosition = cPosition;
+	cPosition = GetActorLocation();
+
+	//do the state machine tick operations
 	m_StateMachine->Tick(DeltaTime);
 
 
@@ -47,6 +94,33 @@ void ACreature::Tick(float DeltaTime)
 void ACreature::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
+}
+
+FVector ACreature::genRandomLocation()
+{
+	FVector outVector;
+	outVector.X = FMath::FRandRange(-2000, 2000);
+	outVector.Y = FMath::FRandRange(-2000, 2000);
+	outVector.Z = 0.f;
+	//check if the location is valid, if not do it until it's valid<--maybe in a new function?
+	return outVector;
+}
+
+void ACreature::move(float DeltaTime, bool isDash)
+{
+
+	float finalSpeed = cSpeed / cSize * 200.f;
+	//if it's dashing, the speed will be twiced
+	if (isDash) {
+		finalSpeed *= 2.f;
+	}
+
+	//set the location
+		//if there's has the route, run by each node
+	SetActorLocation(FMath::VInterpConstantTo(cPosition, cTargetPosition, DeltaTime, finalSpeed));
+	
+	//set the rotation
+	SetActorRotation(cVelocity.Rotation());
 
 }
 
@@ -66,13 +140,26 @@ void ACreature::stateRegister()
 	//	STATE_STANDBY
 	m_StateMachine->RegisterState(STATE_STANDBY, &ACreature::State_Standby_OnEnter, &ACreature::State_Standby_OnTick, &ACreature::State_Standby_OnExit);
 
-	//set default state
-//	m_StateMachine->ChangeState(STATE_STANDBY);
 
 }
 
-void ACreature::State_Wander_OnEnter(void) {}
-void ACreature::State_Wander_OnTick(float f_DeltaTime){}
+void ACreature::State_Wander_OnEnter(void) {
+//generate a target location
+cTargetPosition = genRandomLocation();
+
+}
+void ACreature::State_Wander_OnTick(float f_DeltaTime){
+	//if creature arrive nearby the location, change another random location
+	//maybe also if the path array length is not zero, and the index is the last node, will be find a new path
+	FVector vectorToTarget = cTargetPosition - cPosition;
+	
+	if (FVector::Distance(cTargetPosition,cPosition)<100.f) {
+		cTargetPosition = genRandomLocation();
+	}
+
+//and let the actor let it move
+	move(f_DeltaTime, true);
+}
 void ACreature::State_Wander_OnExit(void){ SetLastState(m_StateMachine->GetCurrentState()); }
 
 void ACreature::State_Flee_OnEnter(void){}

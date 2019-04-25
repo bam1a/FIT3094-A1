@@ -23,6 +23,8 @@ public:
 		FOOD
 	};
 
+	static TArray<APathNode*> NodeList;
+
 protected:
 	//the bounding box mesh(if have)
 	UPROPERTY(EditAnywhere)
@@ -38,15 +40,16 @@ protected:
 	UPROPERTY(EditAnywhere, Category = NodeSettings)
 	TArray<APathNode*> neighbourNode;
 	
-	//valid radius of the node,set it in editor.
-	UPROPERTY(EditAnywhere, Category = NodeSettings)
-		Node_Type nNodeType;
+	//valid radius of the node,set it in editor?
+	//UENUM(BlueprintType)
+	//UPROPERTY(EditAnywhere, Category = NodeSettings)
+	Node_Type nNodeType;
 
-	//valid radius of the node
-	UPROPERTY(EditAnywhere, Category = NodeSettings)
-		float nValidRadius;
+	//reaching radius of the node
+	//UPROPERTY(EditAnywhere, Category = NodeSettings)
+		//float nReachDistance;
 
-
+	
 public:	
 	//assessor
 	//getPosition: return a position

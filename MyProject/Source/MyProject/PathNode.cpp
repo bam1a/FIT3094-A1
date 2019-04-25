@@ -14,6 +14,9 @@ APathNode::APathNode()
 	Mesh = Cast<UStaticMeshComponent>(RootComponent);
 
 	nPosition = GetActorLocation();
+	nNodeType = PATH;
+
+	APathNode::NodeList.Push(this);
 
 }
 
@@ -29,5 +32,7 @@ void APathNode::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+
 }
+TArray<APathNode*> APathNode::NodeList;
 

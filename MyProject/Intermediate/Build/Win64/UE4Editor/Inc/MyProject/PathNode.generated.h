@@ -59,8 +59,7 @@ DEFINE_VTABLE_PTR_HELPER_CTOR_CALLER(APathNode); \
 
 #define MyProject_Source_MyProject_PathNode_h_12_PRIVATE_PROPERTY_OFFSET \
 	FORCEINLINE static uint32 __PPO__Mesh() { return STRUCT_OFFSET(APathNode, Mesh); } \
-	FORCEINLINE static uint32 __PPO__neighbourNode() { return STRUCT_OFFSET(APathNode, neighbourNode); } \
-	FORCEINLINE static uint32 __PPO__nValidRadius() { return STRUCT_OFFSET(APathNode, nValidRadius); }
+	FORCEINLINE static uint32 __PPO__neighbourNode() { return STRUCT_OFFSET(APathNode, neighbourNode); }
 
 
 #define MyProject_Source_MyProject_PathNode_h_9_PROLOG
