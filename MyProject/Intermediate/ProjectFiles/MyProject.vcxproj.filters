@@ -60,4 +60,20 @@
       <Filter>Source\MyProject</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Source\MyProject\Gatherer.h">
+      <Filter>Source\MyProject</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\MyProject\Pathfinder.h">
+      <Filter>Source\MyProject</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\Source\MyProject\Gatherer.cpp">
+      <Filter>Source\MyProject</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\MyProject\Pathfinder.cpp">
+      <Filter>Source\MyProject</Filter>
+    </ClCompile>
+  </ItemGroup>
 </Project>

@@ -35,7 +35,6 @@
 "D:\Github\FIT3094 A1\MyProject\Intermediate\Build\Win64\UE4Editor\Development\MyProject\Gatherer.cpp.obj"
 "D:\Github\FIT3094 A1\MyProject\Intermediate\Build\Win64\UE4Editor\Development\MyProject\MyProject.cpp.obj"
 "D:\Github\FIT3094 A1\MyProject\Intermediate\Build\Win64\UE4Editor\Development\MyProject\MyProjectGameModeBase.cpp.obj"
-"D:\Github\FIT3094 A1\MyProject\Intermediate\Build\Win64\UE4Editor\Development\MyProject\Pathfinder.cpp.obj"
 "D:\Github\FIT3094 A1\MyProject\Intermediate\Build\Win64\UE4Editor\Development\MyProject\PathNode.cpp.obj"
 "D:\Github\FIT3094 A1\MyProject\Intermediate\Build\Win64\UE4Editor\Development\MyProject\StateMachine.cpp.obj"
 "D:\Github\FIT3094 A1\MyProject\Intermediate\Build\Win64\UE4Editor\Development\MyProject\Wall.cpp.obj"
@@ -74,7 +73,7 @@
 "C:\Program Files\Epic Games\UE_4.21\Engine\Intermediate\Build\Win64\UE4Editor\Development\Core\UE4Editor-Core.lib"
 "C:\Program Files\Epic Games\UE_4.21\Engine\Intermediate\Build\Win64\UE4Editor\Development\CoreUObject\UE4Editor-CoreUObject.lib"
 "C:\Program Files\Epic Games\UE_4.21\Engine\Intermediate\Build\Win64\UE4Editor\Development\InputCore\UE4Editor-InputCore.lib"
-/OUT:"D:\Github\FIT3094 A1\MyProject\Binaries\Win64\UE4Editor-MyProject-3377.dll"
-/IMPLIB:"D:\Github\FIT3094 A1\MyProject\Intermediate\Build\Win64\UE4Editor\Development\MyProject\UE4Editor-MyProject-3377.suppressed.lib"
-/PDB:"D:\Github\FIT3094 A1\MyProject\Binaries\Win64\UE4Editor-MyProject-3377.pdb"
+/OUT:"D:\Github\FIT3094 A1\MyProject\Binaries\Win64\UE4Editor-MyProject-95.dll"
+/IMPLIB:"D:\Github\FIT3094 A1\MyProject\Intermediate\Build\Win64\UE4Editor\Development\MyProject\UE4Editor-MyProject-95.suppressed.lib"
+/PDB:"D:\Github\FIT3094 A1\MyProject\Binaries\Win64\UE4Editor-MyProject-95.pdb"
 /ignore:4078

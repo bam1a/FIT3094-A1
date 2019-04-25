@@ -45,7 +45,7 @@ protected:
 	//UPROPERTY(EditAnywhere, Category = NodeSettings)
 	Node_Type nNodeType;
 
-	//reaching radius of the node
+	//reaching radius of the node<--no need?
 	//UPROPERTY(EditAnywhere, Category = NodeSettings)
 		//float nReachDistance;
 
@@ -57,7 +57,7 @@ public:
 	//getNeighbourNode: return neighbour nodes(in pointer form)
 	TArray<APathNode*>* GetNeighbourNode() { return &neighbourNode; };
 
-	//mutator
+	//mutator----read only, doesn't need?
 
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

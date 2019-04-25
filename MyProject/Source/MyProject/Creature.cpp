@@ -237,14 +237,17 @@ void ACreature::State_Flee_OnTick(float f_DeltaTime) {
 void ACreature::State_Flee_OnExit(void) { SetLastState(m_StateMachine->GetCurrentState()); }
 
 void ACreature::State_Spawn_OnEnter(void) {}
-//generate a new same creature with a slightly different status based on parent status.
-//do it in different creature types.
-void ACreature::State_Spawn_OnTick(float f_DeltaTime) {}
+void ACreature::State_Spawn_OnTick(float f_DeltaTime) {
+	//generate a new same creature with a slightly different status based on parent status.
+	//do it after different creature types created.
+	//debug msg for spawned.
+}
 void ACreature::State_Spawn_OnExit(void) { SetLastState(m_StateMachine->GetCurrentState()); }
 
 void ACreature::State_Die_OnEnter(void) {}
 void ACreature::State_Die_OnTick(float f_DeltaTime) {
 	Destroy();
+	//debug msg for destoryed
 }
 void ACreature::State_Die_OnExit(void) { SetLastState(m_StateMachine->GetCurrentState()); }
 

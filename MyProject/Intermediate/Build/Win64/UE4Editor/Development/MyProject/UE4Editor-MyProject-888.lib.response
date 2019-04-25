@@ -3,7 +3,7 @@
 /MACHINE:x64
 /SUBSYSTEM:WINDOWS
 /DEF
-/NAME:"UE4Editor-MyProject-3377.dll"
+/NAME:"UE4Editor-MyProject-888.dll"
 /IGNORE:4221
 /NODEFAULTLIB
 "D:\Github\FIT3094 A1\MyProject\Intermediate\Build\Win64\MyProjectEditor\Development\Engine\SharedPCH.Engine.h.obj"
@@ -22,4 +22,4 @@
 "D:\Github\FIT3094 A1\MyProject\Intermediate\Build\Win64\UE4Editor\Development\MyProject\PathNode.gen.cpp.obj"
 "D:\Github\FIT3094 A1\MyProject\Intermediate\Build\Win64\UE4Editor\Development\MyProject\Wall.gen.cpp.obj"
 "D:\Github\FIT3094 A1\MyProject\Intermediate\Build\Win64\UE4Editor\Development\MyProject\PCLaunch.rc.res"
-/OUT:"D:\Github\FIT3094 A1\MyProject\Intermediate\Build\Win64\UE4Editor\Development\MyProject\UE4Editor-MyProject-3377.lib"
+/OUT:"D:\Github\FIT3094 A1\MyProject\Intermediate\Build\Win64\UE4Editor\Development\MyProject\UE4Editor-MyProject-888.lib"
