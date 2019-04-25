@@ -3,7 +3,7 @@
   <ItemGroup>
     <None Include="..\..\MyProject.uproject" />
     <Filter Include="Source">
-      <UniqueIdentifier>{D0E2A26E-71F2-46D1-9B13-66A061E2BA1E}</UniqueIdentifier>
+      <UniqueIdentifier>{74304A3A-44D9-4466-A48A-80A9BBE46928}</UniqueIdentifier>
     </Filter>
     <None Include="..\..\Source\MyProject.Target.cs">
       <Filter>Source</Filter>
@@ -12,7 +12,7 @@
       <Filter>Source</Filter>
     </None>
     <Filter Include="Config">
-      <UniqueIdentifier>{E0278A82-06A2-436E-A3EB-DDF6A4456485}</UniqueIdentifier>
+      <UniqueIdentifier>{C9EF57E9-96E6-435B-8187-138F8D5F519F}</UniqueIdentifier>
     </Filter>
     <None Include="..\..\Config\DefaultEditor.ini">
       <Filter>Config</Filter>
@@ -24,8 +24,14 @@
       <Filter>Config</Filter>
     </None>
     <Filter Include="Source\MyProject">
-      <UniqueIdentifier>{291B8615-7626-40E8-A3D4-CBD95C198B3C}</UniqueIdentifier>
+      <UniqueIdentifier>{738C19DF-B660-43EE-AD29-D38B0AF7B05F}</UniqueIdentifier>
     </Filter>
+    <ClCompile Include="..\..\Source\MyProject\Creature.cpp">
+      <Filter>Source\MyProject</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\MyProject\Creature.h">
+      <Filter>Source\MyProject</Filter>
+    </ClInclude>
     <None Include="..\..\Source\MyProject\MyProject.Build.cs">
       <Filter>Source\MyProject</Filter>
     </None>
@@ -41,27 +47,17 @@
     <ClInclude Include="..\..\Source\MyProject\MyProjectGameModeBase.h">
       <Filter>Source\MyProject</Filter>
     </ClInclude>
+    <ClCompile Include="..\..\Source\MyProject\PathNode.cpp">
+      <Filter>Source\MyProject</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\MyProject\PathNode.h">
+      <Filter>Source\MyProject</Filter>
+    </ClInclude>
     <ClCompile Include="..\..\Source\MyProject\StateMachine.cpp">
       <Filter>Source\MyProject</Filter>
     </ClCompile>
     <ClInclude Include="..\..\Source\MyProject\StateMachine.h">
       <Filter>Source\MyProject</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\Source\MyProject\Creature.h">
-      <Filter>Source\MyProject</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\MyProject\PathNode.h">
-      <Filter>Source\MyProject</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\Source\MyProject\Creature.cpp">
-      <Filter>Source\MyProject</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\MyProject\PathNode.cpp">
-      <Filter>Source\MyProject</Filter>
-    </ClCompile>
   </ItemGroup>
 </Project>
