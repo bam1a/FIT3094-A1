@@ -42,18 +42,32 @@ public:
 	//Pathfinder(FVector fromPos, FVector toPos);
 	~Pathfinder();
 
-	APathNode* startPt;
-	APathNode* endPt;
-	priority_queue<NodeCost*, TArray<NodeCost*>, NodeCost>* frontier;
+	APathNode* startNode;
+	APathNode* endNode;
+	FVector startPt;
+	FVector endPt;
+	priority_queue<NodeCost*, vector<NodeCost*>, NodeCost> frontier;
 	TArray<NodeCost*> closeNode;
 	bool isFound;
 
 	static TArray<APathNode*> NodeArray;
-	static TArray<FVector> GeneratePath(FVector inStartPt, FVector inEndPt);
+	TArray<FVector> GeneratePath(FVector inStartPt, FVector inEndPt);
 
-	TArray<APathNode*>getNeighbours(NodeCost* currentNode);
+	//functions:
+		//getNeighbours: output the connecting node
+		//getCost: get the cost between 2 nodes
+		//getHeuristic: get the distance between the checking node and end node
+		//reset: reset every variables except statics.
+		//search: create a link list for the close node to find the best path.
+		//getNearestNode: find the nearest node for specific position
+		//isNodeCostClosed: check if that node is existed in the closed list
+	TArray<APathNode*> getNeighbours(NodeCost* inNode);
 	float getCost(NodeCost* fromNode, NodeCost* toNode);
 	float setHeuristic(NodeCost* inNode);
 	void reset();
 	void search();
+	APathNode* getNearestNode(FVector inPos);
+	bool isNodeCostClosed(APathNode* checkNode);
+	//bool isCostOverWritable(float formerCost, float afterCost);
+
 };
