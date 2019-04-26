@@ -136,7 +136,7 @@ protected:
 	other parameters:
 	cGen: reproduced generation(I guess it might be interesting when generation is being better and better, but it's more like an label, or being abandoned)
 	cReproduceCount: determines how many child would be generated when spawning new creatures.
-	cPathNode:the node will be going to
+	cPathList:the node will be going to
 	cTargetNodeID: the node in the pathNode array will be going to
 	cTargetPosition: the position targeting at
 	cPosition: current position(actually can replaced by GetActorByLocation but just in case.

@@ -89,8 +89,10 @@ float APathfind::setHeuristic(NodeCost * inNode)
 
 void APathfind::reset()
 {
-	startNode, endNode = nullptr;
-	startPt, endPt = FVector::ZeroVector;
+	startNode = nullptr;
+	endNode = nullptr;
+	startPt = FVector::ZeroVector;
+	endPt = FVector::ZeroVector;
 	frontier.empty();
 	closeNode.Empty();
 	processedNode.Empty();

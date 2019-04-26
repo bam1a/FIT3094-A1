@@ -214,7 +214,7 @@ void ACreature::stateRegister()
 
 void ACreature::State_Wander_OnEnter(void) {
 	//generate a path of the target
-
+	//cPathlist = cPathfinder->GeneratePath(cPosition, genRandomLocation(FVector::ZeroVector, 2000.f, true, cSize));
 	//set target location to the first index of the path list
 	cTargetPosition = genRandomLocation(FVector::ZeroVector, 2000.f,true,cSize);
 }

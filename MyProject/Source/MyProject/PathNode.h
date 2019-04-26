@@ -17,7 +17,6 @@ public:
 
 	static enum Node_Type {
 		PATH=0,
-		CORRIDOR,
 		WATER,
 		SHELTER,
 		FOOD
