@@ -1,6 +1,13 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Pathfinder.h"
+#include "Wall.h"
+#include "Creature.h"
+#include "ConstructorHelpers.h"
+#include <EngineGlobals.h>
+#include "DrawDebugHelpers.h"
+#include "Engine/GameEngine.h"
+
 
 Pathfinder::Pathfinder()
 {
@@ -28,11 +35,12 @@ TArray<FVector> Pathfinder::GeneratePath(FVector inStartPt, FVector inEndPt)
 	//back trace from end node to the start node as vectors
 		//add the last position and its nearest node to the output array
 	outVectors.Add(endPt);
-	//outVectors.Add(endNode->GetPosition());
 		//add the remainings to the array
 	NodeCost* tempNodeCost = closeNode.Top();
 		//loop the tempNode if there's stuff inside and until reached the start node.
 	while (tempNodeCost->node != nullptr && closeNode.Num()>0) {
+		//make some randomness for the position(todo)
+		//todo...
 		outVectors.Add(tempNodeCost->node->GetPosition());
 		//set the parent node for next loop.
 		tempNodeCost = tempNodeCost->parentNodeCost;
@@ -129,10 +137,11 @@ void Pathfinder::search()
 
 APathNode * Pathfinder::getNearestNode(FVector inPos)
 {
-	//set the limit to max for initilzing and a temp. distance var.
+	//set the checking distance to max val for initilzing
+	//and a temp. distance var.
 	float shortestDist = numeric_limits<float>::max();
 	float tempDist = 0.f;
-	//set a node pointer with to part with the distance above
+	//set a node pointer to part with the distance above
 	APathNode* shortestNode=nullptr;
 	//loop all the path node elements
 	for (APathNode* iNode : NodeArray) {
@@ -159,3 +168,60 @@ bool Pathfinder::isNodeCostClosed(APathNode * checkNode)
 	//otherwise output false
 	return false;
 }
+
+
+//FVector Pathfinder::genRandomLocation(FVector initPos, float inRange, bool isNeedValidCheck, float inCheckRange)
+//{
+//	FVector outVector;
+//	outVector.X = initPos.X + FMath::FRandRange((inRange*-1.f), inRange);
+//	outVector.Y = initPos.Y + FMath::FRandRange((inRange*-1.f), inRange);
+//	outVector.Z = 0.f;
+//
+//	//check if the location is valid, if not do it until it's valid<--maybe in a new function?
+//	//condition to do: the valid check switch is label as true
+//	if (isNeedValidCheck) {
+//		while (!checkPosValid(initPos, inCheckRange)) {
+//			outVector.X = initPos.X + FMath::FRandRange((inRange*-1.f), inRange);
+//			outVector.Y = initPos.Y + FMath::FRandRange((inRange*-1.f), inRange);
+//			outVector.Z = 0.f;
+//		}
+//	}
+//	return outVector;
+//}
+//
+//bool Pathfinder::checkPosValid(FVector checkPos, float sweepArea)
+//{
+//	//sweep the position according to the sweeping area
+//
+//	//array of“FHitResult”that is going to store all the objects our hit detection registers
+//	TArray<FHitResult>OutHits;
+//	//get our locationandcreate a sphere collider.
+//	FVector location = checkPos;
+//	FCollisionShape CheckSphere = FCollisionShape::MakeSphere(sweepArea);
+//
+//	//perform a“SweepMultiByChannel”which creates a shape based onthe last parameter, located at the position in the 2nd/3rd parameter.2nd/3rd parameter are the start and end points of a“Sweep”of the shape.
+//	//Any objects that overlap are then stored in the first parameter(our TArray)
+//	bool isHit = GetWorld()->SweepMultiByChannel(OutHits, location, location, FQuat::Identity, ECC_WorldStatic, CheckSphere);
+//
+//	if (isHit) {
+//		//loop throughall our objects(autocasting them),get their mesh component and then if that was successful, apply a force to that object. 
+//		//The force has a start, size, amount, falloff and a boolean checking if to NOT use mass.
+//		for (auto& Hit : OutHits) {
+//			//if it has a wall, or a creature, or a food pallet, return false
+//			AWall* wall = Cast<AWall>((Hit.GetActor()));
+//			if (wall) {
+//				return false;
+//			}
+//			ACreature* creature = Cast<ACreature>((Hit.GetActor()));
+//			if (creature) {
+//				return false;
+//			}
+//		}
+//	}
+//	else {
+//		return true;
+//
+//	}
+//	return true;
+//}
+

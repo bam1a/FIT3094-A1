@@ -3,7 +3,7 @@
   <ItemGroup>
     <None Include="..\..\MyProject.uproject" />
     <Filter Include="Source">
-      <UniqueIdentifier>{9B4C1569-057D-4E88-A3EE-E3D37EA93245}</UniqueIdentifier>
+      <UniqueIdentifier>{0F3ABE37-F4CD-4BD9-A07B-053B6DE510F6}</UniqueIdentifier>
     </Filter>
     <None Include="..\..\Source\MyProject.Target.cs">
       <Filter>Source</Filter>
@@ -12,7 +12,7 @@
       <Filter>Source</Filter>
     </None>
     <Filter Include="Config">
-      <UniqueIdentifier>{3483817D-28FF-48D4-805A-28A683C87E9C}</UniqueIdentifier>
+      <UniqueIdentifier>{317740D5-82AC-4BD4-8778-B90946F13604}</UniqueIdentifier>
     </Filter>
     <None Include="..\..\Config\DefaultEditor.ini">
       <Filter>Config</Filter>
@@ -24,12 +24,18 @@
       <Filter>Config</Filter>
     </None>
     <Filter Include="Source\MyProject">
-      <UniqueIdentifier>{4A4438D3-7962-4C3F-AA5D-B4FC42F4205A}</UniqueIdentifier>
+      <UniqueIdentifier>{18A7532C-5836-4918-9B79-B6DD57DF41ED}</UniqueIdentifier>
     </Filter>
     <ClCompile Include="..\..\Source\MyProject\Creature.cpp">
       <Filter>Source\MyProject</Filter>
     </ClCompile>
     <ClInclude Include="..\..\Source\MyProject\Creature.h">
+      <Filter>Source\MyProject</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\MyProject\Gatherer.cpp">
+      <Filter>Source\MyProject</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\MyProject\Gatherer.h">
       <Filter>Source\MyProject</Filter>
     </ClInclude>
     <None Include="..\..\Source\MyProject\MyProject.Build.cs">
@@ -47,6 +53,18 @@
     <ClInclude Include="..\..\Source\MyProject\MyProjectGameModeBase.h">
       <Filter>Source\MyProject</Filter>
     </ClInclude>
+    <ClCompile Include="..\..\Source\MyProject\Pathfind.cpp">
+      <Filter>Source\MyProject</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\MyProject\Pathfind.h">
+      <Filter>Source\MyProject</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\MyProject\Pathfinder.cpp">
+      <Filter>Source\MyProject</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\MyProject\Pathfinder.h">
+      <Filter>Source\MyProject</Filter>
+    </ClInclude>
     <ClCompile Include="..\..\Source\MyProject\PathNode.cpp">
       <Filter>Source\MyProject</Filter>
     </ClCompile>
@@ -59,21 +77,11 @@
     <ClInclude Include="..\..\Source\MyProject\StateMachine.h">
       <Filter>Source\MyProject</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\Source\MyProject\Gatherer.h">
-      <Filter>Source\MyProject</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\MyProject\Pathfinder.h">
-      <Filter>Source\MyProject</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\Source\MyProject\Gatherer.cpp">
+    <ClCompile Include="..\..\Source\MyProject\Wall.cpp">
       <Filter>Source\MyProject</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\MyProject\Pathfinder.cpp">
+    <ClInclude Include="..\..\Source\MyProject\Wall.h">
       <Filter>Source\MyProject</Filter>
-    </ClCompile>
+    </ClInclude>
   </ItemGroup>
 </Project>

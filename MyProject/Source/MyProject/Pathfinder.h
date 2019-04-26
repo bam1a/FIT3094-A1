@@ -4,9 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "PathNode.h"
-#include "Creature.h"
 #include <queue>
 #include <vector>
+//#include "Pathfinder.generated.h"
+
 
 
 using namespace std;
@@ -15,6 +16,9 @@ using namespace std;
  */
 class MYPROJECT_API Pathfinder
 {
+	//GENERATED_BODY()
+protected:
+
 public:
 	//miniclass NodeCost: a class that contains a path node, a cost value, and a parent node
 	struct NodeCost {
@@ -84,5 +88,7 @@ public:
 	APathNode* getNearestNode(FVector inPos);
 	bool isNodeCostClosed(APathNode* checkNode);
 	//bool isCostOverWritable(float formerCost, float afterCost);
+	FVector genRandomLocation(FVector initPos, float inRange, bool isNeedValidCheck = false, float inCheckRange = 1.f);
+	bool checkPosValid(FVector checkPos, float sweepArea);
 
 };

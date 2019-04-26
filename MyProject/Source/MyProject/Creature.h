@@ -4,6 +4,7 @@
 
 #include "StateMachine.h"
 #include "PathNode.h"
+#include "Pathfind.h"
 #include "CoreMinimal.h"
 #include "ConstructorHelpers.h"
 #include <EngineGlobals.h>
@@ -151,8 +152,10 @@ protected:
 	FVector cPosition, cTargetPosition, cLastPosition, cVelocity;
 	Creature_State cLastState;
 	ACreature* cTargetCreature;
-	//TArray<Node> cPathNode;
+	TArray<FVector> cPathlist;
 	//int cTargetNodeID;
+	UPROPERTY(EditAnyWhere, Category="pathFinding")
+	APathfind* cPathfinder;
 	/////////////////////////////////////////////////////////////////////////////////////////
 	//state machine's state events
 

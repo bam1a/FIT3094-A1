@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "PathNode.h"
+#include "Pathfind.h"
 
 // Sets default values
 APathNode::APathNode()
@@ -16,8 +17,8 @@ APathNode::APathNode()
 	nPosition = GetActorLocation();
 	nNodeType = PATH;
 
-	APathNode::NodeList.Push(this);
-
+	//APathNode::NodeList.Push(this);
+	APathfind::NodeArray.Add(this);
 }
 
 // Called when the game starts or when spawned
@@ -34,5 +35,5 @@ void APathNode::Tick(float DeltaTime)
 
 
 }
-TArray<APathNode*> APathNode::NodeList;
+//TArray<APathNode*> APathNode::NodeList;
 

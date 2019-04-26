@@ -1,10 +1,12 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Creature.h"
+#include "Pathfind.h"
 #include "Wall.h"
 #include "ConstructorHelpers.h"
 #include <EngineGlobals.h>
 #include "DrawDebugHelpers.h"
+#include "EngineUtils.h"
 #include "Engine/GameEngine.h"
 
 
@@ -47,6 +49,7 @@ void ACreature::initialize()
 	//do it in new function as it'll be inherited by others
 	stateRegister();
 
+
 	//set default state
 	m_StateMachine->ChangeState(STATE_WANDER);
 
@@ -70,6 +73,7 @@ void ACreature::initialize(float inSpeed, float inSize, int inPower, int inDef, 
 	//do it in new function as it'll be inherited by others
 	stateRegister();
 
+
 	//set default state
 	m_StateMachine->ChangeState(STATE_WANDER);
 
@@ -81,6 +85,12 @@ void ACreature::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	//get the path finding actor
+	for (TActorIterator<APathfind> ActorItr(GetWorld()); ActorItr; ++ActorItr)
+	{
+		// Same as with the Object Iterator, access the subclass instance with the * or -> operators.
+		cPathfinder = *ActorItr;
+	}
 }
 
 // Called every frame
@@ -203,9 +213,10 @@ void ACreature::stateRegister()
 }
 
 void ACreature::State_Wander_OnEnter(void) {
-	//generate a target location
-	cTargetPosition = genRandomLocation(FVector::ZeroVector, 2000.f,true,cSize);
+	//generate a path of the target
 
+	//set target location to the first index of the path list
+	cTargetPosition = genRandomLocation(FVector::ZeroVector, 2000.f,true,cSize);
 }
 void ACreature::State_Wander_OnTick(float f_DeltaTime) {
 	//if creature arrive nearby the location, change another random location
@@ -213,11 +224,15 @@ void ACreature::State_Wander_OnTick(float f_DeltaTime) {
 	FVector vectorToTarget = cTargetPosition - cPosition;
 
 	if (FVector::Distance(cTargetPosition, cPosition) < cSize) {
+		//change to another index when not finished its path.
+		//change another target when reached
 		cTargetPosition = genRandomLocation(FVector::ZeroVector, 2000.f, true, cSize);
 	}
 
 	//and let the actor move
 	move(f_DeltaTime, false);
+
+	//other creature will do it based on this function.
 }
 void ACreature::State_Wander_OnExit(void) { SetLastState(m_StateMachine->GetCurrentState()); }
 
@@ -230,8 +245,10 @@ void ACreature::State_Flee_OnTick(float f_DeltaTime) {
 		//and let the actor move
 		move(f_DeltaTime, true);
 	}
-	//otherwise get back to wandering mode.
-	m_StateMachine->ChangeState(STATE_WANDER);
+	else {
+		//otherwise get back to wandering mode.
+		m_StateMachine->ChangeState(cLastState);
+	}
 
 }
 void ACreature::State_Flee_OnExit(void) { SetLastState(m_StateMachine->GetCurrentState()); }

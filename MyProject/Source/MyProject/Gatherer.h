@@ -13,5 +13,6 @@ UCLASS()
 class MYPROJECT_API AGatherer : public ACreature
 {
 	GENERATED_BODY()
-	
+public:
+private:
 };
