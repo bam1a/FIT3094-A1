@@ -16,24 +16,26 @@ using namespace std;
 class MYPROJECT_API Pathfinder
 {
 public:
-	//miniclass NodeVal: a class that contains a path node and a cost value
+	//miniclass NodeCost: a class that contains a path node, a cost value, and a parent node
 	struct NodeCost {
 		APathNode* node;
 		float cost;
 		float heuristic;
-		APathNode* parentNode=nullptr;
+		NodeCost* parentNodeCost=nullptr;
 
 		NodeCost(){}
-
-		NodeCost(APathNode* inNode, float inCost) {
+		//constructor
+		NodeCost(APathNode* inNode, float inCost, float inHeuristic,NodeCost* inParentNode=nullptr) {
 			node = inNode;
 			cost = inCost;
+			heuristic = inHeuristic;
+			parentNodeCost = inParentNode;
 		}
 
 		//this operator will let the prio. queue keep sort in decending order
 		//which let the top be the lowest cost.
 		bool operator() (const NodeCost* node1, const NodeCost* node2, float epslion = 0.00001f) {
-			return node1->cost > node2->cost;
+			return (node1->cost+ node1->heuristic) > (node2->cost+ node2->heuristic);
 		}
 	};
 
@@ -42,13 +44,26 @@ public:
 	//Pathfinder(FVector fromPos, FVector toPos);
 	~Pathfinder();
 
+	//variable for searching
+		//startNode: the starting node when searching
+		//endNode: the goal node when searching
+		//startPt: the start location
+		//endPt: the goal position
+		//isFound: the switch which determines the path is found or not.
 	APathNode* startNode;
 	APathNode* endNode;
 	FVector startPt;
 	FVector endPt;
+	bool isFound;
+
+
+	//list for the search uses
+		//frontier: a queue of node cost combination that keeps set itself in decending position to keep the smallest value at top
+		//closeNode: the node cost combination that is already expended, which shouldn't be revisit as it causes node loop
+		//processedNode:all the node cost combination will be saved here, prevent garbrage when reusing.
 	priority_queue<NodeCost*, vector<NodeCost*>, NodeCost> frontier;
 	TArray<NodeCost*> closeNode;
-	bool isFound;
+	TArray<NodeCost*> processedNode;
 
 	static TArray<APathNode*> NodeArray;
 	TArray<FVector> GeneratePath(FVector inStartPt, FVector inEndPt);
@@ -61,7 +76,7 @@ public:
 		//search: create a link list for the close node to find the best path.
 		//getNearestNode: find the nearest node for specific position
 		//isNodeCostClosed: check if that node is existed in the closed list
-	TArray<APathNode*> getNeighbours(NodeCost* inNode);
+	TArray<APathNode*> getNeighbours(APathNode* inNode);
 	float getCost(NodeCost* fromNode, NodeCost* toNode);
 	float setHeuristic(NodeCost* inNode);
 	void reset();

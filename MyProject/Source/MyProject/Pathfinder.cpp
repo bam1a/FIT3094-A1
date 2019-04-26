@@ -26,15 +26,26 @@ TArray<FVector> Pathfinder::GeneratePath(FVector inStartPt, FVector inEndPt)
 	//create the path
 	search();
 	//back trace from end node to the start node as vectors
-	//add the end point for the path goal
+		//add the last position and its nearest node to the output array
+	outVectors.Add(endPt);
+	//outVectors.Add(endNode->GetPosition());
+		//add the remainings to the array
+	NodeCost* tempNodeCost = closeNode.Top();
+		//loop the tempNode if there's stuff inside and until reached the start node.
+	while (tempNodeCost->node != nullptr && closeNode.Num()>0) {
+		outVectors.Add(tempNodeCost->node->GetPosition());
+		//set the parent node for next loop.
+		tempNodeCost = tempNodeCost->parentNodeCost;
+	}
+
 	//and then output it.
 	return outVectors;
 }
 
-TArray<APathNode*> Pathfinder::getNeighbours(NodeCost * inNode)
+TArray<APathNode*> Pathfinder::getNeighbours(APathNode * inNode)
 {
 	//get the array of neighbour nodes from the current node.
-	TArray<APathNode*> outArray = *(inNode->node->GetNeighbourNode());
+	TArray<APathNode*> outArray = *(inNode->GetNeighbourNode());
 	return outArray;
 }
 
@@ -61,11 +72,59 @@ void Pathfinder::reset()
 	startPt,endPt = FVector::ZeroVector;
 	frontier.empty();
 	closeNode.Empty();
+	processedNode.Empty();
 	isFound = false;
 }
 
 void Pathfinder::search()
 {
+	//initialize
+	isFound = false;
+	//create a new NodeCost for the starting node
+	NodeCost* startingNodeCost = new NodeCost(startNode, 0.f,FVector::Distance(startNode->GetPosition(),endNode->GetPosition()));
+	frontier.push(startingNodeCost);
+	processedNode.Push(startingNodeCost);
+	//main loop
+	//keep looping unless there's no more frontier queue or already found the end node.
+	while (frontier.size() > 0 && !isFound) {
+		//set the current node cost combination as the top frontier node.
+		NodeCost* current = frontier.top();
+		//then close that node as well(as it assumed to reach goal "faster and optimal")
+		closeNode.Push(frontier.top());
+		//and then pop the node from frontier.
+		frontier.pop();
+		//if the current node it's not a null pointer
+		if (current->node != nullptr) {
+			//if the current Node pointer is the end node
+			if (current->node == endNode) {
+				//set to true to terminate th loop
+				isFound = true;
+			}
+			//if it's not 
+			else {
+				//loop all the neighbours from the current node
+				for (APathNode* next : getNeighbours(current->node)) {
+					//find that node is closed or not
+						//if that nodeCost it's not closed
+					if (!isNodeCostClosed(next)) {
+						//set its heuristic
+						float inHeuristic = FVector::Distance(next->GetPosition(), endNode->GetPosition());
+						//set the cost between current Node and next node+ the previous costs calculated before
+						float inCost = current->cost + FVector::Distance(next->GetPosition(), current->node->GetPosition());
+						//set the NodeCost for with current node cost object as the parent node
+						//add it to the frontier
+						NodeCost* nextNodeCost = new NodeCost(next, 0.f, FVector::Distance(startNode->GetPosition(), endNode->GetPosition()),current);
+						frontier.push(nextNodeCost);
+						processedNode.Push(nextNodeCost);
+					}
+				}
+			}
+		}
+		else {
+			break;
+		}
+
+	}
 }
 
 APathNode * Pathfinder::getNearestNode(FVector inPos)
