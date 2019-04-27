@@ -27,7 +27,6 @@ ACreature::ACreature()
 	//Mesh->SetStaticMesh(Wedge.Object);
 	Mesh->SetSimulatePhysics(true);
 
-	initialize();
 
 
 }
@@ -91,6 +90,9 @@ void ACreature::BeginPlay()
 		// Same as with the Object Iterator, access the subclass instance with the * or -> operators.
 		cPathfinder = *ActorItr;
 	}
+	//initialize the parameeter
+	initialize();
+
 }
 
 // Called every frame
@@ -159,7 +161,6 @@ void ACreature::move(float DeltaTime, bool isDash)
 
 bool ACreature::checkPosValid(FVector checkPos, float sweepArea)
 {
-	//sweep the position according to the sweeping area
 
 	//array of“FHitResult”that is going to store all the objects our hit detection registers
 	TArray<FHitResult>OutHits;
@@ -167,6 +168,7 @@ bool ACreature::checkPosValid(FVector checkPos, float sweepArea)
 	FVector location = checkPos;
 	FCollisionShape CheckSphere = FCollisionShape::MakeSphere(sweepArea);
 
+	//sweep the position according to the sweeping area
 	//perform a“SweepMultiByChannel”which creates a shape based onthe last parameter, located at the position in the 2nd/3rd parameter.2nd/3rd parameter are the start and end points of a“Sweep”of the shape.
 	//Any objects that overlap are then stored in the first parameter(our TArray)
 	bool isHit = GetWorld()->SweepMultiByChannel(OutHits, location, location, FQuat::Identity, ECC_WorldStatic, CheckSphere);
@@ -214,7 +216,7 @@ void ACreature::stateRegister()
 
 void ACreature::State_Wander_OnEnter(void) {
 	//generate a path of the target
-	//cPathlist = cPathfinder->GeneratePath(cPosition, genRandomLocation(FVector::ZeroVector, 2000.f, true, cSize));
+	cPathlist = cPathfinder->GeneratePath(cPosition, genRandomLocation(FVector::ZeroVector, 2000.f, true, cSize));
 	//set target location to the first index of the path list
 	cTargetPosition = genRandomLocation(FVector::ZeroVector, 2000.f,true,cSize);
 }

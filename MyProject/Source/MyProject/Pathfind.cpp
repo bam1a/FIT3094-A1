@@ -50,14 +50,17 @@ TArray<FVector> APathfind::GeneratePath(FVector inStartPt, FVector inEndPt)
 	//add the last position and its nearest node to the output array
 	outVectors.Add(endPt);
 	//add the remainings to the array
-	NodeCost* tempNodeCost = closeNode.Top();
-	//loop the tempNode if there's stuff inside and until reached the start node.
-	while (tempNodeCost->node != nullptr && closeNode.Num()>0) {
-		//make some randomness for the position(todo)
-		//todo...
-		outVectors.Add(tempNodeCost->node->GetPosition());
-		//set the parent node for next loop.
-		tempNodeCost = tempNodeCost->parentNodeCost;
+	//there's no need to back trace if only start node is the end node.
+	if (closeNode.Num() > 1) {
+		NodeCost* tempNodeCost = closeNode.Top();
+		//loop the tempNode if there's stuff inside and until reached the start node.
+		while (tempNodeCost->node != nullptr) {
+			//make some randomness for the position(todo)
+			//todo...
+			outVectors.Add(tempNodeCost->node->GetPosition());
+			//set the parent node for next loop.
+			tempNodeCost = tempNodeCost->parentNodeCost;
+		}
 	}
 
 	//and then output it.
@@ -126,21 +129,27 @@ void APathfind::search()
 			}
 			//if it's not 
 			else {
-				//loop all the neighbours from the current node
-				for (APathNode* next : getNeighbours(current->node)) {
-					//find that node is closed or not
-					//if that nodeCost it's not closed
-					if (!isNodeCostClosed(next)) {
-						//set its heuristic
-						float inHeuristic = FVector::Distance(next->GetPosition(), endNode->GetPosition());
-						//set the cost between current Node and next node+ the previous costs calculated before
-						float inCost = current->cost + FVector::Distance(next->GetPosition(), current->node->GetPosition());
-						//set the NodeCost for with current node cost object as the parent node
-						//add it to the frontier
-						NodeCost* nextNodeCost = new NodeCost(next, 0.f, FVector::Distance(startNode->GetPosition(), endNode->GetPosition()), current);
-						frontier.push(nextNodeCost);
-						processedNode.Push(nextNodeCost);
+				//if the current node has no neighbour, break it.
+				if (current->node->GetNeighbourNode()->Num() > 0) {
+					//loop all the neighbours from the current node
+					for (APathNode* next : getNeighbours(current->node)) {
+						//find that node is closed or not
+						//if that nodeCost it's not closed
+						if (!isNodeCostClosed(next)) {
+							//set its heuristic
+							float inHeuristic = FVector::Distance(next->GetPosition(), endNode->GetPosition());
+							//set the cost between current Node and next node+ the previous costs calculated before
+							float inCost = current->cost + FVector::Distance(next->GetPosition(), current->node->GetPosition());
+							//set the NodeCost for with current node cost object as the parent node
+							//add it to the frontier
+							NodeCost* nextNodeCost = new NodeCost(next, 0.f, FVector::Distance(startNode->GetPosition(), endNode->GetPosition()), current);
+							frontier.push(nextNodeCost);
+							processedNode.Push(nextNodeCost);
+						}
 					}
+				}
+				else {
+					break;
 				}
 			}
 		}
