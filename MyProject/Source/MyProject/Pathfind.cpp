@@ -120,7 +120,7 @@ void APathfind::search()
 		closeNode.Push(frontier.top());
 		//and then pop the node from frontier.
 		frontier.pop();
-		//if the current node it's not a null pointer
+		//make branches if the current node it's not a null pointer
 		if (current->node != nullptr) {
 			//if the current Node pointer is the end node
 			if (current->node == endNode) {
@@ -130,12 +130,12 @@ void APathfind::search()
 			//if it's not 
 			else {
 				//if the current node has no neighbour, break it.
-				if (current->node->GetNeighbourNode()->Num() > 0) {
+				if (current->node->GetNeighbourNode()->Num() > 0 && (current->node->GetNeighbourNode()!=nullptr) ) {
 					//loop all the neighbours from the current node
 					for (APathNode* next : getNeighbours(current->node)) {
 						//find that node is closed or not
 						//if that nodeCost it's not closed
-						if (!isNodeCostClosed(next)) {
+						if (!isNodeCostClosed(next)&& next!=nullptr ) {
 							//set its heuristic
 							float inHeuristic = FVector::Distance(next->GetPosition(), endNode->GetPosition());
 							//set the cost between current Node and next node+ the previous costs calculated before
@@ -153,6 +153,7 @@ void APathfind::search()
 				}
 			}
 		}
+		//otherwise there's no way to keep looking forward
 		else {
 			break;
 		}
