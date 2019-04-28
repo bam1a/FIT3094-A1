@@ -5,11 +5,12 @@
 #include "Wall.h"
 #include "ConstructorHelpers.h"
 #include <EngineGlobals.h>
+#include <cmath>
 #include "DrawDebugHelpers.h"
 #include "EngineUtils.h"
 #include "Engine/GameEngine.h"
 
-
+using namespace std;
 // Sets default values
 ACreature::ACreature()
 {
@@ -168,6 +169,11 @@ bool ACreature::checkPosValid(FVector checkPos, float sweepArea)
 	FVector location = checkPos;
 	FCollisionShape CheckSphere = FCollisionShape::MakeSphere(sweepArea);
 
+	//make sure it's inside -2000 to 2000 range.
+	if ((abs(checkPos.X) / (2000.f-cSize)) >= 1.f ||(abs(checkPos.Y)/(2000.f-cSize))>=1.f) {
+		return false;
+	}
+
 	//sweep the position according to the sweeping area
 	//perform a“SweepMultiByChannel”which creates a shape based onthe last parameter, located at the position in the 2nd/3rd parameter.2nd/3rd parameter are the start and end points of a“Sweep”of the shape.
 	//Any objects that overlap are then stored in the first parameter(our TArray)
@@ -216,19 +222,30 @@ void ACreature::stateRegister()
 
 void ACreature::State_Wander_OnEnter(void) {
 	//generate a path of the target
-	cPathlist = cPathfinder->GeneratePath(cPosition, genRandomLocation(FVector::ZeroVector, 2000.f, true, cSize));
+	cPathlist = cPathfinder->GeneratePath(cPosition, genRandomLocation(FVector::ZeroVector, 2000.f, true, cSize*2));
 	//set target location to the first index of the path list
-	cTargetPosition = genRandomLocation(FVector::ZeroVector, 2000.f,true,cSize);
+	//cTargetPosition = genRandomLocation(FVector::ZeroVector, 2000.f,true,cSize);
+	cPathlistID = cPathlist.Num() - 1;
+	cTargetPosition = cPathlist[cPathlistID];
 }
 void ACreature::State_Wander_OnTick(float f_DeltaTime) {
 	//if creature arrive nearby the location, change another random location
 	//maybe also if the path array length is not zero, and the index is the last node, will be find a new path
 	FVector vectorToTarget = cTargetPosition - cPosition;
 
-	if (FVector::Distance(cTargetPosition, cPosition) < cSize) {
+	if (FVector::Distance(cTargetPosition, cPosition) < (cSize*2)) {
 		//change to another index when not finished its path.
 		//change another target when reached
-		cTargetPosition = genRandomLocation(FVector::ZeroVector, 2000.f, true, cSize);
+		if (cTargetPosition == cPathlist[0]) {
+			//cTargetPosition = genRandomLocation(FVector::ZeroVector, 2000.f, true, cSize);
+			cPathlist = cPathfinder->GeneratePath(cPosition, genRandomLocation(FVector::ZeroVector, 2000.f, true, cSize*2));
+			cPathlistID = cPathlist.Num()-1;
+			cTargetPosition = cPathlist[cPathlistID];
+		}
+		else {
+			cPathlistID -= 1;
+			cTargetPosition = cPathlist[cPathlistID];
+		}
 	}
 
 	//and let the actor move

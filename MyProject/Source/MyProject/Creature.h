@@ -137,6 +137,7 @@ protected:
 	cGen: reproduced generation(I guess it might be interesting when generation is being better and better, but it's more like an label, or being abandoned)
 	cReproduceCount: determines how many child would be generated when spawning new creatures.
 	cPathList:the node will be going to
+	cPathListID: the current ID of the path.
 	cTargetNodeID: the node in the pathNode array will be going to
 	cTargetPosition: the position targeting at
 	cPosition: current position(actually can replaced by GetActorByLocation but just in case.
@@ -148,11 +149,14 @@ protected:
 	*/
 	float cSpeed, cSize, cSight, cTimer, cTime;
 	int cPower, cHP, cDef, cGen, cReproCount;
+	UPROPERTY(VisibleAnywhere)
+		int cPathlistID;
 
 	FVector cPosition, cTargetPosition, cLastPosition, cVelocity;
 	Creature_State cLastState;
 	ACreature* cTargetCreature;
-	TArray<FVector> cPathlist;
+	UPROPERTY(EditAnywhere)
+		TArray<FVector> cPathlist;
 	//int cTargetNodeID;
 	UPROPERTY(VisibleAnywhere, Category="pathFinding")
 	APathfind* cPathfinder;

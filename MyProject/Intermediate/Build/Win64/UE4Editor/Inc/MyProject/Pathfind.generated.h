@@ -57,7 +57,11 @@ DEFINE_VTABLE_PTR_HELPER_CTOR_CALLER(APathfind); \
 	DEFINE_DEFAULT_CONSTRUCTOR_CALL(APathfind)
 
 
-#define MyProject_Source_MyProject_Pathfind_h_17_PRIVATE_PROPERTY_OFFSET
+#define MyProject_Source_MyProject_Pathfind_h_17_PRIVATE_PROPERTY_OFFSET \
+	FORCEINLINE static uint32 __PPO__startNode() { return STRUCT_OFFSET(APathfind, startNode); } \
+	FORCEINLINE static uint32 __PPO__endNode() { return STRUCT_OFFSET(APathfind, endNode); }
+
+
 #define MyProject_Source_MyProject_Pathfind_h_14_PROLOG
 #define MyProject_Source_MyProject_Pathfind_h_17_GENERATED_BODY_LEGACY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \

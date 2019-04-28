@@ -7,6 +7,7 @@
 #include <EngineGlobals.h>
 #include "DrawDebugHelpers.h"
 #include "Engine/GameEngine.h"
+#include "EngineUtils.h"
 
 
 // Sets default values
@@ -23,7 +24,18 @@ TArray<APathNode*> APathfind::NodeArray;
 // Called when the game starts or when spawned
 void APathfind::BeginPlay()
 {
+	//add all the APathNode to the array.
+	for (TActorIterator<APathNode> ActorItr(GetWorld()); ActorItr; ++ActorItr)
+	{
+		// Same as with the Object Iterator, access the subclass instance with the * or -> operators.
+		NodeArray.Add(*ActorItr);
+	}
+
 	Super::BeginPlay();
+	for (APathNode* iNode : NodeArray) {
+		NodeArray4Show.Add(iNode);
+	}
+
 	
 }
 
@@ -48,20 +60,27 @@ TArray<FVector> APathfind::GeneratePath(FVector inStartPt, FVector inEndPt)
 	search();
 	//back trace from end node to the start node as vectors
 	//add the last position and its nearest node to the output array
-	outVectors.Add(endPt);
+	//outVectors.Add(endPt);
 	//add the remainings to the array
 	//there's no need to back trace if only start node is the end node.
+	GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString::FromInt(closeNode.Num()));
 	if (closeNode.Num() > 1) {
 		NodeCost* tempNodeCost = closeNode.Top();
 		//loop the tempNode if there's stuff inside and until reached the start node.
-		while (tempNodeCost->node != nullptr) {
-			//make some randomness for the position(todo)
-			//todo...
-			outVectors.Add(tempNodeCost->node->GetPosition());
-			//set the parent node for next loop.
-			tempNodeCost = tempNodeCost->parentNodeCost;
+		while (tempNodeCost != nullptr) {
+			if (tempNodeCost->node != nullptr) {
+				//make some randomness for the position?(todo)
+				//todo...
+				outVectors.Add(tempNodeCost->node->GetPosition());
+				//set the parent node for next loop.
+				tempNodeCost = tempNodeCost->parentNodeCost;
+			}
+			else {
+				break;
+			}
 		}
 	}
+	GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Green, FString::FromInt(outVectors.Num()));
 
 	//and then output it.
 	return outVectors;
@@ -113,11 +132,12 @@ void APathfind::search()
 	processedNode.Push(startingNodeCost);
 	//main loop
 	//keep looping unless there's no more frontier queue or already found the end node.
+	GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Orange, FString::FromInt(frontier.size()));
 	while (frontier.size() > 0 && !isFound) {
 		//set the current node cost combination as the top frontier node.
 		NodeCost* current = frontier.top();
 		//then close that node as well(as it assumed to reach goal "faster and optimal")
-		closeNode.Push(frontier.top());
+		closeNode.Push(current);
 		//and then pop the node from frontier.
 		frontier.pop();
 		//make branches if the current node it's not a null pointer
@@ -130,8 +150,10 @@ void APathfind::search()
 			//if it's not 
 			else {
 				//if the current node has no neighbour, break it.
+				GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Blue, FString::FromInt(current->node->GetNeighbourNode()->Num()));
 				if (current->node->GetNeighbourNode()->Num() > 0 && (current->node->GetNeighbourNode()!=nullptr) ) {
 					//loop all the neighbours from the current node
+					GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Purple, FString::FromInt(getNeighbours(current->node).Num()));
 					for (APathNode* next : getNeighbours(current->node)) {
 						//find that node is closed or not
 						//if that nodeCost it's not closed
@@ -142,7 +164,7 @@ void APathfind::search()
 							float inCost = current->cost + FVector::Distance(next->GetPosition(), current->node->GetPosition());
 							//set the NodeCost for with current node cost object as the parent node
 							//add it to the frontier
-							NodeCost* nextNodeCost = new NodeCost(next, 0.f, FVector::Distance(startNode->GetPosition(), endNode->GetPosition()), current);
+							NodeCost* nextNodeCost = new NodeCost(next, inCost, inHeuristic, current);
 							frontier.push(nextNodeCost);
 							processedNode.Push(nextNodeCost);
 						}
@@ -166,14 +188,14 @@ APathNode * APathfind::getNearestNode(FVector inPos)
 {
 	//set the checking distance to max val for initilzing
 	//and a temp. distance var.
-	float shortestDist = numeric_limits<float>::max();
-	float tempDist = 0.f;
+	float shortestDist = 30000.f;
+	float tempDist = 30000.f;
 	//set a node pointer to part with the distance above
 	APathNode* shortestNode = nullptr;
 	//loop all the path node elements
 	for (APathNode* iNode : NodeArray) {
 		//if there's a shorter, change that node and use that distance as ref.
-		tempDist = FVector::Distance(iNode->GetPosition(), inPos);
+		tempDist = FVector::Distance(iNode->GetActorLocation(), inPos);
 		if (tempDist < shortestDist) {
 			shortestDist = tempDist;
 			shortestNode = iNode;

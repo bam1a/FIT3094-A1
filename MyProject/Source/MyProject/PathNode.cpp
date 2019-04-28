@@ -18,14 +18,14 @@ APathNode::APathNode()
 	nNodeType = PATH;
 
 	//APathNode::NodeList.Push(this);
-	APathfind::NodeArray.Add(this);
+	//APathfind::NodeArray.Add(this);
 }
 
 // Called when the game starts or when spawned
 void APathNode::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	nPosition = GetActorLocation();
 }
 
 // Called every frame

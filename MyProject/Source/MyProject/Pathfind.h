@@ -53,8 +53,10 @@ protected:
 	//startPt: the start location
 	//endPt: the goal position
 	//isFound: the switch which determines the path is found or not.
-	APathNode* startNode;
-	APathNode* endNode;
+	UPROPERTY(VisibleAnywhere)
+		APathNode* startNode;
+	UPROPERTY(VisibleAnywhere)
+		APathNode* endNode;
 	FVector startPt;
 	FVector endPt;
 	bool isFound;
@@ -94,7 +96,8 @@ public:
 	//function for external classes use
 	//nodeArray: the array which contains all the path nodes
 	//GeneratePath: generate the path for each
-	//UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere)
+		TArray<APathNode*>NodeArray4Show;
 	static TArray<APathNode*> NodeArray;
 	TArray<FVector> GeneratePath(FVector inStartPt, FVector inEndPt);
 

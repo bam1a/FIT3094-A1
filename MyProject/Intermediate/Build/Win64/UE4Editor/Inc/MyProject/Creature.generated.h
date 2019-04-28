@@ -59,6 +59,8 @@ DEFINE_VTABLE_PTR_HELPER_CTOR_CALLER(ACreature); \
 
 #define MyProject_Source_MyProject_Creature_h_18_PRIVATE_PROPERTY_OFFSET \
 	FORCEINLINE static uint32 __PPO__Mesh() { return STRUCT_OFFSET(ACreature, Mesh); } \
+	FORCEINLINE static uint32 __PPO__cPathlistID() { return STRUCT_OFFSET(ACreature, cPathlistID); } \
+	FORCEINLINE static uint32 __PPO__cPathlist() { return STRUCT_OFFSET(ACreature, cPathlist); } \
 	FORCEINLINE static uint32 __PPO__cPathfinder() { return STRUCT_OFFSET(ACreature, cPathfinder); }
 
 
