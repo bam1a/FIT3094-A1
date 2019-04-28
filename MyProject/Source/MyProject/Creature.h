@@ -154,7 +154,7 @@ protected:
 	ACreature* cTargetCreature;
 	TArray<FVector> cPathlist;
 	//int cTargetNodeID;
-	UPROPERTY(EditAnyWhere, Category="pathFinding")
+	UPROPERTY(VisibleAnywhere, Category="pathFinding")
 	APathfind* cPathfinder;
 	/////////////////////////////////////////////////////////////////////////////////////////
 	//state machine's state events

@@ -94,6 +94,7 @@ public:
 	//function for external classes use
 	//nodeArray: the array which contains all the path nodes
 	//GeneratePath: generate the path for each
+	//UPROPERTY(VisibleAnywhere)
 	static TArray<APathNode*> NodeArray;
 	TArray<FVector> GeneratePath(FVector inStartPt, FVector inEndPt);
 

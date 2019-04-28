@@ -63,7 +63,7 @@ void EmptyLinkFunctionForGeneratedCodeCreature() {}
 		{ "ToolTip", "int cTargetNodeID;" },
 	};
 #endif
-	const UE4CodeGen_Private::FObjectPropertyParams Z_Construct_UClass_ACreature_Statics::NewProp_cPathfinder = { UE4CodeGen_Private::EPropertyClass::Object, "cPathfinder", RF_Public|RF_Transient|RF_MarkAsNative, (EPropertyFlags)0x0020080000000001, 1, nullptr, STRUCT_OFFSET(ACreature, cPathfinder), Z_Construct_UClass_APathfind_NoRegister, METADATA_PARAMS(Z_Construct_UClass_ACreature_Statics::NewProp_cPathfinder_MetaData, ARRAY_COUNT(Z_Construct_UClass_ACreature_Statics::NewProp_cPathfinder_MetaData)) };
+	const UE4CodeGen_Private::FObjectPropertyParams Z_Construct_UClass_ACreature_Statics::NewProp_cPathfinder = { UE4CodeGen_Private::EPropertyClass::Object, "cPathfinder", RF_Public|RF_Transient|RF_MarkAsNative, (EPropertyFlags)0x0020080000020001, 1, nullptr, STRUCT_OFFSET(ACreature, cPathfinder), Z_Construct_UClass_APathfind_NoRegister, METADATA_PARAMS(Z_Construct_UClass_ACreature_Statics::NewProp_cPathfinder_MetaData, ARRAY_COUNT(Z_Construct_UClass_ACreature_Statics::NewProp_cPathfinder_MetaData)) };
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_ACreature_Statics::NewProp_Mesh_MetaData[] = {
 		{ "Category", "Creature" },
@@ -99,7 +99,7 @@ void EmptyLinkFunctionForGeneratedCodeCreature() {}
 		}
 		return OuterClass;
 	}
-	IMPLEMENT_CLASS(ACreature, 4206876083);
+	IMPLEMENT_CLASS(ACreature, 850031391);
 	static FCompiledInDefer Z_CompiledInDefer_UClass_ACreature(Z_Construct_UClass_ACreature, &ACreature::StaticClass, TEXT("/Script/MyProject"), TEXT("ACreature"), false, nullptr, nullptr, nullptr);
 	DEFINE_VTABLE_PTR_HELPER_CTOR(ACreature);
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
