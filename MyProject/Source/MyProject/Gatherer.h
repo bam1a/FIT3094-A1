@@ -15,26 +15,35 @@ class MYPROJECT_API AGatherer : public ACreature
 {
 	GENERATED_BODY()
 public:
-	enum Creature_State {
-		STATE_TOEAT=10,
-		STATE_EATING
-	};
-	virtual void Tick(float DeltaTime) override;
+	void Tick(float DeltaTime) override;
 
 
 private:
+
+	// Called when the game starts or when spawned
+	void BeginPlay() override;
+
 	AFood * eatingTarget;
 	int happiness, happinessLimit;
 
+	//Gatherer-only functions
+	//function for get the surrounding actors in the sight
+	AFood* getFood(TArray<FHitResult>* inHits);
+	//APredator* getPredator();
+	//getPartner(FHitResult inHitActor);
+	//flockAdjust();
+
+	//registering state, override the whole function without any coherance each other
+	void stateRegister() override;
 
 	//STATE_WANDER:wandering in another place(will be overwriten by others but will act as a super::blah(blah) ) <--target, after finishing up the node properties
-	virtual void State_Wander_OnEnter(void) override;
-	virtual void State_Wander_OnTick(float f_DeltaTime) override;
-	virtual void State_Wander_OnExit(void) override;
+	void State_Wander_OnEnter(void) override;
+	void State_Wander_OnTick(float f_DeltaTime) override;
+	void State_Wander_OnExit(void) override;
 	//STATE_SPAWN: spawning new creature based on its status but with some varieties based on some randomness
-	virtual void State_Spawn_OnEnter(void) override;
-	virtual void State_Spawn_OnTick(float f_DeltaTime) override;
-	virtual void State_Spawn_OnExit(void) override;
+	void State_Spawn_OnEnter(void) override;
+	void State_Spawn_OnTick(float f_DeltaTime) override;
+	void State_Spawn_OnExit(void) override;
 	//STATE_TOEAT: moving towards to the food pallet which detected
 	void State_ToEat_OnEnter(void);
 	void State_ToEat_OnTick(float f_DeltaTime);
@@ -44,5 +53,7 @@ private:
 	void State_Eating_OnTick(float f_DeltaTime);
 	void State_Eating_OnExit(void);
 
+	//this gatherer is special for gatherer's functionality.
+	StateMachine<Creature_State, AGatherer>* m_StateMachine;
 
 };

@@ -28,7 +28,9 @@ public:
 		STATE_SPAWN,
 		STATE_DIE,
 		STATE_HIT,
-		STATE_STANDBY
+		STATE_STANDBY,
+		STATE_COLLECTOR_TOEAT,
+		STATE_COLLECTOR_EATING
 	};
 
 	static enum Creature_Type {
@@ -48,6 +50,9 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	//function for setting the path finder class
+	void setPathfinder();
 
 public:
 	// Called every frame
@@ -122,7 +127,7 @@ protected:
 	StateMachine<Creature_State, ACreature>* m_StateMachine;
 
 
-	void stateRegister();
+	virtual void stateRegister();
 
 
 	//creature type
@@ -196,9 +201,14 @@ protected:
 	virtual void State_Standby_OnTick(float f_DeltaTime);
 	virtual void State_Standby_OnExit(void);
 
+
+	//////////////////Collector only:define the function in  collector.//////////////////////////
+
+
 	//other functions
 	FVector genRandomLocation(FVector initPos, float inRange, bool isNeedValidCheck=false, float inCheckRange=1.f);
 	void move(float DeltaTime, bool isDash);
 	bool checkPosValid(FVector checkPos, float sweepArea);
+	TArray<FHitResult> getSurroundings();
 
 };

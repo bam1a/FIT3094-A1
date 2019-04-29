@@ -74,8 +74,7 @@ void ACreature::initialize(float inSpeed, float inSize, int inPower, int inDef, 
 	stateRegister();
 
 
-	//set default state
-	m_StateMachine->ChangeState(STATE_WANDER);
+
 
 
 }
@@ -85,14 +84,22 @@ void ACreature::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	setPathfinder();
+	//initialize the parameeter
+	initialize();
+
+	//set default state
+	m_StateMachine->ChangeState(STATE_WANDER);
+}
+
+void ACreature::setPathfinder()
+{
 	//get the path finding actor
 	for (TActorIterator<APathfind> ActorItr(GetWorld()); ActorItr; ++ActorItr)
 	{
 		// Same as with the Object Iterator, access the subclass instance with the * or -> operators.
 		cPathfinder = *ActorItr;
 	}
-	//initialize the parameeter
-	initialize();
 
 }
 
@@ -226,6 +233,29 @@ bool ACreature::checkPosValid(FVector checkPos, float sweepArea)
 
 	}
 	return true;
+}
+
+TArray<FHitResult> ACreature::getSurroundings()
+{
+	//array of“FHitResult”that is going to store all the objects our hit detection registers
+	TArray<FHitResult>OutHits;
+	//get our locationandcreate a sphere collider.
+	FCollisionShape CheckSphere = FCollisionShape::MakeSphere(cSight);
+
+	//sweep the position according to the sweeping area
+	//perform a“SweepMultiByChannel”which creates a shape based onthe last parameter, located at the position in the 2nd/3rd parameter.2nd/3rd parameter are the start and end points of a“Sweep”of the shape.
+	//Any objects that overlap are then stored in the first parameter(our TArray)
+	bool isHit = GetWorld()->SweepMultiByChannel(OutHits, cPosition, cPosition, FQuat::Identity, ECC_WorldStatic, CheckSphere);
+	
+	//if there's result, return the array of results
+	if (isHit) {
+		return OutHits;
+	}
+	//otherwise just output an array with no data
+	else {
+		OutHits.Empty();
+		return OutHits;
+	}
 }
 
 void ACreature::stateRegister()
