@@ -56,6 +56,10 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	//externally do when creature intetionally hit other
+		//when no more damage, will be kill itself from the screen.
+	void TakeDmg(int inAtk);
+
 	//assessor:
 	//current state
 	Creature_State SetCurrentState() {
@@ -176,14 +180,14 @@ protected:
 	void State_Flee_OnTick(float f_DeltaTime);
 	void State_Flee_OnExit(void);
 	//STATE_SPAWN: spawning new creature based on its status but with some varieties based on some randomness
-	void State_Spawn_OnEnter(void);
-	void State_Spawn_OnTick(float f_DeltaTime);
-	void State_Spawn_OnExit(void);
+	virtual void State_Spawn_OnEnter(void);
+	virtual void State_Spawn_OnTick(float f_DeltaTime);
+	virtual void State_Spawn_OnExit(void);
 	//STATE_DIE:die (remove itself from render pipeline array and destory itself.)
 	void State_Die_OnEnter(void);
 	void State_Die_OnTick(float f_DeltaTime);
 	void State_Die_OnExit(void);
-	//STATE_HIT:hit by something( might have some time lag)
+	//STATE_HIT:hit by something and determine is dead or not( might have some time lag)
 	void State_Hit_OnEnter(void);
 	void State_Hit_OnTick(float f_DeltaTime);
 	void State_Hit_OnExit(void);

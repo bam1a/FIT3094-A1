@@ -123,6 +123,22 @@ void ACreature::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 }
 
+void ACreature::TakeDmg(int inAtk)
+{
+	//damage calculation: attack from others-defence
+	int finalDmg = inAtk - cDef;
+	//if defence is more than attack, keep it at 1 as well
+	if (finalDmg <= 0) {
+		finalDmg = 1;
+	}
+	//and then take damage to the HP
+	cHP -= finalDmg;
+	//if HP is less than 0, change state to die.
+	if (cHP <= 0) {
+		m_StateMachine->ChangeState(STATE_DIE);
+	}
+}
+
 FVector ACreature::genRandomLocation(FVector initPos, float inRange, bool isNeedValidCheck, float inCheckRange)
 {
 	FVector outVector=FVector::ZeroVector;
