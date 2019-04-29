@@ -168,9 +168,9 @@ protected:
 	//void State_Nothing_OnTick(float f_DeltaTime);
 	//void State_Nothing_OnExit(void);
 	//STATE_WANDER:wandering in another place(will be overwriten by others but will act as a super::blah(blah) ) <--target, after finishing up the node properties
-	void State_Wander_OnEnter(void);
-	void State_Wander_OnTick(float f_DeltaTime);
-	void State_Wander_OnExit(void);
+	virtual void State_Wander_OnEnter(void);
+	virtual void State_Wander_OnTick(float f_DeltaTime);
+	virtual void State_Wander_OnExit(void);
 	//STATE_FLEE:fleeing
 	void State_Flee_OnEnter(void);
 	void State_Flee_OnTick(float f_DeltaTime);
@@ -188,9 +188,9 @@ protected:
 	void State_Hit_OnTick(float f_DeltaTime);
 	void State_Hit_OnExit(void);
 	//STATE_STANDBY:standby(hider might able having some specific feature)
-	void State_Standby_OnEnter(void);
-	void State_Standby_OnTick(float f_DeltaTime);
-	void State_Standby_OnExit(void);
+	virtual void State_Standby_OnEnter(void);
+	virtual void State_Standby_OnTick(float f_DeltaTime);
+	virtual void State_Standby_OnExit(void);
 
 	//other functions
 	FVector genRandomLocation(FVector initPos, float inRange, bool isNeedValidCheck=false, float inCheckRange=1.f);

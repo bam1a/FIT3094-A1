@@ -26,7 +26,7 @@ ACreature::ACreature()
 
 	//set our shape as the static mesh, and turn our Physics on.
 	//Mesh->SetStaticMesh(Wedge.Object);
-	Mesh->SetSimulatePhysics(true);
+	Mesh->SetSimulatePhysics(false);
 
 
 
@@ -125,17 +125,26 @@ void ACreature::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 FVector ACreature::genRandomLocation(FVector initPos, float inRange, bool isNeedValidCheck, float inCheckRange)
 {
-	FVector outVector;
+	FVector outVector=FVector::ZeroVector;
+	FRandomStream randomVal;
+	randomVal.GenerateNewSeed();
+	//outVector.X = initPos.X + randomVal.FRandRange(0.f,(inRange * 2)) - inRange;
 	outVector.X = initPos.X + FMath::FRandRange((inRange*-1.f), inRange);
+	randomVal.GenerateNewSeed();
 	outVector.Y = initPos.Y + FMath::FRandRange((inRange*-1.f), inRange);
+	//outVector.Y = initPos.Y + randomVal.FRandRange(0.f,(inRange * 2)) - inRange;
 	outVector.Z = 0.f;
 
 	//check if the location is valid, if not do it until it's valid<--maybe in a new function?
 	//condition to do: the valid check switch is label as true
 	if (isNeedValidCheck) {
-		while (!checkPosValid(initPos, inCheckRange)) {
+		while (!checkPosValid(outVector, inCheckRange)) {
+			randomVal.GenerateNewSeed();
+			//outVector.X = initPos.X + randomVal.FRandRange(0.f,(inRange * 2)) - inRange;
 			outVector.X = initPos.X + FMath::FRandRange((inRange*-1.f), inRange);
+			randomVal.GenerateNewSeed();
 			outVector.Y = initPos.Y + FMath::FRandRange((inRange*-1.f), inRange);
+			//outVector.Y = initPos.Y + randomVal.FRandRange(0.f,(inRange * 2)) - inRange;
 			outVector.Z = 0.f;
 		}
 	}
@@ -156,7 +165,9 @@ void ACreature::move(float DeltaTime, bool isDash)
 	SetActorLocation(FMath::VInterpConstantTo(cPosition, cTargetPosition, DeltaTime, finalSpeed));
 	
 	//set the rotation
-	SetActorRotation(cVelocity.Rotation());
+	FRotator finalRot = cVelocity.Rotation();
+	finalRot.Yaw += 90.f;
+	SetActorRotation(finalRot);
 
 }
 
@@ -222,7 +233,7 @@ void ACreature::stateRegister()
 
 void ACreature::State_Wander_OnEnter(void) {
 	//generate a path of the target
-	cPathlist = cPathfinder->GeneratePath(cPosition, genRandomLocation(FVector::ZeroVector, 2000.f, true, cSize*2));
+	cPathlist = cPathfinder->GeneratePath(cPosition, genRandomLocation(FVector::ZeroVector, 2000.f, true, cSize*3));
 	//set target location to the first index of the path list
 	//cTargetPosition = genRandomLocation(FVector::ZeroVector, 2000.f,true,cSize);
 	cPathlistID = cPathlist.Num() - 1;
@@ -236,10 +247,14 @@ void ACreature::State_Wander_OnTick(float f_DeltaTime) {
 	if (FVector::Distance(cTargetPosition, cPosition) < (cSize*2)) {
 		//change to another index when not finished its path.
 		//change another target when reached
-		if (cTargetPosition == cPathlist[0]) {
+		if (cTargetPosition == cPathlist[0] || cPathlistID == 0) {
 			//cTargetPosition = genRandomLocation(FVector::ZeroVector, 2000.f, true, cSize);
-			cPathlist = cPathfinder->GeneratePath(cPosition, genRandomLocation(FVector::ZeroVector, 2000.f, true, cSize*2));
-			cPathlistID = cPathlist.Num()-1;
+			cPathlist = cPathfinder->GeneratePath(cPosition, genRandomLocation(FVector::ZeroVector, 2000.f, true, cSize * 2));
+			while (cPathlist.Num() <= 0) {
+				//i don't want a path that is 0, although the path must be more than 1, but just in case.
+				cPathlist = cPathfinder->GeneratePath(cPosition, genRandomLocation(FVector::ZeroVector, 2000.f, true, cSize * 2));
+			}
+			cPathlistID = cPathlist.Num() - 1;
 			cTargetPosition = cPathlist[cPathlistID];
 		}
 		else {

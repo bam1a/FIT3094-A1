@@ -1,6 +1,11 @@
 D:\Github\FIT3094 A1\MyProject\Source\MyProject\Creature.h
+D:\Github\FIT3094 A1\MyProject\Source\MyProject\Food.h
+D:\Github\FIT3094 A1\MyProject\Source\MyProject\FoodGen.h
 D:\Github\FIT3094 A1\MyProject\Source\MyProject\Gatherer.h
+D:\Github\FIT3094 A1\MyProject\Source\MyProject\Hider.h
+D:\Github\FIT3094 A1\MyProject\Source\MyProject\Hunter.h
 D:\Github\FIT3094 A1\MyProject\Source\MyProject\MyProjectGameModeBase.h
 D:\Github\FIT3094 A1\MyProject\Source\MyProject\Pathfind.h
 D:\Github\FIT3094 A1\MyProject\Source\MyProject\PathNode.h
+D:\Github\FIT3094 A1\MyProject\Source\MyProject\Shelter.h
 D:\Github\FIT3094 A1\MyProject\Source\MyProject\Wall.h

@@ -12,7 +12,7 @@ AWall::AWall()
 	RootComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("RootComponent"));
 	//andset our Mesh property to reference the RootComponent
 	Mesh = Cast<UStaticMeshComponent>(RootComponent);
-
+	Mesh->SetSimulatePhysics(false);
 }
 
 // Called when the game starts or when spawned

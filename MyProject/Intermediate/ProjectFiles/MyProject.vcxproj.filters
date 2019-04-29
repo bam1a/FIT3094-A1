@@ -84,4 +84,38 @@
       <Filter>Source\MyProject</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Source\MyProject\Hider.h">
+      <Filter>Source\MyProject</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\MyProject\Shelter.h">
+      <Filter>Source\MyProject</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\MyProject\Hunter.h">
+      <Filter>Source\MyProject</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\MyProject\Food.h">
+      <Filter>Source\MyProject</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\MyProject\FoodGen.h">
+      <Filter>Source\MyProject</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\Source\MyProject\Hider.cpp">
+      <Filter>Source\MyProject</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\MyProject\Shelter.cpp">
+      <Filter>Source\MyProject</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\MyProject\Hunter.cpp">
+      <Filter>Source\MyProject</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\MyProject\Food.cpp">
+      <Filter>Source\MyProject</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\MyProject\FoodGen.cpp">
+      <Filter>Source\MyProject</Filter>
+    </ClCompile>
+  </ItemGroup>
 </Project>

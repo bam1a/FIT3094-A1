@@ -15,7 +15,7 @@ APathfind::APathfind()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
-
+	reset();
 }
 
 TArray<APathNode*> APathfind::NodeArray;
@@ -35,7 +35,7 @@ void APathfind::BeginPlay()
 	for (APathNode* iNode : NodeArray) {
 		NodeArray4Show.Add(iNode);
 	}
-
+	reset();
 	
 }
 
@@ -60,7 +60,7 @@ TArray<FVector> APathfind::GeneratePath(FVector inStartPt, FVector inEndPt)
 	search();
 	//back trace from end node to the start node as vectors
 	//add the last position and its nearest node to the output array
-	//outVectors.Add(endPt);
+	outVectors.Add(endPt);
 	//add the remainings to the array
 	//there's no need to back trace if only start node is the end node.
 	GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString::FromInt(closeNode.Num()));
@@ -128,6 +128,7 @@ void APathfind::search()
 	isFound = false;
 	//create a new NodeCost for the starting node
 	NodeCost* startingNodeCost = new NodeCost(startNode, 0.f, FVector::Distance(startNode->GetPosition(), endNode->GetPosition()));
+	frontier.empty();
 	frontier.push(startingNodeCost);
 	processedNode.Push(startingNodeCost);
 	//main loop
@@ -220,15 +221,15 @@ bool APathfind::isNodeCostClosed(APathNode * checkNode)
 
 FVector APathfind::genRandomLocation(FVector initPos, float inRange, bool isNeedValidCheck, float inCheckRange)
 {
-		FVector outVector;
-		outVector.X = initPos.X + FMath::FRandRange((inRange*-1.f), inRange);
-		outVector.Y = initPos.Y + FMath::FRandRange((inRange*-1.f), inRange);
-		outVector.Z = 0.f;
+	FVector outVector = FVector::ZeroVector;
+	outVector.X = initPos.X + FMath::FRandRange((inRange*-1.f), inRange);
+	outVector.Y = initPos.Y + FMath::FRandRange((inRange*-1.f), inRange);
+	outVector.Z = 0.f;
 	
 		//check if the location is valid, if not do it until it's valid<--maybe in a new function?
 		//condition to do: the valid check switch is label as true
 		if (isNeedValidCheck) {
-			while (!checkPosValid(initPos, inCheckRange)) {
+			while (!checkPosValid(outVector, inCheckRange)) {
 				outVector.X = initPos.X + FMath::FRandRange((inRange*-1.f), inRange);
 				outVector.Y = initPos.Y + FMath::FRandRange((inRange*-1.f), inRange);
 				outVector.Z = 0.f;
