@@ -5,3 +5,8 @@
 AFood::AFood():APathNode() {
 	nNodeType = FOOD;
 }
+
+void AFood::BeEaten()
+{
+	Destroy();
+}

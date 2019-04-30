@@ -13,9 +13,9 @@ PRAGMA_DISABLE_DEPRECATION_WARNINGS
 #endif
 #define MYPROJECT_Gatherer_generated_h
 
-#define MyProject_Source_MyProject_Gatherer_h_16_RPC_WRAPPERS
-#define MyProject_Source_MyProject_Gatherer_h_16_RPC_WRAPPERS_NO_PURE_DECLS
-#define MyProject_Source_MyProject_Gatherer_h_16_INCLASS_NO_PURE_DECLS \
+#define MyProject_Source_MyProject_Gatherer_h_17_RPC_WRAPPERS
+#define MyProject_Source_MyProject_Gatherer_h_17_RPC_WRAPPERS_NO_PURE_DECLS
+#define MyProject_Source_MyProject_Gatherer_h_17_INCLASS_NO_PURE_DECLS \
 private: \
 	static void StaticRegisterNativesAGatherer(); \
 	friend struct Z_Construct_UClass_AGatherer_Statics; \
@@ -24,7 +24,7 @@ public: \
 	DECLARE_SERIALIZER(AGatherer)
 
 
-#define MyProject_Source_MyProject_Gatherer_h_16_INCLASS \
+#define MyProject_Source_MyProject_Gatherer_h_17_INCLASS \
 private: \
 	static void StaticRegisterNativesAGatherer(); \
 	friend struct Z_Construct_UClass_AGatherer_Statics; \
@@ -33,7 +33,7 @@ public: \
 	DECLARE_SERIALIZER(AGatherer)
 
 
-#define MyProject_Source_MyProject_Gatherer_h_16_STANDARD_CONSTRUCTORS \
+#define MyProject_Source_MyProject_Gatherer_h_17_STANDARD_CONSTRUCTORS \
 	/** Standard constructor, called after all reflected properties have been initialized */ \
 	NO_API AGatherer(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get()); \
 	DEFINE_DEFAULT_OBJECT_INITIALIZER_CONSTRUCTOR_CALL(AGatherer) \
@@ -46,7 +46,7 @@ private: \
 public:
 
 
-#define MyProject_Source_MyProject_Gatherer_h_16_ENHANCED_CONSTRUCTORS \
+#define MyProject_Source_MyProject_Gatherer_h_17_ENHANCED_CONSTRUCTORS \
 	/** Standard constructor, called after all reflected properties have been initialized */ \
 	NO_API AGatherer() { }; \
 private: \
@@ -59,26 +59,26 @@ DEFINE_VTABLE_PTR_HELPER_CTOR_CALLER(AGatherer); \
 	DEFINE_DEFAULT_CONSTRUCTOR_CALL(AGatherer)
 
 
-#define MyProject_Source_MyProject_Gatherer_h_16_PRIVATE_PROPERTY_OFFSET
-#define MyProject_Source_MyProject_Gatherer_h_13_PROLOG
-#define MyProject_Source_MyProject_Gatherer_h_16_GENERATED_BODY_LEGACY \
+#define MyProject_Source_MyProject_Gatherer_h_17_PRIVATE_PROPERTY_OFFSET
+#define MyProject_Source_MyProject_Gatherer_h_14_PROLOG
+#define MyProject_Source_MyProject_Gatherer_h_17_GENERATED_BODY_LEGACY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \
 public: \
-	MyProject_Source_MyProject_Gatherer_h_16_PRIVATE_PROPERTY_OFFSET \
-	MyProject_Source_MyProject_Gatherer_h_16_RPC_WRAPPERS \
-	MyProject_Source_MyProject_Gatherer_h_16_INCLASS \
-	MyProject_Source_MyProject_Gatherer_h_16_STANDARD_CONSTRUCTORS \
+	MyProject_Source_MyProject_Gatherer_h_17_PRIVATE_PROPERTY_OFFSET \
+	MyProject_Source_MyProject_Gatherer_h_17_RPC_WRAPPERS \
+	MyProject_Source_MyProject_Gatherer_h_17_INCLASS \
+	MyProject_Source_MyProject_Gatherer_h_17_STANDARD_CONSTRUCTORS \
 public: \
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
 
 
-#define MyProject_Source_MyProject_Gatherer_h_16_GENERATED_BODY \
+#define MyProject_Source_MyProject_Gatherer_h_17_GENERATED_BODY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \
 public: \
-	MyProject_Source_MyProject_Gatherer_h_16_PRIVATE_PROPERTY_OFFSET \
-	MyProject_Source_MyProject_Gatherer_h_16_RPC_WRAPPERS_NO_PURE_DECLS \
-	MyProject_Source_MyProject_Gatherer_h_16_INCLASS_NO_PURE_DECLS \
-	MyProject_Source_MyProject_Gatherer_h_16_ENHANCED_CONSTRUCTORS \
+	MyProject_Source_MyProject_Gatherer_h_17_PRIVATE_PROPERTY_OFFSET \
+	MyProject_Source_MyProject_Gatherer_h_17_RPC_WRAPPERS_NO_PURE_DECLS \
+	MyProject_Source_MyProject_Gatherer_h_17_INCLASS_NO_PURE_DECLS \
+	MyProject_Source_MyProject_Gatherer_h_17_ENHANCED_CONSTRUCTORS \
 private: \
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
 

@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Creature.h"
 #include "Food.h"
+#include "Hunter.h"
 #include "Gatherer.generated.h"
 
 /**
@@ -15,7 +16,7 @@ class MYPROJECT_API AGatherer : public ACreature
 {
 	GENERATED_BODY()
 public:
-	void Tick(float DeltaTime) override;
+	virtual void Tick(float DeltaTime) override;
 
 
 private:
@@ -23,27 +24,29 @@ private:
 	// Called when the game starts or when spawned
 	void BeginPlay() override;
 
-	AFood * eatingTarget;
+	AFood * foodTarget;
 	int happiness, happinessLimit;
 
 	//Gatherer-only functions
 	//function for get the surrounding actors in the sight
+	//getfood:detect food in the sight
+	//getHunter: detect predator in the sight
 	AFood* getFood(TArray<FHitResult>* inHits);
-	//APredator* getPredator();
-	//getPartner(FHitResult inHitActor);
+	AHunter* getHunter(TArray<FHitResult>* inHits);
+	//getPartner(TArray<FHitResult>* inHits);
 	//flockAdjust();
 
 	//registering state, override the whole function without any coherance each other
-	void stateRegister() override;
+	virtual void stateRegister() override;
 
 	//STATE_WANDER:wandering in another place(will be overwriten by others but will act as a super::blah(blah) ) <--target, after finishing up the node properties
-	void State_Wander_OnEnter(void) override;
-	void State_Wander_OnTick(float f_DeltaTime) override;
-	void State_Wander_OnExit(void) override;
+	virtual void State_Wander_OnEnter(void) override;
+	virtual void State_Wander_OnTick(float f_DeltaTime) override;
+	virtual void State_Wander_OnExit(void) override;
 	//STATE_SPAWN: spawning new creature based on its status but with some varieties based on some randomness
-	void State_Spawn_OnEnter(void) override;
-	void State_Spawn_OnTick(float f_DeltaTime) override;
-	void State_Spawn_OnExit(void) override;
+	virtual void State_Spawn_OnEnter(void) override;
+	virtual void State_Spawn_OnTick(float f_DeltaTime) override;
+	virtual void State_Spawn_OnExit(void) override;
 	//STATE_TOEAT: moving towards to the food pallet which detected
 	void State_ToEat_OnEnter(void);
 	void State_ToEat_OnTick(float f_DeltaTime);
@@ -53,7 +56,7 @@ private:
 	void State_Eating_OnTick(float f_DeltaTime);
 	void State_Eating_OnExit(void);
 
-	//this gatherer is special for gatherer's functionality.
+	//this gatherer is special for creature's functionality.
 	StateMachine<Creature_State, AGatherer>* m_StateMachine;
 
 };

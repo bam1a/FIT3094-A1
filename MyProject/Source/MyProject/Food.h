@@ -15,5 +15,5 @@ class MYPROJECT_API AFood : public APathNode
 	GENERATED_BODY()
 public:
 	AFood();
-
+	void BeEaten();
 };

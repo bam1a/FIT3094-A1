@@ -33,6 +33,19 @@ AFood * AGatherer::getFood(TArray<FHitResult>* inHits)
 	return nullptr;
 }
 
+AHunter * AGatherer::getHunter(TArray<FHitResult>* inHits)
+{
+	//if the hit result array has a hunter object, output it immediately.
+	for (auto& Hit : *inHits) {
+		AHunter* hunter = Cast<AHunter>((Hit.GetActor()));
+		if (hunter) {
+			return hunter;
+		}
+	}
+	//otherwise just return a null pointer, other function will recognize.
+	return nullptr;
+}
+
 void AGatherer::stateRegister()
 {
 	m_StateMachine = new StateMachine<Creature_State, AGatherer>(this, STATE_DO_NOTHING);
@@ -64,6 +77,17 @@ void AGatherer::State_Wander_OnTick(float f_DeltaTime)
 {
 	Super::State_Wander_OnTick(f_DeltaTime);
 	//make some if cases to find enemies and food
+	TArray<FHitResult> hitResult = getSurroundings();
+	AFood* tempFoodTarget = getFood(&hitResult);
+	AHunter* tempHunterTarget = getHunter(&hitResult);
+	if (tempFoodTarget != nullptr) {
+		foodTarget = tempFoodTarget;
+		m_StateMachine->ChangeState(STATE_COLLECTOR_TOEAT);
+	}
+	if (tempHunterTarget != nullptr) {
+		cTargetCreature = Cast<ACreature>(tempHunterTarget);
+		m_StateMachine->ChangeState(STATE_FLEE);
+	}
 }
 
 void AGatherer::State_Wander_OnExit(void)
@@ -88,15 +112,47 @@ void AGatherer::State_Spawn_OnExit(void)
 
 void AGatherer::State_ToEat_OnEnter(void)
 {
+	//cTargetPosition = foodTarget->GetPosition();
+	//generate a path of the target
+	cPathlist = cPathfinder->GeneratePath(cPosition, foodTarget->GetPosition());
+	//set target location to the first index of the path list
+	cPathlistID = cPathlist.Num() - 1;
+	cTargetPosition = cPathlist[cPathlistID];
+
 }
 
 void AGatherer::State_ToEat_OnTick(float f_DeltaTime)
 {
+	if (FVector::Distance(cTargetPosition, cPosition) < (cSize)) {
+		//change to another index when not finished its path.
+		//it reaches the food location, change state to eating.
+		if (cTargetPosition == cPathlist[0] || cPathlistID == 0) {
+			m_StateMachine->ChangeState(STATE_COLLECTOR_EATING);
+		}
+		else {
+			cPathlistID -= 1;
+			cTargetPosition = cPathlist[cPathlistID];
+		}
+	}
+	//if foodTarget is eaten(should be result in being a null pointer), change it back to wander state.
+	if (foodTarget == nullptr) {
+		m_StateMachine->ChangeState(STATE_WANDER);
+	}
+	//if hunter is on its sight, flee.
+	TArray<FHitResult> hitResult = getSurroundings();
+	AHunter* tempHunterTarget = getHunter(&hitResult);
+	if (tempHunterTarget != nullptr) {
+		cTargetCreature = Cast<ACreature>(tempHunterTarget);
+		m_StateMachine->ChangeState(STATE_FLEE);
+	}
+
+
+	//and let the actor move
+	move(f_DeltaTime, false);
+
 }
 
-void AGatherer::State_ToEat_OnExit(void)
-{
-}
+void AGatherer::State_ToEat_OnExit(void) { SetLastState(m_StateMachine->GetCurrentState()); }
 
 void AGatherer::State_Eating_OnEnter(void)
 {
@@ -104,8 +160,18 @@ void AGatherer::State_Eating_OnEnter(void)
 
 void AGatherer::State_Eating_OnTick(float f_DeltaTime)
 {
+	//kill the target food when reached the target.
+	foodTarget->BeEaten();
+	//add happiness and hp when eaten the food
+	happiness += 1;
+	cHP += 1;
+	//check if it reaches the happiness limit, spawn a new same type creature when reached, otherwise just do the wander
+	if (happiness == happinessLimit) {
+		m_StateMachine->ChangeState(STATE_SPAWN);
+	}
+	else {
+		m_StateMachine->ChangeState(STATE_WANDER);
+	}
 }
 
-void AGatherer::State_Eating_OnExit(void)
-{
-}
+void AGatherer::State_Eating_OnExit(void) { SetLastState(m_StateMachine->GetCurrentState()); }
