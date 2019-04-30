@@ -30,7 +30,8 @@ public:
 		STATE_HIT,
 		STATE_STANDBY,
 		STATE_COLLECTOR_TOEAT,
-		STATE_COLLECTOR_EATING
+		STATE_COLLECTOR_EATING,
+		STATE_HIDER_TOSHELTER
 	};
 
 	static enum Creature_Type {
@@ -85,7 +86,7 @@ public:
 	//generation
 	int GetGen() { return cGen; };
 	//reproduction count
-	int GetReproCount() { return cReproCount; };
+	int GetSpawnCount() { return cSpawnCount; };
 	//position
 	FVector GetPos() { return cPosition; };
 	//last state
@@ -111,7 +112,7 @@ public:
 	//generation
 	void SetGen(int inGen) { cGen = inGen; };
 	//reproduction count
-	void SetReproCount(int inCount) { cReproCount = inCount; };
+	void SetSpawnCount(int inCount) { cSpawnCount = inCount; };
 	//position
 	void SetPosition(FVector inPos) { cPosition = inPos; };
 	//last state
@@ -159,7 +160,7 @@ protected:
 	cTime: the target time of the timer
 	*/
 	float cSpeed, cSize, cSight, cTimer, cTime;
-	int cPower, cHP, cDef, cGen, cReproCount;
+	int cPower, cHP, cDef, cGen, cSpawnCount;
 	UPROPERTY(VisibleAnywhere)
 		int cPathlistID;
 

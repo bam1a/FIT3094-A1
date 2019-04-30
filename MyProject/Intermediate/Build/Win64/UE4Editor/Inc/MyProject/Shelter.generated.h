@@ -35,7 +35,7 @@ public: \
 
 #define MyProject_Source_MyProject_Shelter_h_15_STANDARD_CONSTRUCTORS \
 	/** Standard constructor, called after all reflected properties have been initialized */ \
-	NO_API AShelter(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get()); \
+	NO_API AShelter(const FObjectInitializer& ObjectInitializer); \
 	DEFINE_DEFAULT_OBJECT_INITIALIZER_CONSTRUCTOR_CALL(AShelter) \
 	DECLARE_VTABLE_PTR_HELPER_CTOR(NO_API, AShelter); \
 DEFINE_VTABLE_PTR_HELPER_CTOR_CALLER(AShelter); \
@@ -47,8 +47,6 @@ public:
 
 
 #define MyProject_Source_MyProject_Shelter_h_15_ENHANCED_CONSTRUCTORS \
-	/** Standard constructor, called after all reflected properties have been initialized */ \
-	NO_API AShelter() { }; \
 private: \
 	/** Private move- and copy-constructors, should never be used */ \
 	NO_API AShelter(AShelter&&); \
@@ -59,7 +57,10 @@ DEFINE_VTABLE_PTR_HELPER_CTOR_CALLER(AShelter); \
 	DEFINE_DEFAULT_CONSTRUCTOR_CALL(AShelter)
 
 
-#define MyProject_Source_MyProject_Shelter_h_15_PRIVATE_PROPERTY_OFFSET
+#define MyProject_Source_MyProject_Shelter_h_15_PRIVATE_PROPERTY_OFFSET \
+	FORCEINLINE static uint32 __PPO__shelterArea() { return STRUCT_OFFSET(AShelter, shelterArea); }
+
+
 #define MyProject_Source_MyProject_Shelter_h_12_PROLOG
 #define MyProject_Source_MyProject_Shelter_h_15_GENERATED_BODY_LEGACY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \

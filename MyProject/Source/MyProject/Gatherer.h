@@ -24,11 +24,12 @@ private:
 	// Called when the game starts or when spawned
 	void BeginPlay() override;
 
+	//local variables
 	AFood * foodTarget;
 	int happiness, happinessLimit;
 
 	//Gatherer-only functions
-	//function for get the surrounding actors in the sight
+	//functions for get the surrounding actors in the sight
 	//getfood:detect food in the sight
 	//getHunter: detect predator in the sight
 	AFood* getFood(TArray<FHitResult>* inHits);

@@ -4,6 +4,13 @@
 
 AGatherer::AGatherer():ACreature() 
 {
+	//reset all array/pointer content when start up(try prevent memory leakage and crash)
+	delete g_StateMachine;
+	g_StateMachine = nullptr;
+	delete foodTarget;
+	foodTarget = nullptr;
+
+
 	//Get Sphere Mesh
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> VisualAsset(TEXT("/Game/StarterContent/Shapes/Shape_Wedge_A.Shape_Wedge_A"));
 	if (VisualAsset.Succeeded())
@@ -35,6 +42,8 @@ void AGatherer::BeginPlay()
 	//initialize the parameeter
 	initialize();
 	cType = GATHERER;
+	//reproduction counter
+	cSpawnCount=3;
 	//set default state
 	g_StateMachine->ChangeState(STATE_WANDER);
 
@@ -146,6 +155,7 @@ void AGatherer::State_Hit_OnTick(float f_DeltaTime)
 {
 	//set the lag time be 3s
 	cTime = 3.f;
+	cTimer = 0.f;
 	//if time's up, change the status back to normal(might be overloaded when needed.
 	if (cTimer >= cTime) {
 		g_StateMachine->ChangeState(cLastState);
@@ -218,12 +228,17 @@ void AGatherer::State_Eating_OnTick(float f_DeltaTime)
 		//add happiness and hp when eaten the food
 		happiness += 1;
 		cHP += 1;
-		//check if it reaches the happiness limit, spawn a new same type creature when reached, otherwise just do the wander
-		if (happiness == happinessLimit) {
+		//check if it reaches the happiness limit=cSpawnCount, spawn a new same type creature when reached, otherwise just do the wander
+		if (happiness == cSpawnCount) {
 			g_StateMachine->ChangeState(STATE_SPAWN);
+			//reset the happiness count
+			happiness = 0;
 		}
 		else {
+			//find the other
 			g_StateMachine->ChangeState(STATE_WANDER);
+			//and add 1 happiness count.
+			happiness += 1;
 		}
 
 	}

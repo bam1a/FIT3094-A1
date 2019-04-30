@@ -14,6 +14,15 @@ using namespace std;
 // Sets default values
 ACreature::ACreature()
 {
+	//reset all array/pointer content when start up(try prevent memory leakage and crash)
+	cPathlist.Empty();
+	delete cPathfinder;
+	cPathfinder = nullptr;
+	delete m_StateMachine;
+	m_StateMachine = nullptr;
+	delete cTargetCreature;
+	cTargetCreature = nullptr;
+
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
