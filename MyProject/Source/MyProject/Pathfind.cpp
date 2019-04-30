@@ -27,13 +27,18 @@ void APathfind::BeginPlay()
 	//add all the APathNode to the array.
 	for (TActorIterator<APathNode> ActorItr(GetWorld()); ActorItr; ++ActorItr)
 	{
-		// Same as with the Object Iterator, access the subclass instance with the * or -> operators.
-		NodeArray.Add(*ActorItr);
-	}
+		//add only if the node type is not food.
+		if ((*ActorItr->getNodeType()) != FString("Food")) {
+			// Same as with the Object Iterator, access the subclass instance with the * or -> operators.
+			NodeArray.Add(*ActorItr);
 
+		}
+	}
+	//add all path node to its array.
 	Super::BeginPlay();
 	for (APathNode* iNode : NodeArray) {
-		NodeArray4Show.Add(iNode);
+			NodeArray4Show.Add(iNode);
+		
 	}
 	reset();
 	
@@ -196,6 +201,7 @@ APathNode * APathfind::getNearestNode(FVector inPos)
 	//loop all the path node elements
 	for (APathNode* iNode : NodeArray) {
 		//if there's a shorter, change that node and use that distance as ref.
+		//if()
 		tempDist = FVector::Distance(iNode->GetActorLocation(), inPos);
 		if (tempDist < shortestDist) {
 			shortestDist = tempDist;

@@ -35,7 +35,7 @@ public:
 
 	static enum Creature_Type {
 		CREATURE = 0,
-		COLLECTOR,
+		GATHERER,
 		HUNTER,
 		HIDER
 	};
@@ -124,6 +124,8 @@ protected:
 	UPROPERTY(EditAnywhere)
 		UStaticMeshComponent* Mesh;
 
+	UMaterialInstanceDynamic* DynamicMaterialInst;
+
 	StateMachine<Creature_State, ACreature>* m_StateMachine;
 
 
@@ -163,6 +165,7 @@ protected:
 
 	FVector cPosition, cTargetPosition, cLastPosition, cVelocity;
 	Creature_State cLastState;
+	Creature_Type cType;
 	ACreature* cTargetCreature;
 	UPROPERTY(EditAnywhere)
 		TArray<FVector> cPathlist;
@@ -181,9 +184,9 @@ protected:
 	virtual void State_Wander_OnTick(float f_DeltaTime);
 	virtual void State_Wander_OnExit(void);
 	//STATE_FLEE:fleeing
-	void State_Flee_OnEnter(void);
-	void State_Flee_OnTick(float f_DeltaTime);
-	void State_Flee_OnExit(void);
+	virtual void State_Flee_OnEnter(void);
+	virtual void State_Flee_OnTick(float f_DeltaTime);
+	virtual void State_Flee_OnExit(void);
 	//STATE_SPAWN: spawning new creature based on its status but with some varieties based on some randomness
 	virtual void State_Spawn_OnEnter(void);
 	virtual void State_Spawn_OnTick(float f_DeltaTime);
@@ -193,9 +196,9 @@ protected:
 	void State_Die_OnTick(float f_DeltaTime);
 	void State_Die_OnExit(void);
 	//STATE_HIT:hit by something and determine is dead or not( might have some time lag)
-	void State_Hit_OnEnter(void);
-	void State_Hit_OnTick(float f_DeltaTime);
-	void State_Hit_OnExit(void);
+	virtual void State_Hit_OnEnter(void);
+	virtual void State_Hit_OnTick(float f_DeltaTime);
+	virtual void State_Hit_OnExit(void);
 	//STATE_STANDBY:standby(hider might able having some specific feature)
 	virtual void State_Standby_OnEnter(void);
 	virtual void State_Standby_OnTick(float f_DeltaTime);

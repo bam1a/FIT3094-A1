@@ -13,6 +13,7 @@ APathNode::APathNode()
 	RootComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("RootComponent"));
 	//andset our Mesh property to reference the RootComponent
 	Mesh = Cast<UStaticMeshComponent>(RootComponent);
+	UMaterialInstanceDynamic* DynamicMaterialInst=nullptr;
 
 	nPosition = GetActorLocation();
 	nNodeType = PATH;
@@ -26,6 +27,23 @@ void APathNode::BeginPlay()
 {
 	Super::BeginPlay();
 	nPosition = GetActorLocation();
+}
+
+
+
+FString APathNode::getNodeType()
+{
+	FString outString = "";
+	if (nNodeType == PATH) {
+		return "Path";
+	}
+	else if (nNodeType == FOOD) {
+		return "Food";
+	}
+	else if (nNodeType == SHELTER) {
+		return "Shelter";
+	}
+	return "";
 }
 
 // Called every frame

@@ -15,5 +15,6 @@ class MYPROJECT_API AFood : public APathNode
 	GENERATED_BODY()
 public:
 	AFood();
+	virtual void BeginPlay() override;
 	void BeEaten();
 };

@@ -35,7 +35,7 @@ public: \
 
 #define MyProject_Source_MyProject_Gatherer_h_17_STANDARD_CONSTRUCTORS \
 	/** Standard constructor, called after all reflected properties have been initialized */ \
-	NO_API AGatherer(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get()); \
+	NO_API AGatherer(const FObjectInitializer& ObjectInitializer); \
 	DEFINE_DEFAULT_OBJECT_INITIALIZER_CONSTRUCTOR_CALL(AGatherer) \
 	DECLARE_VTABLE_PTR_HELPER_CTOR(NO_API, AGatherer); \
 DEFINE_VTABLE_PTR_HELPER_CTOR_CALLER(AGatherer); \
@@ -47,8 +47,6 @@ public:
 
 
 #define MyProject_Source_MyProject_Gatherer_h_17_ENHANCED_CONSTRUCTORS \
-	/** Standard constructor, called after all reflected properties have been initialized */ \
-	NO_API AGatherer() { }; \
 private: \
 	/** Private move- and copy-constructors, should never be used */ \
 	NO_API AGatherer(AGatherer&&); \

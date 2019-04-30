@@ -31,6 +31,8 @@ protected:
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	UMaterialInstanceDynamic* DynamicMaterialInst;
+
 	
 	//position of the node
 	FVector nPosition;
@@ -55,6 +57,8 @@ public:
 	FVector GetPosition() { return nPosition; };
 	//getNeighbourNode: return neighbour nodes(in pointer form)
 	TArray<APathNode*>* GetNeighbourNode() { return &neighbourNode; };
+	//getNodeType: return the type of the node
+	FString getNodeType();
 
 	//mutator----read only, doesn't need?
 

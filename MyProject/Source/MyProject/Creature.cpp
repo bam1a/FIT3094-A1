@@ -29,7 +29,6 @@ ACreature::ACreature()
 	Mesh->SetSimulatePhysics(false);
 
 
-
 }
 
 void ACreature::initialize()
@@ -49,9 +48,6 @@ void ACreature::initialize()
 	//do it in new function as it'll be inherited by others
 	stateRegister();
 
-
-	//set default state
-	m_StateMachine->ChangeState(STATE_WANDER);
 
 }
 
@@ -88,6 +84,7 @@ void ACreature::BeginPlay()
 	//initialize the parameeter
 	initialize();
 
+	cType = CREATURE;
 	//set default state
 	m_StateMachine->ChangeState(STATE_WANDER);
 }
@@ -118,8 +115,10 @@ void ACreature::Tick(float DeltaTime)
 	cLastPosition = cPosition;
 	cPosition = GetActorLocation();
 
+	if (cType == CREATURE) {
 	//do the state machine tick operations
 	m_StateMachine->Tick(DeltaTime);
+	}
 
 
 }
@@ -346,7 +345,7 @@ void ACreature::State_Die_OnTick(float f_DeltaTime) {
 	Destroy();
 	//debug msg for destoryed
 }
-void ACreature::State_Die_OnExit(void) { SetLastState(m_StateMachine->GetCurrentState()); }
+void ACreature::State_Die_OnExit(void) { }
 
 void ACreature::State_Hit_OnEnter(void) {
 	//reset the timer

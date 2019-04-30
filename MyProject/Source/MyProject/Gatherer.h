@@ -16,8 +16,8 @@ class MYPROJECT_API AGatherer : public ACreature
 {
 	GENERATED_BODY()
 public:
+	AGatherer();
 	virtual void Tick(float DeltaTime) override;
-
 
 private:
 
@@ -47,6 +47,12 @@ private:
 	virtual void State_Spawn_OnEnter(void) override;
 	virtual void State_Spawn_OnTick(float f_DeltaTime) override;
 	virtual void State_Spawn_OnExit(void) override;
+	//STATE_FLEE:fleeing
+	virtual void State_Flee_OnTick(float f_DeltaTime)override;
+	virtual void State_Flee_OnExit(void)override;
+	//STATE_HIT:hit by something and determine is dead or not( might have some time lag)
+	virtual void State_Hit_OnTick(float f_DeltaTime)override;
+	virtual void State_Hit_OnExit(void)override;
 	//STATE_TOEAT: moving towards to the food pallet which detected
 	void State_ToEat_OnEnter(void);
 	void State_ToEat_OnTick(float f_DeltaTime);
@@ -56,7 +62,7 @@ private:
 	void State_Eating_OnTick(float f_DeltaTime);
 	void State_Eating_OnExit(void);
 
-	//this gatherer is special for creature's functionality.
-	StateMachine<Creature_State, AGatherer>* m_StateMachine;
+	//this gatherer is special for creature's functionality, using g as the first letter to prevent confusion between the original m_StateMachine.
+	StateMachine<Creature_State, AGatherer>* g_StateMachine;
 
 };

@@ -2,9 +2,29 @@
 
 #include "Gatherer.h"
 
+AGatherer::AGatherer():ACreature() 
+{
+	//Get Sphere Mesh
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> VisualAsset(TEXT("/Game/StarterContent/Shapes/Shape_Wedge_A.Shape_Wedge_A"));
+	if (VisualAsset.Succeeded())
+	{
+		Mesh->SetStaticMesh(VisualAsset.Object);
+	}
+
+	static ConstructorHelpers::FObjectFinder<UMaterial> FoundMaterial(TEXT("/Game/assignmentContent/Material.Material"));
+	if (FoundMaterial.Succeeded())
+	{
+		DynamicMaterialInst = UMaterialInstanceDynamic::Create((UMaterial*)FoundMaterial.Object, Mesh);
+		DynamicMaterialInst->SetVectorParameterValue(FName(TEXT("Colour")), FLinearColor(0.0, 1.0, 0.0, 1.0));
+		Mesh->SetMaterial(0, DynamicMaterialInst);
+	}
+}
+
 void AGatherer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	g_StateMachine->Tick(DeltaTime);
+
 }
 
 void AGatherer::BeginPlay()
@@ -14,9 +34,9 @@ void AGatherer::BeginPlay()
 	setPathfinder();
 	//initialize the parameeter
 	initialize();
-
+	cType = GATHERER;
 	//set default state
-	m_StateMachine->ChangeState(STATE_WANDER);
+	g_StateMachine->ChangeState(STATE_WANDER);
 
 }
 
@@ -48,23 +68,23 @@ AHunter * AGatherer::getHunter(TArray<FHitResult>* inHits)
 
 void AGatherer::stateRegister()
 {
-	m_StateMachine = new StateMachine<Creature_State, AGatherer>(this, STATE_DO_NOTHING);
+	g_StateMachine = new StateMachine<Creature_State, AGatherer>(this, STATE_DO_NOTHING); 
 	//STATE_WANDER,
-	m_StateMachine->RegisterState(STATE_WANDER, &AGatherer::State_Wander_OnEnter, &AGatherer::State_Wander_OnTick, &AGatherer::State_Wander_OnExit);
+	g_StateMachine->RegisterState(STATE_WANDER, &AGatherer::State_Wander_OnEnter, &AGatherer::State_Wander_OnTick, &AGatherer::State_Wander_OnExit);
 	//	STATE_FLEE,
-	m_StateMachine->RegisterState(STATE_FLEE, &AGatherer::State_Flee_OnEnter, &AGatherer::State_Flee_OnTick, &AGatherer::State_Flee_OnExit);
+	g_StateMachine->RegisterState(STATE_FLEE, &AGatherer::State_Flee_OnEnter, &AGatherer::State_Flee_OnTick, &AGatherer::State_Flee_OnExit);
 	//	STATE_SPAWN,
-	m_StateMachine->RegisterState(STATE_SPAWN, &AGatherer::State_Spawn_OnEnter, &AGatherer::State_Spawn_OnTick, &AGatherer::State_Spawn_OnExit);
+	g_StateMachine->RegisterState(STATE_SPAWN, &AGatherer::State_Spawn_OnEnter, &AGatherer::State_Spawn_OnTick, &AGatherer::State_Spawn_OnExit);
 	//	STATE_DIE,
-	m_StateMachine->RegisterState(STATE_DIE, &AGatherer::State_Die_OnEnter, &AGatherer::State_Die_OnTick, &AGatherer::State_Die_OnExit);
+	g_StateMachine->RegisterState(STATE_DIE, &AGatherer::State_Die_OnEnter, &AGatherer::State_Die_OnTick, &AGatherer::State_Die_OnExit);
 	//	STATE_HIT,
-	m_StateMachine->RegisterState(STATE_HIT, &AGatherer::State_Hit_OnEnter, &AGatherer::State_Hit_OnTick, &AGatherer::State_Hit_OnExit);
+	g_StateMachine->RegisterState(STATE_HIT, &AGatherer::State_Hit_OnEnter, &AGatherer::State_Hit_OnTick, &AGatherer::State_Hit_OnExit);
 	//	STATE_STANDBY
-	m_StateMachine->RegisterState(STATE_STANDBY, &AGatherer::State_Standby_OnEnter, &AGatherer::State_Standby_OnTick, &AGatherer::State_Standby_OnExit);
+	g_StateMachine->RegisterState(STATE_STANDBY, &AGatherer::State_Standby_OnEnter, &AGatherer::State_Standby_OnTick, &AGatherer::State_Standby_OnExit);
 	//	STATE_COLLECTOR_TOEAT
-	m_StateMachine->RegisterState(STATE_COLLECTOR_TOEAT, &AGatherer::State_ToEat_OnEnter, &AGatherer::State_ToEat_OnTick, &AGatherer::State_ToEat_OnExit);
+	g_StateMachine->RegisterState(STATE_COLLECTOR_TOEAT, &AGatherer::State_ToEat_OnEnter, &AGatherer::State_ToEat_OnTick, &AGatherer::State_ToEat_OnExit);
 	//	STATE_COLLECTOR_EATING
-	m_StateMachine->RegisterState(STATE_COLLECTOR_EATING, &AGatherer::State_Eating_OnEnter, &AGatherer::State_Eating_OnTick, &AGatherer::State_Eating_OnExit);
+	g_StateMachine->RegisterState(STATE_COLLECTOR_EATING, &AGatherer::State_Eating_OnEnter, &AGatherer::State_Eating_OnTick, &AGatherer::State_Eating_OnExit);
 
 }
 
@@ -82,18 +102,15 @@ void AGatherer::State_Wander_OnTick(float f_DeltaTime)
 	AHunter* tempHunterTarget = getHunter(&hitResult);
 	if (tempFoodTarget != nullptr) {
 		foodTarget = tempFoodTarget;
-		m_StateMachine->ChangeState(STATE_COLLECTOR_TOEAT);
+		g_StateMachine->ChangeState(STATE_COLLECTOR_TOEAT);
 	}
 	if (tempHunterTarget != nullptr) {
 		cTargetCreature = Cast<ACreature>(tempHunterTarget);
-		m_StateMachine->ChangeState(STATE_FLEE);
+		g_StateMachine->ChangeState(STATE_FLEE);
 	}
 }
 
-void AGatherer::State_Wander_OnExit(void)
-{	
-	Super::State_Wander_OnExit();
-}
+void AGatherer::State_Wander_OnExit(void){SetLastState(g_StateMachine->GetCurrentState());}
 
 void AGatherer::State_Spawn_OnEnter(void)
 {
@@ -105,10 +122,41 @@ void AGatherer::State_Spawn_OnTick(float f_DeltaTime)
 	Super::State_Spawn_OnTick(f_DeltaTime);
 }
 
-void AGatherer::State_Spawn_OnExit(void)
+void AGatherer::State_Spawn_OnExit(void){SetLastState(g_StateMachine->GetCurrentState());}
+
+void AGatherer::State_Flee_OnTick(float f_DeltaTime)
 {
-	Super::State_Spawn_OnExit();
+	//if the target is less than its sight's twice or it's not die, keep fleeing
+	if (FVector::Distance(cTargetCreature->GetPos(), cPosition)>(cSight * 2) || cTargetCreature != nullptr) {
+		//get the target's position and get the fleeing direction
+		cTargetPosition = cPosition - cTargetCreature->GetPos();
+		//and let the actor move
+		move(f_DeltaTime, true);
+	}
+	else {
+		//otherwise get back to wandering mode.
+		g_StateMachine->ChangeState(cLastState);
+	}
+
 }
+
+void AGatherer::State_Flee_OnExit(void){SetLastState(g_StateMachine->GetCurrentState());}
+
+void AGatherer::State_Hit_OnTick(float f_DeltaTime)
+{
+	//set the lag time be 3s
+	cTime = 3.f;
+	//if time's up, change the status back to normal(might be overloaded when needed.
+	if (cTimer >= cTime) {
+		g_StateMachine->ChangeState(cLastState);
+	}
+	else {
+		cTimer += f_DeltaTime;
+	}
+
+}
+
+void AGatherer::State_Hit_OnExit(void){SetLastState(g_StateMachine->GetCurrentState());}
 
 void AGatherer::State_ToEat_OnEnter(void)
 {
@@ -127,7 +175,7 @@ void AGatherer::State_ToEat_OnTick(float f_DeltaTime)
 		//change to another index when not finished its path.
 		//it reaches the food location, change state to eating.
 		if (cTargetPosition == cPathlist[0] || cPathlistID == 0) {
-			m_StateMachine->ChangeState(STATE_COLLECTOR_EATING);
+			g_StateMachine->ChangeState(STATE_COLLECTOR_EATING);
 		}
 		else {
 			cPathlistID -= 1;
@@ -136,14 +184,14 @@ void AGatherer::State_ToEat_OnTick(float f_DeltaTime)
 	}
 	//if foodTarget is eaten(should be result in being a null pointer), change it back to wander state.
 	if (foodTarget == nullptr) {
-		m_StateMachine->ChangeState(STATE_WANDER);
+		g_StateMachine->ChangeState(STATE_WANDER);
 	}
 	//if hunter is on its sight, flee.
 	TArray<FHitResult> hitResult = getSurroundings();
 	AHunter* tempHunterTarget = getHunter(&hitResult);
 	if (tempHunterTarget != nullptr) {
 		cTargetCreature = Cast<ACreature>(tempHunterTarget);
-		m_StateMachine->ChangeState(STATE_FLEE);
+		g_StateMachine->ChangeState(STATE_FLEE);
 	}
 
 
@@ -152,7 +200,7 @@ void AGatherer::State_ToEat_OnTick(float f_DeltaTime)
 
 }
 
-void AGatherer::State_ToEat_OnExit(void) { SetLastState(m_StateMachine->GetCurrentState()); }
+void AGatherer::State_ToEat_OnExit(void) { SetLastState(g_StateMachine->GetCurrentState()); }
 
 void AGatherer::State_Eating_OnEnter(void)
 {
@@ -160,18 +208,25 @@ void AGatherer::State_Eating_OnEnter(void)
 
 void AGatherer::State_Eating_OnTick(float f_DeltaTime)
 {
-	//kill the target food when reached the target.
-	foodTarget->BeEaten();
-	//add happiness and hp when eaten the food
-	happiness += 1;
-	cHP += 1;
-	//check if it reaches the happiness limit, spawn a new same type creature when reached, otherwise just do the wander
-	if (happiness == happinessLimit) {
-		m_StateMachine->ChangeState(STATE_SPAWN);
+	//if the last frame is already eaten by other, just turn it back to wander stat.
+	if (foodTarget == nullptr) {
+		g_StateMachine->ChangeState(STATE_WANDER);
 	}
 	else {
-		m_StateMachine->ChangeState(STATE_WANDER);
+		//kill the target food when reached the target.
+		foodTarget->BeEaten();
+		//add happiness and hp when eaten the food
+		happiness += 1;
+		cHP += 1;
+		//check if it reaches the happiness limit, spawn a new same type creature when reached, otherwise just do the wander
+		if (happiness == happinessLimit) {
+			g_StateMachine->ChangeState(STATE_SPAWN);
+		}
+		else {
+			g_StateMachine->ChangeState(STATE_WANDER);
+		}
+
 	}
 }
 
-void AGatherer::State_Eating_OnExit(void) { SetLastState(m_StateMachine->GetCurrentState()); }
+void AGatherer::State_Eating_OnExit(void) { SetLastState(g_StateMachine->GetCurrentState()); }
