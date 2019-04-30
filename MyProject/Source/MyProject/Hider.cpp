@@ -105,8 +105,12 @@ void AHider::State_Wander_OnTick(float f_DeltaTime)
 	AShelter* tempShelterTarget = getShelter(&hitResult);
 	AHunter* tempHunterTarget = getHunter(&hitResult);
 	if (tempShelterTarget != nullptr) {
-		shelterTarget = tempShelterTarget;
-		h_StateMachine->ChangeState(STATE_HIDER_TOSHELTER);
+		//when wandering make sure it won't be the same shelter target
+		if (shelterTarget != tempShelterTarget) {
+			shelterTarget = tempShelterTarget;
+			h_StateMachine->ChangeState(STATE_HIDER_TOSHELTER);
+
+		}
 	}
 	if (tempHunterTarget != nullptr) {
 		cTargetCreature = Cast<ACreature>(tempHunterTarget);
@@ -120,11 +124,14 @@ void AHider::State_Wander_OnExit(void){SetLastState(h_StateMachine->GetCurrentSt
 void AHider::State_Spawn_OnEnter(void)
 {
 	Super::State_Spawn_OnEnter();
+
 }
 
 void AHider::State_Spawn_OnTick(float f_DeltaTime)
 {
 	Super::State_Spawn_OnTick(f_DeltaTime);
+	h_StateMachine->ChangeState(STATE_WANDER);
+
 }
 
 void AHider::State_Spawn_OnExit(void){	SetLastState(h_StateMachine->GetCurrentState());}
@@ -149,9 +156,6 @@ void AHider::State_Flee_OnExit(void) { SetLastState(h_StateMachine->GetCurrentSt
 
 void AHider::State_Hit_OnTick(float f_DeltaTime)
 {
-	//set the lag time be 3s
-	cTime = 3.f;
-	cTimer = 0.f;
 	//if time's up, change the status back to normal(might be overloaded when needed.
 	if (cTimer >= cTime) {
 		h_StateMachine->ChangeState(cLastState);
@@ -166,25 +170,70 @@ void AHider::State_Hit_OnExit(void) { SetLastState(h_StateMachine->GetCurrentSta
 void AHider::State_Standby_OnEnter(void)
 {
 	Super::State_Standby_OnEnter();
+	cTimer = 0;
 }
 
 void AHider::State_Standby_OnTick(float f_DeltaTime)
 {
+
+	if (cTimer >= hideTime) {
+		h_StateMachine->ChangeState(STATE_SPAWN);
+	}
+	else {
+		cTimer += f_DeltaTime;
+	}
+
+
 	Super::State_Standby_OnTick(f_DeltaTime);
+	//if hunter is on its sight, flee.
+	TArray<FHitResult> hitResult = getSurroundings();
+	AHunter* tempHunterTarget = getHunter(&hitResult);
+	if (tempHunterTarget != nullptr) {
+		cTargetCreature = Cast<ACreature>(tempHunterTarget);
+		h_StateMachine->ChangeState(STATE_FLEE);
+	}
+	
+
 }
 
 void AHider::State_Standby_OnExit(void){SetLastState(h_StateMachine->GetCurrentState());}
 
 void AHider::State_ToShelter_OnEnter(void)
 {
+	//generate a path of the target
+	cPathlist = cPathfinder->GeneratePath(cPosition, shelterTarget->GetPosition());
+	//set target location to the first index of the path list
+	cPathlistID = cPathlist.Num() - 1;
+	cTargetPosition = cPathlist[cPathlistID];
+
 }
 
 void AHider::State_ToShelter_OnTick(float f_DeltaTime)
 {
+	if (FVector::Distance(cTargetPosition, cPosition) < (cSize)) {
+		//change to another index when not finished its path.
+		//it reaches the shelter location, change state to standby.
+		if (cTargetPosition == cPathlist[0] || cPathlistID == 0) {
+			h_StateMachine->ChangeState(STATE_STANDBY);
+		}
+		else {
+			cPathlistID -= 1;
+			cTargetPosition = cPathlist[cPathlistID];
+		}
+	}
+	//if hunter is on its sight, flee.
+	TArray<FHitResult> hitResult = getSurroundings();
+	AHunter* tempHunterTarget = getHunter(&hitResult);
+	if (tempHunterTarget != nullptr) {
+		cTargetCreature = Cast<ACreature>(tempHunterTarget);
+		h_StateMachine->ChangeState(STATE_FLEE);
+	}
+
+	//and let the actor move
+	move(f_DeltaTime, false);
+
 }
 
-void AHider::State_ToShelter_OnExit(void)
-{
-}
+void AHider::State_ToShelter_OnExit(void) { SetLastState(h_StateMachine->GetCurrentState()); }
 
 
