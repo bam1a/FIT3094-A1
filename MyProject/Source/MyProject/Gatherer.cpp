@@ -15,7 +15,7 @@ AGatherer::AGatherer(FVector inPos) : ACreature(inPos)
 void AGatherer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	g_StateMachine->Tick(DeltaTime);
+	g_StateMachine->Tick(DeltaTime); 
 
 }
 
@@ -71,7 +71,7 @@ void AGatherer::BeginPlay()
 
 	setPathfinder();
 	//initialize the parameeter
-	initialize(10, 10.f, 20, 20, 15, 500.f);
+	initialize(10, 100.f, 15, 15, 15, 500.f);
 	cType = GATHERER;
 	//reproduction counter:randomly from 3-5
 	cSpawnCount= FMath::RandRange(3, 5);
@@ -167,7 +167,7 @@ void AGatherer::State_Spawn_OnExit(void){SetLastState(g_StateMachine->GetCurrent
 void AGatherer::State_Flee_OnTick(float f_DeltaTime)
 {
 	//if the target is less than its sight's twice or it's not die, keep fleeing
-	if (FVector::Distance(cTargetCreature->GetPos(), cPosition)>(cSight * 2) || cTargetCreature != nullptr) {
+	if (FVector::Distance(cTargetCreature->GetPos(), cPosition)<(cSight * 1.5) && cTargetCreature != nullptr) {
 		//get the target's position and get the fleeing direction
 		cTargetPosition = cPosition - cTargetCreature->GetPos();
 		//and let the actor move
@@ -175,7 +175,7 @@ void AGatherer::State_Flee_OnTick(float f_DeltaTime)
 	}
 	else {
 		//otherwise get back to wandering mode.
-		g_StateMachine->ChangeState(cLastState);
+		g_StateMachine->ChangeState(STATE_WANDER);
 	}
 
 }
@@ -184,9 +184,6 @@ void AGatherer::State_Flee_OnExit(void){SetLastState(g_StateMachine->GetCurrentS
 
 void AGatherer::State_Hit_OnTick(float f_DeltaTime)
 {
-	//set the lag time be 3s
-	cTime = 3.f;
-	cTimer = 0.f;
 	//if time's up, change the status back to normal(might be overloaded when needed.
 	if (cTimer >= cTime) {
 		g_StateMachine->ChangeState(cLastState);

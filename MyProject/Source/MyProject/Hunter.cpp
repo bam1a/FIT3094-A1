@@ -68,7 +68,7 @@ void AHunter::BeginPlay()
 
 	setPathfinder();
 	//initialize the parameeter
-	initialize(10, 10.f, 30, 10, 15, 300.f);
+	initialize(20, 100.f, 25, 10, 15, 300.f);
 	//initialize();
 	cType = HUNTER;
 
@@ -122,7 +122,7 @@ void AHunter::State_Wander_OnTick(float f_DeltaTime)
 	ACreature* tempPrayTarget = getPray(&hitResult);
 	//chase if there's a pray and it's not meet from last time, chase that target.
 	if (tempPrayTarget != nullptr) {
-		if (prayTarget != tempPrayTarget) {
+		if (prayTarget != tempPrayTarget && tempPrayTarget != this) {
 			prayTarget = tempPrayTarget;
 			cTargetCreature = prayTarget;
 			p_StateMachine->ChangeState(STATE_HUNTER_CHASE);
@@ -150,8 +150,8 @@ void AHunter::State_Spawn_OnExit(void) { SetLastState(p_StateMachine->GetCurrent
 void AHunter::State_Flee_OnTick(float f_DeltaTime)
 {
 	//if the target is less than its sight's twice or it's not die, keep fleeing
-	if (FVector::Distance(cTargetCreature->GetPos(), cPosition)>(cSight * 2) || cTargetCreature != nullptr) {
-		//get the target's position and get the fleeing direction
+	if (FVector::Distance(cTargetCreature->GetPos(), cPosition)<(cSight * 1.5) && cTargetCreature != nullptr) {
+	//get the target's position and get the fleeing direction
 		cTargetPosition = cPosition - cTargetCreature->GetPos();
 		//and let the actor move
 		move(f_DeltaTime, true);
@@ -188,36 +188,47 @@ void AHunter::State_Chase_OnTick(float f_DeltaTime)
 {
 	//if the timer is over, or the target is gone, hunter lose the interest and find another target.
 	if (cTimer >= chaseTime||cTargetCreature==nullptr) {
-		//prayTarget = nullptr;
+		prayTarget = nullptr;
 		p_StateMachine->ChangeState(STATE_WANDER);
 	}
+	//otherwise move the target and beat it if touched
 	else {
 		cTimer += f_DeltaTime;
 		cTargetPosition = cTargetCreature->GetPos();
 		//and let the actor move
 		move(f_DeltaTime, true);
 
-	}
-	//when hunter really nearby the target, both of them get hit and both shall changed to hit state
-	if (FVector::Distance(cTargetPosition, cPosition) < (cSize)) {
-		//both take damage
-		cTargetCreature->TakeDmg(cPower);
-		TakeDmg(cTargetCreature->GetPower());
-		//if it kills the creature, add a counter
-		//if the count is reached the spawn count, it'll spawn a new hunter
-		if (cTargetCreature->GetHP() <= 0) {
-			killCount += 1;
-			if(killCount>=cSpawnCount){
-				p_StateMachine->ChangeState(STATE_SPAWN);
-				//then reset the count.
-				killCount = 0;
+		//when hunter really nearby the target, both of them get hit and both shall changed to hit state
+		if (FVector::Distance(cTargetPosition, cPosition) <= (cSize*1.5)) {
+			//take some recovery before taking damage
+			int recover = cTargetCreature->GetHP();
+			//both take damage
+			cTargetCreature->TakeDmg(cPower);
+			//before hunter take damage, recover HP based on the damage the target takes
+			//but 1/2 of it.<==tweak to just 1/1
+			recover -= cTargetCreature->GetHP();
+			cHP += (recover);//2
+			TakeDmg(cTargetCreature->GetPower());
+			//and make a force toward each other
+				//todo
+			//if it kills the creature, add a counter
+			//if the count is reached the spawn count, it'll spawn a new hunter
+			if (cTargetCreature->GetHP() <= 0) {
+				killCount += 1;
+				if (killCount >= cSpawnCount) {
+					p_StateMachine->ChangeState(STATE_SPAWN);
+					//then reset the count.
+					killCount = 0;
+				}
 			}
 		}
-	}
-	//when the pray is over its sight, change it back to wander and clear the target
-	else if (FVector::Distance(cTargetPosition, cPosition) >= (cSight)) {
-		p_StateMachine->ChangeState(STATE_WANDER);
-		prayTarget = nullptr;
+		//when the pray is over its sight, change it back to wander and clear the target
+		else if (FVector::Distance(cTargetPosition, cPosition) >= (cSight*2)) {
+			p_StateMachine->ChangeState(STATE_WANDER);
+			prayTarget = nullptr;
+		}
+
+
 	}
 }
 

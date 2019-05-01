@@ -70,7 +70,7 @@ void AHider::BeginPlay()
 
 	setPathfinder();
 	//initialize the parameeter
-	initialize(10, 10.f, 10, 30, 15, 500.f);
+	initialize(10, 100.f, 10, 20, 15, 500.f);
 	
 	cType = HIDER;
 
@@ -100,7 +100,10 @@ ACreature * AHider::getCreature(TArray<FHitResult>* inHits)
 	for (auto& Hit : *inHits) {
 		ACreature* hunter = Cast<ACreature>((Hit.GetActor()));
 		if (hunter) {
-			return hunter;
+			//make sure that pointer isn't itself.
+			if (hunter != this) {
+				return hunter;
+			}
 		}
 	}
 	//otherwise just return a null pointer, other function will recognize.
@@ -172,7 +175,7 @@ void AHider::State_Spawn_OnExit(void){	SetLastState(h_StateMachine->GetCurrentSt
 void AHider::State_Flee_OnTick(float f_DeltaTime)
 {
 	//if the target is less than its sight's twice or it's not die, keep fleeing
-	if (FVector::Distance(cTargetCreature->GetPos(), cPosition)>(cSight * 2) || cTargetCreature != nullptr) {
+	if (FVector::Distance(cTargetCreature->GetPos(), cPosition)<(cSight * 1.5) && cTargetCreature != nullptr) {
 		//get the target's position and get the fleeing direction
 		cTargetPosition = cPosition - cTargetCreature->GetPos();
 		//and let the actor move
@@ -181,7 +184,7 @@ void AHider::State_Flee_OnTick(float f_DeltaTime)
 	else {
 		//otherwise get back to wandering mode.
 		//if the last state is standby, change it to toShelter state.
-		if (cLastState != STATE_STANDBY) {
+		if (cLastState!=STATE_STANDBY) {
 			h_StateMachine->ChangeState(STATE_WANDER);
 			cTargetCreature = nullptr;
 		}

@@ -35,7 +35,7 @@ ACreature::ACreature()
 
 	//set our shape as the static mesh, and turn our Physics on.
 	//Mesh->SetStaticMesh(Wedge.Object);
-	Mesh->SetSimulatePhysics(false);
+	Mesh->SetSimulatePhysics(true);
 
 
 }
@@ -55,6 +55,9 @@ void ACreature::initialize()
 	cDef = 10;
 	cHP = 10;
 	cSight = 10.f;
+
+	//set its scaling
+	Mesh->SetRelativeScale3D(FVector((cSize / 10.f), (cSize / 10.f), (cSize / 10.f)));
 
 	cPosition = GetActorLocation();
 	//set position (last position should be same in this moment)
@@ -76,6 +79,9 @@ void ACreature::initialize(float inSpeed, float inSize, int inPower, int inDef, 
 	cDef = FMath::RandRange((inDef * 8 / 10), (inDef * 12 / 10));
 	cHP = FMath::RandRange((inHP * 8 / 10), (inHP * 12 / 10));
 	cSight = FMath::RandRange((inSight * 6.f / 10.f), (inSight));
+
+	//set its scaling
+	Mesh->SetRelativeScale3D(FVector((cSize / inSize), (cSize / inSize), (cSize / inSize)));
 
 	cPosition = GetActorLocation();
 	//set position (last position should be same in this moment)
@@ -195,7 +201,7 @@ FVector ACreature::genRandomLocation(FVector initPos, float inRange, bool isNeed
 void ACreature::move(float DeltaTime, bool isDash)
 {
 
-	float finalSpeed = cSpeed / cSize * 200.f;
+	float finalSpeed = cSpeed / (cSize/10.f) * 200.f;
 	//if it's dashing, the speed will be twiced
 	if (isDash) {
 		finalSpeed *= 2.f;
@@ -368,7 +374,7 @@ void ACreature::State_Die_OnExit(void) { }
 
 void ACreature::State_Hit_OnEnter(void) {
 	//set the lag time be 3s
-	cTime = 3.f;
+	cTime = 1.f;
 	//reset the timer
 	cTimer = 0.f;
 }

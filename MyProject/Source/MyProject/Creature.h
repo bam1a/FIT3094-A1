@@ -165,7 +165,9 @@ protected:
 	cTime: the target time of the timer
 	*/
 	float cSpeed, cSize, cSight, cTimer, cTime;
-	int cPower, cHP, cDef, cGen, cSpawnCount;
+	int cPower, cDef, cGen, cSpawnCount;
+	UPROPERTY(EditAnywhere)
+		int cHP;
 	UPROPERTY(VisibleAnywhere)
 		int cPathlistID;
 

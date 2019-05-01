@@ -68,7 +68,7 @@ void EmptyLinkFunctionForGeneratedCodeHider() {}
 		}
 		return OuterClass;
 	}
-	IMPLEMENT_CLASS(AHider, 744956459);
+	IMPLEMENT_CLASS(AHider, 2931118222);
 	static FCompiledInDefer Z_CompiledInDefer_UClass_AHider(Z_Construct_UClass_AHider, &AHider::StaticClass, TEXT("/Script/MyProject"), TEXT("AHider"), false, nullptr, nullptr, nullptr);
 	DEFINE_VTABLE_PTR_HELPER_CTOR(AHider);
 PRAGMA_ENABLE_DEPRECATION_WARNINGS

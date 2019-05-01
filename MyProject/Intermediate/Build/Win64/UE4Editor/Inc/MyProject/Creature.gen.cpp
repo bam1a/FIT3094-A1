@@ -48,6 +48,10 @@ void EmptyLinkFunctionForGeneratedCodeCreature() {}
 #endif
 		static const UE4CodeGen_Private::FUnsizedIntPropertyParams NewProp_cPathlistID;
 #if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_cHP_MetaData[];
+#endif
+		static const UE4CodeGen_Private::FUnsizedIntPropertyParams NewProp_cHP;
+#if WITH_METADATA
 		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_Mesh_MetaData[];
 #endif
 		static const UE4CodeGen_Private::FObjectPropertyParams NewProp_Mesh;
@@ -90,6 +94,13 @@ void EmptyLinkFunctionForGeneratedCodeCreature() {}
 #endif
 	const UE4CodeGen_Private::FUnsizedIntPropertyParams Z_Construct_UClass_ACreature_Statics::NewProp_cPathlistID = { UE4CodeGen_Private::EPropertyClass::Int, "cPathlistID", RF_Public|RF_Transient|RF_MarkAsNative, (EPropertyFlags)0x0020080000020001, 1, nullptr, STRUCT_OFFSET(ACreature, cPathlistID), METADATA_PARAMS(Z_Construct_UClass_ACreature_Statics::NewProp_cPathlistID_MetaData, ARRAY_COUNT(Z_Construct_UClass_ACreature_Statics::NewProp_cPathlistID_MetaData)) };
 #if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_ACreature_Statics::NewProp_cHP_MetaData[] = {
+		{ "Category", "Creature" },
+		{ "ModuleRelativePath", "Creature.h" },
+	};
+#endif
+	const UE4CodeGen_Private::FUnsizedIntPropertyParams Z_Construct_UClass_ACreature_Statics::NewProp_cHP = { UE4CodeGen_Private::EPropertyClass::Int, "cHP", RF_Public|RF_Transient|RF_MarkAsNative, (EPropertyFlags)0x0020080000000001, 1, nullptr, STRUCT_OFFSET(ACreature, cHP), METADATA_PARAMS(Z_Construct_UClass_ACreature_Statics::NewProp_cHP_MetaData, ARRAY_COUNT(Z_Construct_UClass_ACreature_Statics::NewProp_cHP_MetaData)) };
+#if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_ACreature_Statics::NewProp_Mesh_MetaData[] = {
 		{ "Category", "Creature" },
 		{ "EditInline", "true" },
@@ -102,6 +113,7 @@ void EmptyLinkFunctionForGeneratedCodeCreature() {}
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ACreature_Statics::NewProp_cPathlist,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ACreature_Statics::NewProp_cPathlist_Inner,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ACreature_Statics::NewProp_cPathlistID,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ACreature_Statics::NewProp_cHP,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ACreature_Statics::NewProp_Mesh,
 	};
 	const FCppClassTypeInfoStatic Z_Construct_UClass_ACreature_Statics::StaticCppClassTypeInfo = {
@@ -127,7 +139,7 @@ void EmptyLinkFunctionForGeneratedCodeCreature() {}
 		}
 		return OuterClass;
 	}
-	IMPLEMENT_CLASS(ACreature, 856188398);
+	IMPLEMENT_CLASS(ACreature, 1123841600);
 	static FCompiledInDefer Z_CompiledInDefer_UClass_ACreature(Z_Construct_UClass_ACreature, &ACreature::StaticClass, TEXT("/Script/MyProject"), TEXT("ACreature"), false, nullptr, nullptr, nullptr);
 	DEFINE_VTABLE_PTR_HELPER_CTOR(ACreature);
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
