@@ -41,8 +41,8 @@ void AHider::BeginPlay()
 	//initialize the parameeter
 	initialize();
 	cType = HIDER;
-	//set target hide time
 
+	//set target hide time
 	hideTime = 60.f;
 	//set default state
 	h_StateMachine->ChangeState(STATE_WANDER);

@@ -31,7 +31,8 @@ public:
 		STATE_STANDBY,
 		STATE_COLLECTOR_TOEAT,
 		STATE_COLLECTOR_EATING,
-		STATE_HIDER_TOSHELTER
+		STATE_HIDER_TOSHELTER,
+		STATE_HUNTER_CHASE
 	};
 
 	static enum Creature_Type {
@@ -91,6 +92,8 @@ public:
 	FVector GetPos() { return cPosition; };
 	//last state
 	Creature_State GetLastState() { return cLastState; };
+	//creature type
+	Creature_Type getCreatureType() { return cType; }
 
 	//mutator:
 	//current state

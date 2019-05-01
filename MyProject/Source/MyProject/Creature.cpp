@@ -298,7 +298,7 @@ void ACreature::State_Wander_OnTick(float f_DeltaTime) {
 	//maybe also if the path array length is not zero, and the index is the last node, will be find a new path
 	FVector vectorToTarget = cTargetPosition - cPosition;
 
-	if (FVector::Distance(cTargetPosition, cPosition) < (cSize)) {
+	if (FVector::Distance(cTargetPosition, cPosition) < (cSize*2)) {
 		//change to another index when not finished its path.
 		//change another target when reached
 		if (cTargetPosition == cPathlist[0] || cPathlistID == 0) {
