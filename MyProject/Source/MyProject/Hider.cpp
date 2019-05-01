@@ -4,6 +4,23 @@
 
 AHider::AHider() :ACreature()
 {
+	construction();
+}
+
+AHider::AHider(FVector inPos, AShelter* inShelter) : ACreature(inPos) {
+	construction();
+	shelterTarget = inShelter;
+}
+
+void AHider::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+	h_StateMachine->Tick(DeltaTime);
+
+}
+
+void AHider::construction()
+{
 	//reset all array/pointer content when start up(try prevent memory leakage and crash)
 	delete h_StateMachine;
 	h_StateMachine = nullptr;
@@ -26,12 +43,6 @@ AHider::AHider() :ACreature()
 	}
 
 }
-void AHider::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-	h_StateMachine->Tick(DeltaTime);
-
-}
 
 void AHider::BeginPlay()
 {
@@ -39,7 +50,8 @@ void AHider::BeginPlay()
 
 	setPathfinder();
 	//initialize the parameeter
-	initialize();
+	initialize(10, 10.f, 10, 30, 15, 500.f);
+	
 	cType = HIDER;
 
 	//set target hide time
@@ -62,11 +74,11 @@ AShelter * AHider::getShelter(TArray<FHitResult>* inHits)
 	return nullptr;
 }
 
-AHunter * AHider::getHunter(TArray<FHitResult>* inHits)
+ACreature * AHider::getCreature(TArray<FHitResult>* inHits)
 {
-	//if the hit result array has a hunter object, output it immediately.
+	//if the hit result array has a creature object, output it immediately.
 	for (auto& Hit : *inHits) {
-		AHunter* hunter = Cast<AHunter>((Hit.GetActor()));
+		ACreature* hunter = Cast<ACreature>((Hit.GetActor()));
 		if (hunter) {
 			return hunter;
 		}
@@ -103,7 +115,7 @@ void AHider::State_Wander_OnTick(float f_DeltaTime)
 	//make some if cases to find enemies and food
 	TArray<FHitResult> hitResult = getSurroundings();
 	AShelter* tempShelterTarget = getShelter(&hitResult);
-	AHunter* tempHunterTarget = getHunter(&hitResult);
+	ACreature* tempCreatureTarget = getCreature(&hitResult);
 	if (tempShelterTarget != nullptr) {
 		//when wandering make sure it won't be the same shelter target
 		if (shelterTarget != tempShelterTarget) {
@@ -112,8 +124,9 @@ void AHider::State_Wander_OnTick(float f_DeltaTime)
 
 		}
 	}
-	if (tempHunterTarget != nullptr) {
-		cTargetCreature = Cast<ACreature>(tempHunterTarget);
+	//if there's a surrounding creature and it's not the former target
+	if (tempCreatureTarget != nullptr && tempCreatureTarget!=cTargetCreature) {
+		cTargetCreature = tempCreatureTarget;
 		h_StateMachine->ChangeState(STATE_FLEE);
 	}
 
@@ -149,7 +162,8 @@ void AHider::State_Flee_OnTick(float f_DeltaTime)
 		//otherwise get back to wandering mode.
 		//if the last state is standby, change it to toShelter state.
 		if (cLastState != STATE_STANDBY) {
-			h_StateMachine->ChangeState(cLastState);
+			h_StateMachine->ChangeState(STATE_WANDER);
+			cTargetCreature = nullptr;
 		}
 		else {
 			h_StateMachine->ChangeState(STATE_HIDER_TOSHELTER);
@@ -192,12 +206,15 @@ void AHider::State_Standby_OnTick(float f_DeltaTime)
 
 	//if hunter is on its sight, flee.
 	TArray<FHitResult> hitResult = getSurroundings();
-	AHunter* tempHunterTarget = getHunter(&hitResult);
-	if (tempHunterTarget != nullptr) {
-		cTargetCreature = Cast<ACreature>(tempHunterTarget);
-		h_StateMachine->ChangeState(STATE_FLEE);
+	ACreature* tempCreatureTarget = getCreature(&hitResult);
+	//make sure there's a surrounding creature and it's not the former target
+	if (tempCreatureTarget != nullptr) {
+		if (tempCreatureTarget != cTargetCreature) {
+			cTargetCreature = tempCreatureTarget;
+			h_StateMachine->ChangeState(STATE_FLEE);
+		}
 	}
-	
+
 
 }
 
@@ -228,9 +245,10 @@ void AHider::State_ToShelter_OnTick(float f_DeltaTime)
 	}
 	//if hunter is on its sight, flee.
 	TArray<FHitResult> hitResult = getSurroundings();
-	AHunter* tempHunterTarget = getHunter(&hitResult);
-	if (tempHunterTarget != nullptr) {
-		cTargetCreature = Cast<ACreature>(tempHunterTarget);
+	ACreature* tempCreatureTarget = getCreature(&hitResult);
+	//if there's a surrounding creature and it's not the former target
+	if (tempCreatureTarget != nullptr && tempCreatureTarget != cTargetCreature) {
+		cTargetCreature = tempCreatureTarget;
 		h_StateMachine->ChangeState(STATE_FLEE);
 	}
 

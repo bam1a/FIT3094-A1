@@ -17,10 +17,12 @@ class MYPROJECT_API AGatherer : public ACreature
 	GENERATED_BODY()
 public:
 	AGatherer();
+	AGatherer(FVector inPos);
 	virtual void Tick(float DeltaTime) override;
 
 private:
-
+	//function contains all the construction procedure.
+	void construction();
 	// Called when the game starts or when spawned
 	void BeginPlay() override;
 

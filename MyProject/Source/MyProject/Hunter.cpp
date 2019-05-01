@@ -4,6 +4,21 @@
 
 AHunter::AHunter() :ACreature()
 {
+	construction();
+}
+AHunter::AHunter(FVector inPos) :ACreature(inPos) {
+	construction();
+}
+
+
+void AHunter::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+	p_StateMachine->Tick(DeltaTime);
+}
+
+void AHunter::construction()
+{
 	//reset all array/pointer content when start up(try prevent memory leakage and crash)
 	delete p_StateMachine;
 	p_StateMachine = nullptr;
@@ -27,19 +42,14 @@ AHunter::AHunter() :ACreature()
 
 }
 
-void AHunter::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-	p_StateMachine->Tick(DeltaTime);
-}
-
 void AHunter::BeginPlay()
 {
 	Super::Super::BeginPlay();
 
 	setPathfinder();
 	//initialize the parameeter
-	initialize();
+	initialize(10, 10.f, 30, 10, 15, 300.f);
+	//initialize();
 	cType = HUNTER;
 
 	//set target chasing time and the kill count

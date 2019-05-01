@@ -39,6 +39,13 @@ ACreature::ACreature()
 
 
 }
+ACreature::ACreature(FVector inPos) {
+	//init. with the original constructor
+	ACreature();
+	//and also set the creature in specific position.
+	SetActorLocation(inPos);
+
+}
 
 void ACreature::initialize()
 {
@@ -60,16 +67,16 @@ void ACreature::initialize()
 
 }
 
-void ACreature::initialize(float inSpeed, float inSize, int inPower, int inDef, int inHP, float inSight, FVector inPos)
+void ACreature::initialize(float inSpeed, float inSize, int inPower, int inDef, int inHP, float inSight)
 {
-	cSpeed = inSpeed;
-	cSize = inSize;
-	cPower = inPower;
-	cDef = inDef;
-	cHP = inHP;
-	cSight = inSight;
+	//random generate the parameters with +-20% (except sight is 60-100%)
+	cSpeed = FMath::RandRange((inSpeed*8/10), (inSpeed * 12 / 10));
+	cSize = FMath::RandRange((inSize * 8.f / 10.f), (inSize * 12.f / 10.f));
+	cPower = FMath::RandRange((inPower * 8 / 10), (inPower * 12 / 10));
+	cDef = FMath::RandRange((inDef * 8 / 10), (inDef * 12 / 10));
+	cHP = FMath::RandRange((inHP * 8 / 10), (inHP * 12 / 10));
+	cSight = FMath::RandRange((inSight * 6.f / 10.f), (inSight));
 
-	SetActorLocation(inPos);
 	cPosition = GetActorLocation();
 	//set position (last position should be same in this moment)
 	cLastPosition = cPosition;

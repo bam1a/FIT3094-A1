@@ -4,6 +4,23 @@
 
 AGatherer::AGatherer():ACreature() 
 {
+	construction();
+}
+
+AGatherer::AGatherer(FVector inPos) : ACreature(inPos)
+{
+	construction();
+}
+
+void AGatherer::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+	g_StateMachine->Tick(DeltaTime);
+
+}
+
+void AGatherer::construction()
+{
 	//reset all array/pointer content when start up(try prevent memory leakage and crash)
 	delete g_StateMachine;
 	g_StateMachine = nullptr;
@@ -25,12 +42,6 @@ AGatherer::AGatherer():ACreature()
 		DynamicMaterialInst->SetVectorParameterValue(FName(TEXT("Colour")), FLinearColor(0.0, 1.0, 0.0, 1.0));
 		Mesh->SetMaterial(0, DynamicMaterialInst);
 	}
-}
-
-void AGatherer::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-	g_StateMachine->Tick(DeltaTime);
 
 }
 
@@ -40,10 +51,10 @@ void AGatherer::BeginPlay()
 
 	setPathfinder();
 	//initialize the parameeter
-	initialize();
+	initialize(10, 10.f, 20, 20, 15, 500.f);
 	cType = GATHERER;
-	//reproduction counter
-	cSpawnCount=3;
+	//reproduction counter:randomly from 3-5
+	cSpawnCount= FMath::RandRange(3, 5);
 	//set default state
 	g_StateMachine->ChangeState(STATE_WANDER);
 

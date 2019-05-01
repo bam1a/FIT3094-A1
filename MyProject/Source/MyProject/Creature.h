@@ -44,10 +44,12 @@ public:
 
 	//create a blank creature without anything started
 	ACreature();
+	//create a creature with requested position
+	ACreature(FVector inPos);
 	//initialize without parameters?
 	void initialize();
 	//initialize with parameters
-	void initialize(float inSpeed, float inSize, int inPower, int inDef, int inHP, float inSight, FVector inPos);
+	void initialize(float inSpeed, float inSize, int inPower, int inDef, int inHP, float inSight);
 
 protected:
 	// Called when the game starts or when spawned

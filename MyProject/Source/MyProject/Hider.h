@@ -17,8 +17,12 @@ class MYPROJECT_API AHider : public ACreature
 	GENERATED_BODY()
 public:
 	AHider();
+	//constructor with a target shelter, make sure it won't hide at that shelter when hiding.
+	AHider(FVector inPos, AShelter* inShelter);
 	virtual void Tick(float DeltaTime) override;
 private:
+	//function contains all the construction procedure.
+	void construction();
 	// Called when the game starts or when spawned
 	void BeginPlay() override;
 
@@ -31,7 +35,7 @@ private:
 	//getShelter: detect shelter in the sight
 	//getHunter: detect predator in the sight
 	AShelter* getShelter(TArray<FHitResult>* inHits);
-	AHunter* getHunter(TArray<FHitResult>* inHits);
+	ACreature* getCreature(TArray<FHitResult>* inHits);
 
 	//registering state, override the whole function without any coherance each other
 	virtual void stateRegister() override;
