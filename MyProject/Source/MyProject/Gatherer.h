@@ -20,6 +20,11 @@ public:
 	AGatherer(FVector inPos);
 	virtual void Tick(float DeltaTime) override;
 
+	//externally do when creature intetionally hit other
+	//when no more damage, will be kill itself from the screen.
+	virtual void TakeDmg(int inAtk) override;
+
+
 private:
 	//function contains all the construction procedure.
 	void construction();

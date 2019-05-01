@@ -20,6 +20,12 @@ public:
 	//constructor with a target shelter, make sure it won't hide at that shelter when hiding.
 	AHider(FVector inPos, AShelter* inShelter);
 	virtual void Tick(float DeltaTime) override;
+
+
+	//externally do when creature intetionally hit other
+	//when no more damage, will be kill itself from the screen.
+	virtual void TakeDmg(int inAtk) override;
+
 private:
 	//function contains all the construction procedure.
 	void construction();

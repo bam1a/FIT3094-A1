@@ -157,10 +157,10 @@ void ACreature::TakeDmg(int inAtk)
 	cHP -= finalDmg;
 	//if HP is less than 0, change state to die.
 	if (cHP <= 0) {
-		m_StateMachine->ChangeState(STATE_DIE);
+		m_StateMachine->ChangeState(STATE_DIE);//<--problem
 	}
 	else {
-		m_StateMachine->ChangeState(STATE_HIT);
+		m_StateMachine->ChangeState(STATE_HIT);//<--problem
 	}
 }
 

@@ -19,6 +19,26 @@ void AGatherer::Tick(float DeltaTime)
 
 }
 
+void AGatherer::TakeDmg(int inAtk)
+{
+	//damage calculation: attack from others-defence
+	int finalDmg = inAtk - cDef;
+	//if defence is more than attack, keep it at 1 as well
+	if (finalDmg <= 0) {
+		finalDmg = 1;
+	}
+	//and then take damage to the HP
+	cHP -= finalDmg;
+	//if HP is less than 0, change state to die.
+	if (cHP <= 0) {
+		g_StateMachine->ChangeState(STATE_DIE);//<--problem
+	}
+	else {
+		g_StateMachine->ChangeState(STATE_HIT);//<--problem
+	}
+
+}
+
 void AGatherer::construction()
 {
 	//reset all array/pointer content when start up(try prevent memory leakage and crash)

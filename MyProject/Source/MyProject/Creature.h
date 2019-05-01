@@ -67,7 +67,7 @@ public:
 
 	//externally do when creature intetionally hit other
 		//when no more damage, will be kill itself from the screen.
-	void TakeDmg(int inAtk);
+	virtual void TakeDmg(int inAtk);
 
 	//assessor:
 	//current state
