@@ -147,7 +147,13 @@ void AHider::State_Flee_OnTick(float f_DeltaTime)
 	}
 	else {
 		//otherwise get back to wandering mode.
-		h_StateMachine->ChangeState(cLastState);
+		//if the last state is standby, change it to toShelter state.
+		if (cLastState != STATE_STANDBY) {
+			h_StateMachine->ChangeState(cLastState);
+		}
+		else {
+			h_StateMachine->ChangeState(STATE_HIDER_TOSHELTER);
+		}
 	}
 
 }
@@ -170,11 +176,12 @@ void AHider::State_Hit_OnExit(void) { SetLastState(h_StateMachine->GetCurrentSta
 void AHider::State_Standby_OnEnter(void)
 {
 	Super::State_Standby_OnEnter();
-	cTimer = 0;
+	cTimer = 0.f;
 }
 
 void AHider::State_Standby_OnTick(float f_DeltaTime)
 {
+	Super::State_Standby_OnTick(f_DeltaTime);
 
 	if (cTimer >= hideTime) {
 		h_StateMachine->ChangeState(STATE_SPAWN);
@@ -183,8 +190,6 @@ void AHider::State_Standby_OnTick(float f_DeltaTime)
 		cTimer += f_DeltaTime;
 	}
 
-
-	Super::State_Standby_OnTick(f_DeltaTime);
 	//if hunter is on its sight, flee.
 	TArray<FHitResult> hitResult = getSurroundings();
 	AHunter* tempHunterTarget = getHunter(&hitResult);

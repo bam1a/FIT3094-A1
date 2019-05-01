@@ -22,6 +22,7 @@ private:
 	void BeginPlay() override;
 
 	//local variables
+	int killCount;
 	ACreature* prayTarget;
 	float chaseTime;
 

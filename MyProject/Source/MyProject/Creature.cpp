@@ -152,6 +152,9 @@ void ACreature::TakeDmg(int inAtk)
 	if (cHP <= 0) {
 		m_StateMachine->ChangeState(STATE_DIE);
 	}
+	else {
+		m_StateMachine->ChangeState(STATE_HIT);
+	}
 }
 
 FVector ACreature::genRandomLocation(FVector initPos, float inRange, bool isNeedValidCheck, float inCheckRange)
@@ -365,7 +368,12 @@ void ACreature::State_Hit_OnEnter(void) {
 void ACreature::State_Hit_OnTick(float f_DeltaTime) {
 	//if time's up, change the status back to normal(might be overloaded when needed.
 	if (cTimer >= cTime) {
-		m_StateMachine->ChangeState(cLastState);
+		if (cLastState != STATE_HIT) {
+			m_StateMachine->ChangeState(cLastState);
+		}
+		else {
+			m_StateMachine->ChangeState(STATE_WANDER);
+		}
 	}
 	else {
 		cTimer += f_DeltaTime;
