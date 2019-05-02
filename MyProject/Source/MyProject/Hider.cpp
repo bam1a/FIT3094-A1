@@ -69,8 +69,9 @@ void AHider::BeginPlay()
 	Super::Super::BeginPlay();
 
 	setPathfinder();
+	setGenerator();
 	//initialize the parameeter
-	initialize(10, 100.f, 10, 20, 15, 5000.f);
+	initialize(10, 100.f, 10, 20, 15, 500.f);
 	
 	cType = HIDER;
 

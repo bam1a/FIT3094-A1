@@ -100,6 +100,9 @@
     <ClInclude Include="..\..\Source\MyProject\FoodGen.h">
       <Filter>Source\MyProject</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\MyProject\generator.h">
+      <Filter>Source\MyProject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Source\MyProject\Hider.cpp">
@@ -115,6 +118,9 @@
       <Filter>Source\MyProject</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\MyProject\FoodGen.cpp">
+      <Filter>Source\MyProject</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\MyProject\generator.cpp">
       <Filter>Source\MyProject</Filter>
     </ClCompile>
   </ItemGroup>

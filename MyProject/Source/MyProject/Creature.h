@@ -5,6 +5,7 @@
 #include "StateMachine.h"
 #include "PathNode.h"
 #include "Pathfind.h"
+#include "generator.h"
 #include "CoreMinimal.h"
 #include "ConstructorHelpers.h"
 #include <EngineGlobals.h>
@@ -57,6 +58,9 @@ protected:
 
 	//function for setting the path finder class
 	void setPathfinder();
+
+	//functiom fot setting the actor generator
+	void setGenerator();
 
 public:
 	// Called every frame
@@ -178,8 +182,10 @@ protected:
 	UPROPERTY(EditAnywhere)
 		TArray<FVector> cPathlist;
 	//int cTargetNodeID;
-	UPROPERTY(VisibleAnywhere, Category="pathFinding")
-	APathfind* cPathfinder;
+	UPROPERTY(VisibleAnywhere, Category = "pathFinding")
+		APathfind* cPathfinder;
+	UPROPERTY(VisibleAnywhere)
+		Agenerator* cGenerator;
 	/////////////////////////////////////////////////////////////////////////////////////////
 	//state machine's state events
 

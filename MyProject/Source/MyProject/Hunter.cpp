@@ -67,8 +67,9 @@ void AHunter::BeginPlay()
 	Super::Super::BeginPlay();
 
 	setPathfinder();
+	setGenerator();
 	//initialize the parameeter
-	initialize(20, 100.f, 25, 10, 15, 1200.f);
+	initialize(15, 100.f, 25, 10, 15, 300.f);
 	//initialize();
 	cType = HUNTER;
 
@@ -207,7 +208,7 @@ void AHunter::State_Chase_OnTick(float f_DeltaTime)
 			//before hunter take damage, recover HP based on the damage the target takes
 			//but 1/2 of it.<==tweak to just 1/1
 			//recover -= cTargetCreature->GetHP();
-			cHP += (recover);//2
+			cHP += (recover);//2/
 			TakeDmg(cTargetCreature->GetPower());
 			//and make a force toward each other
 				//todo

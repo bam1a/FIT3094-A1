@@ -68,7 +68,7 @@ void EmptyLinkFunctionForGeneratedCodeHunter() {}
 		}
 		return OuterClass;
 	}
-	IMPLEMENT_CLASS(AHunter, 3053183840);
+	IMPLEMENT_CLASS(AHunter, 1220458569);
 	static FCompiledInDefer Z_CompiledInDefer_UClass_AHunter(Z_Construct_UClass_AHunter, &AHunter::StaticClass, TEXT("/Script/MyProject"), TEXT("AHunter"), false, nullptr, nullptr, nullptr);
 	DEFINE_VTABLE_PTR_HELPER_CTOR(AHunter);
 PRAGMA_ENABLE_DEPRECATION_WARNINGS

@@ -104,6 +104,7 @@ void ACreature::BeginPlay()
 	Super::BeginPlay();
 	
 	setPathfinder();
+	//setGenerator();
 	//initialize the parameeter
 	initialize();
 
@@ -119,6 +120,17 @@ void ACreature::setPathfinder()
 	{
 		// Same as with the Object Iterator, access the subclass instance with the * or -> operators.
 		cPathfinder = *ActorItr;
+	}
+
+}
+
+void ACreature::setGenerator()
+{
+	//get the path finding actor
+	for (TActorIterator<Agenerator> ActorItr(GetWorld()); ActorItr; ++ActorItr)
+	{
+		// Same as with the Object Iterator, access the subclass instance with the * or -> operators.
+		cGenerator = *ActorItr;
 	}
 
 }

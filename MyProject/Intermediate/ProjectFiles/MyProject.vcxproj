@@ -514,9 +514,11 @@
     <ClInclude Include="..\..\Source\MyProject\FoodGen.h" />
     <ClInclude Include="..\..\Source\MyProject\Gatherer.h" />
     <None Include="..\..\Source\MyProject\MyProject.Build.cs" />
+    <ClCompile Include="..\..\Source\MyProject\generator.cpp" />
     <ClCompile Include="..\..\Source\MyProject\Hider.cpp" />
     <ClCompile Include="..\..\Source\MyProject\Hunter.cpp" />
     <ClCompile Include="..\..\Source\MyProject\MyProject.cpp" />
+    <ClInclude Include="..\..\Source\MyProject\generator.h" />
     <ClInclude Include="..\..\Source\MyProject\Hider.h" />
     <ClInclude Include="..\..\Source\MyProject\Hunter.h" />
     <ClInclude Include="..\..\Source\MyProject\MyProject.h" />

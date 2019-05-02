@@ -70,8 +70,9 @@ void AGatherer::BeginPlay()
 	Super::Super::BeginPlay();
 
 	setPathfinder();
+	setGenerator();
 	//initialize the parameeter
-	initialize(10, 100.f, 15, 15, 15, 2000.f);
+	initialize(10, 100.f, 15, 15, 15, 500.f);
 	cType = GATHERER;
 	//reproduction counter:randomly from 3-5
 	cSpawnCount= FMath::RandRange(3, 5);
@@ -266,7 +267,7 @@ void AGatherer::State_Eating_OnTick(float f_DeltaTime)
 			//find the other
 			g_StateMachine->ChangeState(STATE_WANDER);
 			//and add 1 happiness count.
-			happiness += 1;
+	//		happiness += 1;
 		}
 
 	}
