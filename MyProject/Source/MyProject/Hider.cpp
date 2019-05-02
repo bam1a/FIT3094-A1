@@ -70,7 +70,7 @@ void AHider::BeginPlay()
 
 	setPathfinder();
 	//initialize the parameeter
-	initialize(10, 100.f, 10, 20, 15, 500.f);
+	initialize(10, 100.f, 10, 20, 15, 5000.f);
 	
 	cType = HIDER;
 
@@ -230,9 +230,9 @@ void AHider::State_Standby_OnTick(float f_DeltaTime)
 	//if hunter is on its sight, flee.
 	TArray<FHitResult> hitResult = getSurroundings();
 	ACreature* tempCreatureTarget = getCreature(&hitResult);
-	//make sure there's a surrounding creature and it's not the former target
+	//make sure there's a surrounding creature and it's not the itself
 	if (tempCreatureTarget != nullptr) {
-		if (tempCreatureTarget != cTargetCreature) {
+		if (tempCreatureTarget != this) {
 			cTargetCreature = tempCreatureTarget;
 			h_StateMachine->ChangeState(STATE_FLEE);
 		}

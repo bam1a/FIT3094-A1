@@ -35,7 +35,7 @@ ACreature::ACreature()
 
 	//set our shape as the static mesh, and turn our Physics on.
 	//Mesh->SetStaticMesh(Wedge.Object);
-	Mesh->SetSimulatePhysics(true);
+	//Mesh->SetSimulatePhysics(true);
 
 
 }
@@ -78,10 +78,11 @@ void ACreature::initialize(float inSpeed, float inSize, int inPower, int inDef, 
 	cPower = FMath::RandRange((inPower * 8 / 10), (inPower * 12 / 10));
 	cDef = FMath::RandRange((inDef * 8 / 10), (inDef * 12 / 10));
 	cHP = FMath::RandRange((inHP * 8 / 10), (inHP * 12 / 10));
-	cSight = FMath::RandRange((inSight * 6.f / 10.f), (inSight));
+	cSight = FMath::RandRange((inSight * 8.f / 10.f), (inSight));
 
 	//set its scaling
-	Mesh->SetRelativeScale3D(FVector((cSize / inSize), (cSize / inSize), (cSize / inSize)));
+	float scaleMulti = (cSize / inSize) ;
+	Mesh->SetRelativeScale3D(FVector(scaleMulti, scaleMulti, scaleMulti));
 
 	cPosition = GetActorLocation();
 	//set position (last position should be same in this moment)
@@ -201,7 +202,7 @@ FVector ACreature::genRandomLocation(FVector initPos, float inRange, bool isNeed
 void ACreature::move(float DeltaTime, bool isDash)
 {
 
-	float finalSpeed = cSpeed / (cSize/10.f) * 200.f;
+	float finalSpeed = cSpeed / (cSize/10.f) * 1000.f;
 	//if it's dashing, the speed will be twiced
 	if (isDash) {
 		finalSpeed *= 2.f;
@@ -227,8 +228,8 @@ bool ACreature::checkPosValid(FVector checkPos, float sweepArea)
 	FVector location = checkPos;
 	FCollisionShape CheckSphere = FCollisionShape::MakeSphere(sweepArea);
 
-	//make sure it's inside -2000 to 2000 range.
-	if ((abs(checkPos.X) / (2000.f-cSize)) >= 1.f ||(abs(checkPos.Y)/(2000.f-cSize))>=1.f) {
+	//make sure it's inside -4000 to 4000 range.
+	if ((abs(checkPos.X) / (4000.f-cSize)) >= 1.f ||(abs(checkPos.Y)/(4000.f-cSize))>=1.f) {
 		return false;
 	}
 
@@ -303,7 +304,7 @@ void ACreature::stateRegister()
 
 void ACreature::State_Wander_OnEnter(void) {
 	//generate a path of the target
-	cPathlist = cPathfinder->GeneratePath(cPosition, genRandomLocation(FVector::ZeroVector, 2000.f, true, cSize*3));
+	cPathlist = cPathfinder->GeneratePath(cPosition, genRandomLocation(FVector::ZeroVector, 2000.f, true, cSize));
 	//set target location to the first index of the path list
 	//cTargetPosition = genRandomLocation(FVector::ZeroVector, 2000.f,true,cSize);
 	cPathlistID = cPathlist.Num() - 1;
@@ -319,10 +320,10 @@ void ACreature::State_Wander_OnTick(float f_DeltaTime) {
 		//change another target when reached
 		if (cTargetPosition == cPathlist[0] || cPathlistID == 0) {
 			//cTargetPosition = genRandomLocation(FVector::ZeroVector, 2000.f, true, cSize);
-			cPathlist = cPathfinder->GeneratePath(cPosition, genRandomLocation(FVector::ZeroVector, 2000.f, true, cSize * 2));
+			cPathlist = cPathfinder->GeneratePath(cPosition, genRandomLocation(FVector::ZeroVector, 4000.f, true, cSize * 2));
 			while (cPathlist.Num() <= 0) {
 				//i don't want a path that is 0, although the path must be more than 1, but just in case.
-				cPathlist = cPathfinder->GeneratePath(cPosition, genRandomLocation(FVector::ZeroVector, 2000.f, true, cSize * 2));
+				cPathlist = cPathfinder->GeneratePath(cPosition, genRandomLocation(FVector::ZeroVector, 4000.f, true, cSize * 2));
 			}
 			cPathlistID = cPathlist.Num() - 1;
 			cTargetPosition = cPathlist[cPathlistID];

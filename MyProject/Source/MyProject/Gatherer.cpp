@@ -71,7 +71,7 @@ void AGatherer::BeginPlay()
 
 	setPathfinder();
 	//initialize the parameeter
-	initialize(10, 100.f, 15, 15, 15, 500.f);
+	initialize(10, 100.f, 15, 15, 15, 2000.f);
 	cType = GATHERER;
 	//reproduction counter:randomly from 3-5
 	cSpawnCount= FMath::RandRange(3, 5);

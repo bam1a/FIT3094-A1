@@ -68,7 +68,7 @@ void AHunter::BeginPlay()
 
 	setPathfinder();
 	//initialize the parameeter
-	initialize(20, 100.f, 25, 10, 15, 300.f);
+	initialize(20, 100.f, 25, 10, 15, 1200.f);
 	//initialize();
 	cType = HUNTER;
 

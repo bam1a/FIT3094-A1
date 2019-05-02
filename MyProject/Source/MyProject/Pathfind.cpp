@@ -72,7 +72,7 @@ TArray<FVector> APathfind::GeneratePath(FVector inStartPt, FVector inEndPt)
 	//there's no need to back trace if only start node is the end node.
 	GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString::FromInt(closeNode.Num()));
 	if (closeNode.Num() > 1) {
-		NodeCost* tempNodeCost = closeNode.Top();
+		NodeCost* tempNodeCost = closeNode[closeNode.Num()-1];
 		//loop the tempNode if there's stuff inside and until reached the start node.
 		while (tempNodeCost != nullptr) {
 			if (tempNodeCost->node != nullptr) {

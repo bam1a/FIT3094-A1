@@ -4,4 +4,4 @@ full name: Tsz Chun Chau
 student ID: 27368262
 student email address: tccha17@student.monash.edu
 
-current testing map: creatureNodeTest3
+current testing map: testMap2
