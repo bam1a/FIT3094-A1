@@ -35,7 +35,7 @@ ACreature::ACreature()
 
 	//set our shape as the static mesh, and turn our Physics on.
 	//Mesh->SetStaticMesh(Wedge.Object);
-	//Mesh->SetSimulatePhysics(true);
+	Mesh->SetSimulatePhysics(true);
 
 
 }

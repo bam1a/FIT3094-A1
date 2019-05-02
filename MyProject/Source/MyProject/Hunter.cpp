@@ -201,12 +201,12 @@ void AHunter::State_Chase_OnTick(float f_DeltaTime)
 		//when hunter really nearby the target, both of them get hit and both shall changed to hit state
 		if (FVector::Distance(cTargetPosition, cPosition) <= (cSize*1.5)) {
 			//take some recovery before taking damage
-			int recover = cTargetCreature->GetHP();
+			int recover = cTargetCreature->GetHP()-cPower+cTargetCreature->GetDef();
 			//both take damage
 			cTargetCreature->TakeDmg(cPower);
 			//before hunter take damage, recover HP based on the damage the target takes
 			//but 1/2 of it.<==tweak to just 1/1
-			recover -= cTargetCreature->GetHP();
+			//recover -= cTargetCreature->GetHP();
 			cHP += (recover);//2
 			TakeDmg(cTargetCreature->GetPower());
 			//and make a force toward each other

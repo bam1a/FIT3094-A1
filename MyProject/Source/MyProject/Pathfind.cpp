@@ -18,6 +18,7 @@ APathfind::APathfind()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 	reset();
+	processedNode.Empty();
 }
 
 TArray<APathNode*> APathfind::NodeArray;
@@ -122,7 +123,9 @@ void APathfind::reset()
 	endNode = nullptr;
 	startPt = FVector::ZeroVector;
 	endPt = FVector::ZeroVector;
-	frontier.empty();
+	while (!frontier.empty()) {
+		frontier.pop();
+	}
 	closeNode.Empty();
 	processedNode.Empty();
 	isFound = false;
@@ -135,7 +138,7 @@ void APathfind::search()
 	isFound = false;
 	//create a new NodeCost for the starting node
 	NodeCost* startingNodeCost = new NodeCost(startNode, 0.f, FVector::Distance(startNode->GetPosition(), endNode->GetPosition()));
-	frontier.empty();
+	//frontier.empty();
 	frontier.push(startingNodeCost);
 	processedNode.Push(startingNodeCost);
 	//main loop
@@ -159,13 +162,13 @@ void APathfind::search()
 			else {
 				//if the current node has no neighbour, break it.
 				GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Blue, FString::FromInt(current->node->GetNeighbourNode()->Num()));
-				if (current->node->GetNeighbourNode()->Num() > 0 && (current->node->GetNeighbourNode()!=nullptr) ) {
+				if (current->node->GetNeighbourNode()->Num() > 0 && (current->node->GetNeighbourNode() != nullptr)) {
 					//loop all the neighbours from the current node
 					GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Purple, FString::FromInt(getNeighbours(current->node).Num()));
 					for (APathNode* next : getNeighbours(current->node)) {
 						//find that node is closed or not
 						//if that nodeCost it's not closed
-						if (!isNodeCostClosed(next)&& next!=nullptr ) {
+						if (!isNodeCostClosed(next) && next != nullptr) {
 							//set its heuristic
 							float inHeuristic = FVector::Distance(next->GetPosition(), endNode->GetPosition());
 							//set the cost between current Node and next node+ the previous costs calculated before
@@ -196,8 +199,8 @@ APathNode * APathfind::getNearestNode(FVector inPos)
 {
 	//set the checking distance to max val for initilzing
 	//and a temp. distance var.
-	float shortestDist = 30000.f;
-	float tempDist = 30000.f;
+	float shortestDist = 300000.f;
+	float tempDist = 300000.f;
 	//set a node pointer to part with the distance above
 	APathNode* shortestNode = nullptr;
 	//loop all the path node elements
