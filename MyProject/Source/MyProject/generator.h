@@ -22,9 +22,19 @@ protected:
 	//variables
 	//genTime: the time for spawning food
 	//genTimer: the time incementer for detemine spawn food or not
-	float genTime, genTimer;
+	UPROPERTY(VisibleAnywhere, Category = "InitialGeneratingSettings")
+	float genTime;
+	UPROPERTY(VisibleAnywhere, Category = "InitialGeneratingSettings")
+	float genTimer;
 
 	void resetTimer();
+	
+	UPROPERTY(EditAnywhere, Category = "InitialGeneratingSettings")
+		int HunterCount;
+	UPROPERTY(EditAnywhere, Category = "InitialGeneratingSettings")
+		int GathererCount;
+	UPROPERTY(EditAnywhere, Category = "InitialGeneratingSettings")
+		int HiderCount;
 
 public:	
 	// Called every frame
@@ -32,11 +42,13 @@ public:
 
 	//containers for each generated food pallets and creatures.
 	TArray<AActor*> SpawnedArray;
+	//containers for each generated creatures
+	TArray<AActor*> spawnedCreature;
 
 
 	//T- the actor class which requested for spawn
-	template<class T>
 	//function to generate an object based on the position or generate itself by default
+	template<class T>
 	void spawnActortoWorld(FVector inPosition);
 
 	FVector genRandomLocation(FVector initPos, float inRange, bool isNeedValidCheck = false, float inCheckRange = 1.f);
@@ -49,6 +61,6 @@ public:
 
 template<class T>
 inline void Agenerator::spawnActortoWorld(FVector inPosition) {
-	T* newActor = GetWorld()->SpawnActor<T>(GetClass(), inPosition, FRotator::ZeroRotator);
+	T* newActor = GetWorld()->SpawnActor<T>(T::StaticClass(), inPosition, FRotator::ZeroRotator);
 	SpawnedArray.Add(Cast<AActor>(newActor));
 }

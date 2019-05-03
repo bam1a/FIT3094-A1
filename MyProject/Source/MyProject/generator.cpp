@@ -5,6 +5,9 @@
 #include "Wall.h"
 #include "Food.h"
 #include "Creature.h"
+#include "Gatherer.h"
+#include "Hider.h"
+#include "Hunter.h"
 #include "ConstructorHelpers.h"
 #include "DrawDebugHelpers.h"
 #include "Engine/GameEngine.h"
@@ -23,7 +26,14 @@ void Agenerator::BeginPlay()
 {
 	Super::BeginPlay();
 	resetTimer();
+	//generate a food pallet
+	FVector newLocation = genRandomLocation(FVector::ZeroVector, 4000.f, true, 100.f);
+	spawnActortoWorld<AFood>(newLocation);
 	//generate creatures based on the config.
+	for (int i = 0; i < GathererCount; i++) {
+		newLocation = genRandomLocation(FVector::ZeroVector, 4000.f, true, 100.f);
+		//spawnActortoWorld<AGatherer>(newLocation);
+	}
 }
 
 void Agenerator::resetTimer()
@@ -36,9 +46,12 @@ void Agenerator::resetTimer()
 void Agenerator::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	//when time's up, generate a new food pallet
 	if (genTimer >= genTime) {
 		FVector newLocation = genRandomLocation(FVector::ZeroVector, 4000.f, true, 100.f);
 		spawnActortoWorld<AFood>(newLocation);
+		//and reset the timer
+		resetTimer();
 	}
 	else {
 		genTimer += DeltaTime;

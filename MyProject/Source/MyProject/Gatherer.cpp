@@ -72,7 +72,7 @@ void AGatherer::BeginPlay()
 	setPathfinder();
 	setGenerator();
 	//initialize the parameeter
-	initialize(10, 100.f, 15, 15, 15, 500.f);
+	initialize(10, 100.f, 15, 15, 15, 1000.f);
 	cType = GATHERER;
 	//reproduction counter:randomly from 3-5
 	cSpawnCount= FMath::RandRange(3, 5);
@@ -161,6 +161,9 @@ void AGatherer::State_Spawn_OnEnter(void)
 void AGatherer::State_Spawn_OnTick(float f_DeltaTime)
 {
 	Super::State_Spawn_OnTick(f_DeltaTime);
+	//use the generator to spawn the new actor nearby it
+	cGenerator->spawnActortoWorld<AGatherer>(genRandomLocation(cPosition, cSize * 2, true, cSize));
+	g_StateMachine->ChangeState(STATE_WANDER);
 }
 
 void AGatherer::State_Spawn_OnExit(void){SetLastState(g_StateMachine->GetCurrentState());}
@@ -258,7 +261,7 @@ void AGatherer::State_Eating_OnTick(float f_DeltaTime)
 		happiness += 1;
 		cHP += 1;
 		//check if it reaches the happiness limit=cSpawnCount, spawn a new same type creature when reached, otherwise just do the wander
-		if (happiness == cSpawnCount) {
+		if (happiness >= cSpawnCount) {
 			g_StateMachine->ChangeState(STATE_SPAWN);
 			//reset the happiness count
 			happiness = 0;
