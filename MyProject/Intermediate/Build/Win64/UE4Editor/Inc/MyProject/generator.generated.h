@@ -60,6 +60,7 @@ DEFINE_VTABLE_PTR_HELPER_CTOR_CALLER(Agenerator); \
 #define MyProject_Source_MyProject_generator_h_12_PRIVATE_PROPERTY_OFFSET \
 	FORCEINLINE static uint32 __PPO__genTime() { return STRUCT_OFFSET(Agenerator, genTime); } \
 	FORCEINLINE static uint32 __PPO__genTimer() { return STRUCT_OFFSET(Agenerator, genTimer); } \
+	FORCEINLINE static uint32 __PPO__foodGenCount() { return STRUCT_OFFSET(Agenerator, foodGenCount); } \
 	FORCEINLINE static uint32 __PPO__HunterCount() { return STRUCT_OFFSET(Agenerator, HunterCount); } \
 	FORCEINLINE static uint32 __PPO__GathererCount() { return STRUCT_OFFSET(Agenerator, GathererCount); } \
 	FORCEINLINE static uint32 __PPO__HiderCount() { return STRUCT_OFFSET(Agenerator, HiderCount); }

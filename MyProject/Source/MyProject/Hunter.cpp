@@ -76,7 +76,7 @@ void AHunter::BeginPlay()
 	//set target chasing time and the kill count
 	chaseTime = 30.f;
 	killCount = 0;
-	cSpawnCount = 2;
+	cSpawnCount = FMath::RandRange(2,5);
 	//set default state
 	p_StateMachine->ChangeState(STATE_WANDER);
 }
@@ -143,8 +143,9 @@ void AHunter::State_Spawn_OnEnter(void)
 void AHunter::State_Spawn_OnTick(float f_DeltaTime)
 {
 	Super::State_Spawn_OnTick(f_DeltaTime);
+	//spawn new creature
+	cGenerator->spawnActortoWorld<AHunter>(genRandomLocation(cPosition, cSize * 2, true, cSize));
 	p_StateMachine->ChangeState(STATE_WANDER);
-	//todo: spawn new creature
 }
 void AHunter::State_Spawn_OnExit(void) { SetLastState(p_StateMachine->GetCurrentState()); }
 
@@ -200,7 +201,7 @@ void AHunter::State_Chase_OnTick(float f_DeltaTime)
 		move(f_DeltaTime, true);
 
 		//when hunter really nearby the target, both of them get hit and both shall changed to hit state
-		if (FVector::Distance(cTargetPosition, cPosition) <= (cSize*1.5)) {
+		if (FVector::Distance(cTargetPosition, cPosition) <= (cSize*1.5)&&cTargetCreature!=nullptr) {
 			//take some recovery before taking damage
 			int recover = cTargetCreature->GetHP()-cPower+cTargetCreature->GetDef();
 			//both take damage
@@ -224,10 +225,11 @@ void AHunter::State_Chase_OnTick(float f_DeltaTime)
 			}
 		}
 		//when the pray is over its sight, change it back to wander and clear the target
-		else if (FVector::Distance(cTargetPosition, cPosition) >= (cSight*2)) {
+		else if (FVector::Distance(cTargetPosition, cPosition) >= (cSight*2) || cTargetCreature == nullptr) {
 			p_StateMachine->ChangeState(STATE_WANDER);
 			prayTarget = nullptr;
 		}
+
 
 
 	}

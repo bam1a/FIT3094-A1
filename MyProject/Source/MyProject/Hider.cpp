@@ -76,6 +76,7 @@ void AHider::BeginPlay()
 	cType = HIDER;
 
 	//set target hide time
+	cTimer = 0.f;
 	hideTime = 60.f;
 	//set default state
 	h_StateMachine->ChangeState(STATE_WANDER);
@@ -167,6 +168,8 @@ void AHider::State_Spawn_OnEnter(void)
 void AHider::State_Spawn_OnTick(float f_DeltaTime)
 {
 	Super::State_Spawn_OnTick(f_DeltaTime);
+	cGenerator->spawnActortoWorld<AHider>(genRandomLocation(cPosition, cSize * 2, true, cSize));
+
 	h_StateMachine->ChangeState(STATE_WANDER);
 
 }
@@ -214,7 +217,6 @@ void AHider::State_Hit_OnExit(void) { SetLastState(h_StateMachine->GetCurrentSta
 void AHider::State_Standby_OnEnter(void)
 {
 	Super::State_Standby_OnEnter();
-	cTimer = 0.f;
 }
 
 void AHider::State_Standby_OnTick(float f_DeltaTime)

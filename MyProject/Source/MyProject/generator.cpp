@@ -26,19 +26,31 @@ void Agenerator::BeginPlay()
 {
 	Super::BeginPlay();
 	resetTimer();
-	//generate a food pallet
-	FVector newLocation = genRandomLocation(FVector::ZeroVector, 4000.f, true, 100.f);
-	spawnActortoWorld<AFood>(newLocation);
-	//generate creatures based on the config.
+	//setup a location Vector
+	FVector newLocation;
+	//generate couple of food pallet based on the config.
+	for (int i = 0; i < foodGenCount; i++) {
+		newLocation = genRandomLocation(FVector::ZeroVector, 4000.f, true, 100.f);
+		spawnActortoWorld<AFood>(newLocation);
+	}
+	//generate Gatherer,Hider,Hunter based on the config.
 	for (int i = 0; i < GathererCount; i++) {
 		newLocation = genRandomLocation(FVector::ZeroVector, 4000.f, true, 100.f);
-		//spawnActortoWorld<AGatherer>(newLocation);
+		spawnActortoWorld<AGatherer>(newLocation);
+	}
+	for (int i = 0; i <HiderCount; i++) {
+		newLocation = genRandomLocation(FVector::ZeroVector, 4000.f, true, 100.f);
+		spawnActortoWorld<AHider>(newLocation);
+	}
+	for (int i = 0; i < HunterCount; i++) {
+		newLocation = genRandomLocation(FVector::ZeroVector, 4000.f, true, 100.f);
+		spawnActortoWorld<AHunter>(newLocation);
 	}
 }
 
 void Agenerator::resetTimer()
 {
-	genTime = FMath::RandRange(10.f, 30.f);
+	genTime = FMath::RandRange(30.f, 40.f);
 	genTimer = 0.f;
 }
 

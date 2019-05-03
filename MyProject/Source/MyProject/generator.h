@@ -22,13 +22,16 @@ protected:
 	//variables
 	//genTime: the time for spawning food
 	//genTimer: the time incementer for detemine spawn food or not
-	UPROPERTY(VisibleAnywhere, Category = "InitialGeneratingSettings")
+	UPROPERTY(VisibleAnywhere, Category = "FoodGeneratingSettings")
 	float genTime;
-	UPROPERTY(VisibleAnywhere, Category = "InitialGeneratingSettings")
+	UPROPERTY(VisibleAnywhere, Category = "FoodGeneratingSettings")
 	float genTimer;
+	UPROPERTY(EditAnywhere, Category = "InitialGeneratingSettings")
+		int foodGenCount;
 
 	void resetTimer();
-	
+
+
 	UPROPERTY(EditAnywhere, Category = "InitialGeneratingSettings")
 		int HunterCount;
 	UPROPERTY(EditAnywhere, Category = "InitialGeneratingSettings")
@@ -61,6 +64,9 @@ public:
 
 template<class T>
 inline void Agenerator::spawnActortoWorld(FVector inPosition) {
-	T* newActor = GetWorld()->SpawnActor<T>(T::StaticClass(), inPosition, FRotator::ZeroRotator);
+	//using this spawnInfo force spawn the actor than spawning null actor.
+	FActorSpawnParameters SpawnInfo;
+	SpawnInfo.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+	T* newActor = GetWorld()->SpawnActor<T>(T::StaticClass(), inPosition, FRotator::ZeroRotator,SpawnInfo);
 	SpawnedArray.Add(Cast<AActor>(newActor));
 }

@@ -44,6 +44,10 @@ void EmptyLinkFunctionForGeneratedCodegenerator() {}
 #endif
 		static const UE4CodeGen_Private::FUnsizedIntPropertyParams NewProp_HunterCount;
 #if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_foodGenCount_MetaData[];
+#endif
+		static const UE4CodeGen_Private::FUnsizedIntPropertyParams NewProp_foodGenCount;
+#if WITH_METADATA
 		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_genTimer_MetaData[];
 #endif
 		static const UE4CodeGen_Private::FFloatPropertyParams NewProp_genTimer;
@@ -87,15 +91,22 @@ void EmptyLinkFunctionForGeneratedCodegenerator() {}
 #endif
 	const UE4CodeGen_Private::FUnsizedIntPropertyParams Z_Construct_UClass_Agenerator_Statics::NewProp_HunterCount = { UE4CodeGen_Private::EPropertyClass::Int, "HunterCount", RF_Public|RF_Transient|RF_MarkAsNative, (EPropertyFlags)0x0020080000000001, 1, nullptr, STRUCT_OFFSET(Agenerator, HunterCount), METADATA_PARAMS(Z_Construct_UClass_Agenerator_Statics::NewProp_HunterCount_MetaData, ARRAY_COUNT(Z_Construct_UClass_Agenerator_Statics::NewProp_HunterCount_MetaData)) };
 #if WITH_METADATA
-	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_Agenerator_Statics::NewProp_genTimer_MetaData[] = {
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_Agenerator_Statics::NewProp_foodGenCount_MetaData[] = {
 		{ "Category", "InitialGeneratingSettings" },
+		{ "ModuleRelativePath", "generator.h" },
+	};
+#endif
+	const UE4CodeGen_Private::FUnsizedIntPropertyParams Z_Construct_UClass_Agenerator_Statics::NewProp_foodGenCount = { UE4CodeGen_Private::EPropertyClass::Int, "foodGenCount", RF_Public|RF_Transient|RF_MarkAsNative, (EPropertyFlags)0x0020080000000001, 1, nullptr, STRUCT_OFFSET(Agenerator, foodGenCount), METADATA_PARAMS(Z_Construct_UClass_Agenerator_Statics::NewProp_foodGenCount_MetaData, ARRAY_COUNT(Z_Construct_UClass_Agenerator_Statics::NewProp_foodGenCount_MetaData)) };
+#if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_Agenerator_Statics::NewProp_genTimer_MetaData[] = {
+		{ "Category", "FoodGeneratingSettings" },
 		{ "ModuleRelativePath", "generator.h" },
 	};
 #endif
 	const UE4CodeGen_Private::FFloatPropertyParams Z_Construct_UClass_Agenerator_Statics::NewProp_genTimer = { UE4CodeGen_Private::EPropertyClass::Float, "genTimer", RF_Public|RF_Transient|RF_MarkAsNative, (EPropertyFlags)0x0020080000020001, 1, nullptr, STRUCT_OFFSET(Agenerator, genTimer), METADATA_PARAMS(Z_Construct_UClass_Agenerator_Statics::NewProp_genTimer_MetaData, ARRAY_COUNT(Z_Construct_UClass_Agenerator_Statics::NewProp_genTimer_MetaData)) };
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_Agenerator_Statics::NewProp_genTime_MetaData[] = {
-		{ "Category", "InitialGeneratingSettings" },
+		{ "Category", "FoodGeneratingSettings" },
 		{ "ModuleRelativePath", "generator.h" },
 		{ "ToolTip", "variables\ngenTime: the time for spawning food\ngenTimer: the time incementer for detemine spawn food or not" },
 	};
@@ -105,6 +116,7 @@ void EmptyLinkFunctionForGeneratedCodegenerator() {}
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_Agenerator_Statics::NewProp_HiderCount,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_Agenerator_Statics::NewProp_GathererCount,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_Agenerator_Statics::NewProp_HunterCount,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_Agenerator_Statics::NewProp_foodGenCount,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_Agenerator_Statics::NewProp_genTimer,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_Agenerator_Statics::NewProp_genTime,
 	};
@@ -131,7 +143,7 @@ void EmptyLinkFunctionForGeneratedCodegenerator() {}
 		}
 		return OuterClass;
 	}
-	IMPLEMENT_CLASS(Agenerator, 850400514);
+	IMPLEMENT_CLASS(Agenerator, 3049671015);
 	static FCompiledInDefer Z_CompiledInDefer_UClass_Agenerator(Z_Construct_UClass_Agenerator, &Agenerator::StaticClass, TEXT("/Script/MyProject"), TEXT("Agenerator"), false, nullptr, nullptr, nullptr);
 	DEFINE_VTABLE_PTR_HELPER_CTOR(Agenerator);
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
