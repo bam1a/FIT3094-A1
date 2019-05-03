@@ -1,0 +1,37 @@
+/NOLOGO
+/errorReport:prompt
+/MACHINE:x64
+/SUBSYSTEM:WINDOWS
+/DEF
+/NAME:"UE4Editor-MyProject-4561.dll"
+/IGNORE:4221
+/NODEFAULTLIB
+"D:\Github\FIT3094 A1\MyProject\Intermediate\Build\Win64\MyProjectEditor\Development\Engine\SharedPCH.Engine.h.obj"
+"D:\Github\FIT3094 A1\MyProject\Intermediate\Build\Win64\UE4Editor\Development\MyProject\Creature.cpp.obj"
+"D:\Github\FIT3094 A1\MyProject\Intermediate\Build\Win64\UE4Editor\Development\MyProject\Food.cpp.obj"
+"D:\Github\FIT3094 A1\MyProject\Intermediate\Build\Win64\UE4Editor\Development\MyProject\FoodGen.cpp.obj"
+"D:\Github\FIT3094 A1\MyProject\Intermediate\Build\Win64\UE4Editor\Development\MyProject\Gatherer.cpp.obj"
+"D:\Github\FIT3094 A1\MyProject\Intermediate\Build\Win64\UE4Editor\Development\MyProject\Hider.cpp.obj"
+"D:\Github\FIT3094 A1\MyProject\Intermediate\Build\Win64\UE4Editor\Development\MyProject\Hunter.cpp.obj"
+"D:\Github\FIT3094 A1\MyProject\Intermediate\Build\Win64\UE4Editor\Development\MyProject\MyProject.cpp.obj"
+"D:\Github\FIT3094 A1\MyProject\Intermediate\Build\Win64\UE4Editor\Development\MyProject\MyProjectGameModeBase.cpp.obj"
+"D:\Github\FIT3094 A1\MyProject\Intermediate\Build\Win64\UE4Editor\Development\MyProject\Pathfind.cpp.obj"
+"D:\Github\FIT3094 A1\MyProject\Intermediate\Build\Win64\UE4Editor\Development\MyProject\Pathfinder.cpp.obj"
+"D:\Github\FIT3094 A1\MyProject\Intermediate\Build\Win64\UE4Editor\Development\MyProject\PathNode.cpp.obj"
+"D:\Github\FIT3094 A1\MyProject\Intermediate\Build\Win64\UE4Editor\Development\MyProject\Shelter.cpp.obj"
+"D:\Github\FIT3094 A1\MyProject\Intermediate\Build\Win64\UE4Editor\Development\MyProject\StateMachine.cpp.obj"
+"D:\Github\FIT3094 A1\MyProject\Intermediate\Build\Win64\UE4Editor\Development\MyProject\Wall.cpp.obj"
+"D:\Github\FIT3094 A1\MyProject\Intermediate\Build\Win64\UE4Editor\Development\MyProject\Creature.gen.cpp.obj"
+"D:\Github\FIT3094 A1\MyProject\Intermediate\Build\Win64\UE4Editor\Development\MyProject\Food.gen.cpp.obj"
+"D:\Github\FIT3094 A1\MyProject\Intermediate\Build\Win64\UE4Editor\Development\MyProject\FoodGen.gen.cpp.obj"
+"D:\Github\FIT3094 A1\MyProject\Intermediate\Build\Win64\UE4Editor\Development\MyProject\Gatherer.gen.cpp.obj"
+"D:\Github\FIT3094 A1\MyProject\Intermediate\Build\Win64\UE4Editor\Development\MyProject\Hider.gen.cpp.obj"
+"D:\Github\FIT3094 A1\MyProject\Intermediate\Build\Win64\UE4Editor\Development\MyProject\Hunter.gen.cpp.obj"
+"D:\Github\FIT3094 A1\MyProject\Intermediate\Build\Win64\UE4Editor\Development\MyProject\MyProject.init.gen.cpp.obj"
+"D:\Github\FIT3094 A1\MyProject\Intermediate\Build\Win64\UE4Editor\Development\MyProject\MyProjectGameModeBase.gen.cpp.obj"
+"D:\Github\FIT3094 A1\MyProject\Intermediate\Build\Win64\UE4Editor\Development\MyProject\Pathfind.gen.cpp.obj"
+"D:\Github\FIT3094 A1\MyProject\Intermediate\Build\Win64\UE4Editor\Development\MyProject\PathNode.gen.cpp.obj"
+"D:\Github\FIT3094 A1\MyProject\Intermediate\Build\Win64\UE4Editor\Development\MyProject\Shelter.gen.cpp.obj"
+"D:\Github\FIT3094 A1\MyProject\Intermediate\Build\Win64\UE4Editor\Development\MyProject\Wall.gen.cpp.obj"
+"D:\Github\FIT3094 A1\MyProject\Intermediate\Build\Win64\UE4Editor\Development\MyProject\PCLaunch.rc.res"
+/OUT:"D:\Github\FIT3094 A1\MyProject\Intermediate\Build\Win64\UE4Editor\Development\MyProject\UE4Editor-MyProject-4561.lib"
