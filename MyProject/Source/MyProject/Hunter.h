@@ -61,21 +61,31 @@ private:
 	void State_Chase_OnExit(void);
 
 	//STATE_MATING: keep wander until finding the another mating partner and mate it in a random node
+	void State_Mating_OnEnter(void);
+	void State_Mating_OnTick(float f_DeltaTime);
+	void State_Mating_OnExit(void);
 
-	//genetic algo.
+	/*
+	genetic algo.
 		//breeding(make 3 seeds to swap?)
 		//mutate(use 3 variations to alter)
 		//generate new one.
+	*/
+	void breeding();
+	void mutate();
 
+	/*
+	neuron network decision making
+	//centralized neuron network, evolve the decision engine (which will be implemented as a controller actor class:P)
 	//find how many specific stuff in its surroundings.
-
 	//make decision by using neuron network
+	*/
+	Creature_State neuroDecision(int prayNum, int hunterNum);
 
 	//check correctness of the current decision and the realized decision
+	bool verifyDecision();
+	//grab and load the NN format from the file system
 
-	//centralized neuron network, evolve the decision engine (which will be implemented as a controller actor class:P) 
-
-	//this gatherer is special for creature's functionality, using p as the first letter to prevent confusion between the original m_StateMachine and others.
 	StateMachine<Creature_State, AHunter>* p_StateMachine;
 
 
