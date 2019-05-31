@@ -164,7 +164,7 @@ void ACreature::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 }
 
-void ACreature::TakeDmg(int inAtk)
+void ACreature::TakeDmg(int inAtk, FVector inPosition)
 {
 	//damage calculation: attack from others-defence
 	int finalDmg = inAtk - cDef;
@@ -174,12 +174,14 @@ void ACreature::TakeDmg(int inAtk)
 	}
 	//and then take damage to the HP
 	cHP -= finalDmg;
+	//and then create a impulse based on the input position
+	Mesh->AddRadialImpulse(inPosition, 100.f, cPower * 100.f, ERadialImpulseFalloff::RIF_Linear, true);
 	//if HP is less than 0, change state to die.
 	if (cHP <= 0) {
-		m_StateMachine->ChangeState(STATE_DIE);//<--problem
+		m_StateMachine->ChangeState(STATE_DIE);
 	}
 	else {
-		m_StateMachine->ChangeState(STATE_HIT);//<--problem
+		m_StateMachine->ChangeState(STATE_HIT);
 	}
 }
 
