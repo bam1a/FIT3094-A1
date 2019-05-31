@@ -20,7 +20,7 @@ public:
 
 	//externally do when creature intetionally hit other
 	//when no more damage, will be kill itself from the screen.
-	virtual void TakeDmg(int inAtk) override;
+	virtual void TakeDmg(int inAtk, FVector inPosition) override;
 
 
 private:
@@ -59,6 +59,21 @@ private:
 	void State_Chase_OnEnter(void);
 	void State_Chase_OnTick(float f_DeltaTime);
 	void State_Chase_OnExit(void);
+
+	//STATE_MATING: keep wander until finding the another mating partner and mate it in a random node
+
+	//genetic algo.
+		//breeding(make 3 seeds to swap?)
+		//mutate(use 3 variations to alter)
+		//generate new one.
+
+	//find how many specific stuff in its surroundings.
+
+	//make decision by using neuron network
+
+	//check correctness of the current decision and the realized decision
+
+	//centralized neuron network, evolve the decision engine (which will be implemented as a controller actor class:P) 
 
 	//this gatherer is special for creature's functionality, using p as the first letter to prevent confusion between the original m_StateMachine and others.
 	StateMachine<Creature_State, AHunter>* p_StateMachine;

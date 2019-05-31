@@ -17,7 +17,7 @@ void AHunter::Tick(float DeltaTime)
 	p_StateMachine->Tick(DeltaTime);
 }
 
-void AHunter::TakeDmg(int inAtk)
+void AHunter::TakeDmg(int inAtk, FVector inPosition)
 {
 	//damage calculation: attack from others-defence
 	int finalDmg = inAtk - cDef;
@@ -27,6 +27,8 @@ void AHunter::TakeDmg(int inAtk)
 	}
 	//and then take damage to the HP
 	cHP -= finalDmg;
+	//and then create a impulse based on the input position
+	Mesh->AddRadialImpulse(inPosition, 100.f, cPower * 100.f, ERadialImpulseFalloff::RIF_Linear, true);
 	//if HP is less than 0, change state to die.
 	if (cHP <= 0) {
 		p_StateMachine->ChangeState(STATE_DIE);//<--problem
@@ -205,12 +207,12 @@ void AHunter::State_Chase_OnTick(float f_DeltaTime)
 			//take some recovery before taking damage
 			int recover = cTargetCreature->GetHP()-cPower+cTargetCreature->GetDef();
 			//both take damage
-			cTargetCreature->TakeDmg(cPower);
+			cTargetCreature->TakeDmg(cPower, cPosition);
 			//before hunter take damage, recover HP based on the damage the target takes
 			//but 1/2 of it.<==tweak to just 1/1
 			//recover -= cTargetCreature->GetHP();
 			cHP += (recover);//2/
-			TakeDmg(cTargetCreature->GetPower());
+			TakeDmg(cTargetCreature->GetPower(), cTargetCreature->GetPos());
 			//and make a force toward each other
 				//todo
 			//if it kills the creature, add a counter
@@ -223,6 +225,7 @@ void AHunter::State_Chase_OnTick(float f_DeltaTime)
 					killCount = 0;
 				}
 			}
+			
 		}
 		//when the pray is over its sight, change it back to wander and clear the target
 		else if (FVector::Distance(cTargetPosition, cPosition) >= (cSight*2) || cTargetCreature == nullptr) {
