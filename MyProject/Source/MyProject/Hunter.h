@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Creature.h"
+#include "EvolutionControler.h"
 #include "Hunter.generated.h"
 
 /**
@@ -61,18 +62,11 @@ private:
 	void State_Chase_OnExit(void);
 
 	//STATE_MATING: keep wander until finding the another mating partner and mate it in a random node
-	void State_Mating_OnEnter(void);
-	void State_Mating_OnTick(float f_DeltaTime);
-	void State_Mating_OnExit(void);
+	void State_ToMate_OnEnter(void);
+	void State_ToMate_OnTick(float f_DeltaTime);
+	void State_ToMate_OnExit(void);
 
-	/*
-	genetic algo.
-		//breeding(make 3 seeds to swap?)
-		//mutate(use 3 variations to alter)
-		//generate new one.
-	*/
-	void breeding();
-	void mutate();
+
 
 	/*
 	neuron network decision making
@@ -80,10 +74,13 @@ private:
 	//find how many specific stuff in its surroundings.
 	//make decision by using neuron network
 	*/
-	Creature_State neuroDecision(int prayNum, int hunterNum);
+	float currentStateID;
+	float neuroDecide(int prayNum, int hunterNum, int killCount, int spawnCount);
+	Creature_State toState(float);
 
 	//check correctness of the current decision and the realized decision
 	bool verifyDecision();
+	void RespondDecision();
 	//grab and load the NN format from the file system
 
 	StateMachine<Creature_State, AHunter>* p_StateMachine;
