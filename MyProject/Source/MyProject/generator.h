@@ -39,6 +39,9 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "InitialGeneratingSettings")
 		int HiderCount;
 
+	//UPROPERTY(EditAnywhere, Category = "InitialGeneratingSettings")
+		//AEvolutionControler* HunterEvolutionControler;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

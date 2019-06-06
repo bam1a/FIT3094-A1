@@ -2,6 +2,7 @@
 
 #include "EvolutionControler.h"
 #include "FileHelper.h"
+#include "Hunter.h"
 #include <Runtime/Engine/Classes/Engine/Engine.h>
 #include "Paths.h"
 
@@ -114,3 +115,4 @@ void AEvolutionControler::loadNetwork()
 
 
 }
+

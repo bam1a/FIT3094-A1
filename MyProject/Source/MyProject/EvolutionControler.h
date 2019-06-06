@@ -5,15 +5,27 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Network.h"
-#include "Hunter.h"
+#include "Creature.h"
+#include "generator.h"
 #include <fstream>
 #include <sstream>
 #include <iostream>
 #include "EvolutionControler.generated.h"
 
-struct Genomes {
-	float speed, size,sight;
+struct Genome {
+	//genome format:
+	//speed, size, sight, power, def, HP, fitness(if needed)
+	float speed, size,sight,fitness;
 	int power, def, HP;
+	Genome(float inSpeed, float inSize, float inSight, int inPower, int inDef, int inHP) {
+		speed = inSpeed;
+		size = inSize;
+		sight = inSight;
+		power = inPower;
+		def = inDef;
+		HP = inHP;
+	}
+	//comparison function?
 };
 
 UCLASS()
@@ -25,13 +37,20 @@ public:
 	// Sets default values for this actor's properties
 	AEvolutionControler();
 	Network* NNetwork;
-//	TArray<AHunter> breedCouples;
-//	TArray<Genomes> genomeList;
 
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	TArray<ACreature*> breedCouples;
+	TArray<Genome*> genomeList;
+
+	UPROPERTY(EditAnywhere, Category = "InitialGeneratingSettings")
+		Agenerator* generator;
+
+	UPROPERTY(EditAnywhere, Category = "InitialGeneratingSettings")
+		int HunterCount;
+
 
 
 public:	
@@ -47,12 +66,12 @@ genetic algo.
 	void breed();
 	void mutate();
 	void generateByGenomes();
+	void loadGenome();
 
 	double NeuronDecision(TArray<double>inputValue);
 	void adjustDecision(double actualOutput);
 
 	void saveNetwork();
 	void loadNetwork();
-	void loadGenome();
 
 };

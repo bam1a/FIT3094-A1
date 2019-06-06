@@ -42,10 +42,10 @@ void Agenerator::BeginPlay()
 		newLocation = genRandomLocation(FVector::ZeroVector, 4000.f, true, 100.f);
 		spawnActortoWorld<AHider>(newLocation);
 	}
-	for (int i = 0; i < HunterCount; i++) {
-		newLocation = genRandomLocation(FVector::ZeroVector, 4000.f, true, 100.f);
-		spawnActortoWorld<AHunter>(newLocation);
-	}
+	//for (int i = 0; i < HunterCount; i++) {
+	//	newLocation = genRandomLocation(FVector::ZeroVector, 4000.f, true, 100.f);
+	//	spawnActortoWorld<AHunter>(newLocation);
+	//}
 }
 
 void Agenerator::resetTimer()

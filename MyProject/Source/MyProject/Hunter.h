@@ -74,6 +74,7 @@ private:
 	//find how many specific stuff in its surroundings.
 	//make decision by using neuron network
 	*/
+	AEvolutionControler* DNAController;
 	float currentStateID;
 	float neuroDecide(int prayNum, int hunterNum, int killCount, int spawnCount);
 	Creature_State toState(float);
