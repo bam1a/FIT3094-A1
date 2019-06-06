@@ -52,7 +52,7 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "InitialGeneratingSettings")
 		int HunterCount;
 
-
+	double timer;
 
 public:	
 	// Called every frame
