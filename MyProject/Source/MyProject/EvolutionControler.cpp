@@ -15,6 +15,11 @@ AEvolutionControler::AEvolutionControler()
 
 }
 
+AEvolutionControler::~AEvolutionControler()
+{
+	saveNetwork();
+}
+
 // Called when the game starts or when spawned
 void AEvolutionControler::BeginPlay()
 {
@@ -55,6 +60,17 @@ void AEvolutionControler::adjustDecision(double actualOutput)
 	TArray<double> actualOutputArr;
 	actualOutputArr.Push(actualOutput);
 	NNetwork->backPropagation(actualOutputArr);
+}
+
+void AEvolutionControler::saveNetwork()
+{
+	//initialize, and make some buffers when writing file
+	FString textString="testing";
+	FString lineString="";
+	FString fileLoc = FPaths::ProjectContentDir() + "AAAAA.txt";
+	bool AllowOverwriting = false;
+	FFileHelper::SaveStringToFile(textString, *fileLoc);
+
 }
 
 void AEvolutionControler::loadNetwork()

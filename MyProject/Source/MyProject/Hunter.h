@@ -82,6 +82,10 @@ private:
 	//check correctness of the current decision and the realized decision
 	bool verifyDecision();
 	void RespondDecision();
+	//a timer to calculate its fitness
+	double globalTimer = 0.f;
+	//a value of total killing count to determine its fitness
+	int totalKillCount = 0;
 	//grab and load the NN format from the file system
 
 	StateMachine<Creature_State, AHunter>* p_StateMachine;

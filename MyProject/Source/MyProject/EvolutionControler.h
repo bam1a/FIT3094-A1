@@ -18,13 +18,14 @@ struct Genome {
 	float speed, size,sight,fitness;
 	int power, def, HP;
 	FVector pos;
-	Genome(float inSpeed, float inSize, float inSight, int inPower, int inDef, int inHP, FVector inPos) {
+	Genome(float inSpeed, float inSize, float inSight, int inPower, int inDef, int inHP, FVector inPos, float inTimeFitness, int inKillFitness) {
 		speed = inSpeed;
 		size = inSize;
 		sight = inSight;
 		power = inPower;
 		def = inDef;
 		HP = inHP;
+		fitness = inTimeFitness + (inKillFitness * 10.f);
 	}
 	//comparison function?
 };
@@ -37,6 +38,7 @@ class MYPROJECT_API AEvolutionControler : public AActor
 public:	
 	// Sets default values for this actor's properties
 	AEvolutionControler();
+	~AEvolutionControler();
 	Network* NNetwork;
 
 
@@ -44,6 +46,8 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	TArray<Genome*> breedCouples;
+	Genome* bestGenome = nullptr;
+	Genome* bestGenome2 = nullptr;
 	TArray<Genome*> genomeList;
 
 	UPROPERTY(EditAnywhere, Category = "InitialGeneratingSettings")
@@ -52,7 +56,6 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "InitialGeneratingSettings")
 		int HunterCount;
 
-	double timer;
 
 public:	
 	// Called every frame
@@ -64,11 +67,12 @@ genetic algo.
 	//mutate(use 3 variations to alter)
 	//generate new set of creatures.
 */
-	void setGenomeCouple(ACreature* inCreature);
+	void setGenomeCouple(ACreature* inCreature, float inTimeFitness, int inKillFitness);
 	void breed();
 	void mutate();
 	void generateByGenomes();
 	void loadGenome();
+	void saveGenome();
 
 	double NeuronDecision(TArray<double>inputValue);
 	void adjustDecision(double actualOutput);
