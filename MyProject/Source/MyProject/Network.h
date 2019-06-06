@@ -28,6 +28,9 @@ public:
 	//overwrite every neuron's output weight, even the bias
 	void overwriteNeurons(TArray<TArray<TArray<double>>>& inNeuro);
 
+	TArray<int>getTopology();
+	TArray<TArray<TArray<double>>> getNeuroOutputWeight();
+
 private:
 	double m_error;
 	TArray<Layer> m_layers;

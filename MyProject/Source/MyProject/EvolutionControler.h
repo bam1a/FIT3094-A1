@@ -45,14 +45,18 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	//genetic evolution related
 	TArray<Genome*> breedCouples;
 	Genome* bestGenome = nullptr;
 	Genome* bestGenome2 = nullptr;
 	TArray<Genome*> genomeList;
 
+	//used to generate a new creature
 	UPROPERTY(EditAnywhere, Category = "InitialGeneratingSettings")
 		Agenerator* generator;
 
+	//used to generate some default hunters when startup?
 	UPROPERTY(EditAnywhere, Category = "InitialGeneratingSettings")
 		int HunterCount;
 

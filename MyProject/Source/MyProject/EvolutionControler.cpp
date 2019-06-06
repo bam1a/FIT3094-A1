@@ -17,7 +17,6 @@ AEvolutionControler::AEvolutionControler()
 
 AEvolutionControler::~AEvolutionControler()
 {
-	saveNetwork();
 }
 
 // Called when the game starts or when spawned
@@ -31,6 +30,9 @@ void AEvolutionControler::BeginPlay()
 	loadNetwork(); 
 	//load genomes
 	
+	//temp. placement: saving the network
+	saveNetwork();
+
 }
 
 // Called every frame
@@ -65,11 +67,40 @@ void AEvolutionControler::adjustDecision(double actualOutput)
 void AEvolutionControler::saveNetwork()
 {
 	//initialize, and make some buffers when writing file
-	FString textString="testing";
+		//can't use "\n"to make a new line, only using array could solve it.
+	TArray<FString> textStringArr;
+	//textStringArr.Push(TEXT("testing\n123\t456 78"));
+	//textStringArr.Push(TEXT("africa is the best"));
+	//temp. string
 	FString lineString="";
 	FString fileLoc = FPaths::ProjectContentDir() + "AAAAA.txt";
-	bool AllowOverwriting = false;
-	FFileHelper::SaveStringToFile(textString, *fileLoc);
+	//adding topology
+	lineString = "topology:";
+	for (int i : NNetwork->getTopology()) {
+		lineString.Append(" ");
+		lineString.Append(FString::FromInt(i));
+	}
+	textStringArr.Push(lineString);
+	//adding neuron structures
+		//get the neuron output weight structure(except the last layer as it has no meaning of weights.
+	TArray<TArray<TArray<double>>> neuroOutputWeight = NNetwork->getNeuroOutputWeight();
+	for (int i = 0; i < neuroOutputWeight.Num() - 1; i++) {
+		lineString = TEXT("L" + FString::FromInt(i+1)+":");
+		for (TArray<double>iNeuro : neuroOutputWeight[i]) {
+			lineString.Append(TEXT("	"));
+			for (double iWeight : iNeuro) {
+				lineString.Append(FString::SanitizeFloat(iWeight));
+				lineString.Append(" ");
+			}
+			//remove the last space char to maintain the format.
+			lineString.RemoveAt(lineString.Len() - 1,1);
+		}
+		textStringArr.Push(lineString);
+	}
+	//overwrite the whole file.
+	FFileHelper::SaveStringArrayToFile(textStringArr, *fileLoc);
+	TArray<FString> fileStringArr;
+	FFileHelper::LoadANSITextFileToStrings(*fileLoc, NULL, fileStringArr);
 
 }
 

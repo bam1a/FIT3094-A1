@@ -212,3 +212,29 @@ void Network::overwriteNeurons(TArray<TArray<TArray<double>>>& inNeuro)
 		}
 	}
 }
+
+TArray<int> Network::getTopology()
+{
+	TArray<int>outArr;
+	for (Layer i : m_layers) {
+		outArr.Push(i.Num() - 1);
+	}
+	return outArr;
+}
+
+TArray<TArray<TArray<double>>> Network::getNeuroOutputWeight()
+{
+	TArray<TArray<TArray<double>>> outArr;
+	//loop all layers
+	for (Layer iLayer : m_layers) {
+		//loop all neurons in the layer
+		TArray<TArray<double>> tempNeuroArr;
+		for (Neuron iNeuron : iLayer) {
+			//add the neuron weights into the temp. array
+			tempNeuroArr.Push(iNeuron.getOutputWeight());
+		}
+		//and then add to the output array of array
+		outArr.Add(tempNeuroArr);
+	}
+	return outArr;
+}
