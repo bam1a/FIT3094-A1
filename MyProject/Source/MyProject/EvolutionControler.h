@@ -17,7 +17,8 @@ struct Genome {
 	//speed, size, sight, power, def, HP, fitness(if needed)
 	float speed, size,sight,fitness;
 	int power, def, HP;
-	Genome(float inSpeed, float inSize, float inSight, int inPower, int inDef, int inHP) {
+	FVector pos;
+	Genome(float inSpeed, float inSize, float inSight, int inPower, int inDef, int inHP, FVector inPos) {
 		speed = inSpeed;
 		size = inSize;
 		sight = inSight;
@@ -42,7 +43,7 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-	TArray<ACreature*> breedCouples;
+	TArray<Genome*> breedCouples;
 	TArray<Genome*> genomeList;
 
 	UPROPERTY(EditAnywhere, Category = "InitialGeneratingSettings")
@@ -63,6 +64,7 @@ genetic algo.
 	//mutate(use 3 variations to alter)
 	//generate new set of creatures.
 */
+	void setGenomeCouple(ACreature* inCreature);
 	void breed();
 	void mutate();
 	void generateByGenomes();
