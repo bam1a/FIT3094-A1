@@ -22,6 +22,10 @@ public:
 	//externally do when creature intetionally hit other
 	//when no more damage, will be kill itself from the screen.
 	virtual void TakeDmg(int inAtk, FVector inPosition) override;
+	//get the hunter is looking for mate
+	bool getIsMating() { return isMating; };
+	void setIsMating(bool inBool) { isMating = inBool; };
+
 
 
 private:
@@ -33,11 +37,17 @@ private:
 	//local variables
 	int killCount;
 	ACreature* prayTarget;
+	AHunter* mateTarget;
+	bool isMating = false;
 	float chaseTime;
+	int previousHP;
 
 	//Hunter only function
-	//functions for get the surrounding actors in the sight
+	//functions for get the surrounding pray in the sight
 	ACreature* getPray(TArray<FHitResult>* inHits);
+	AHunter* getMate(TArray<FHitResult>* inHits);
+	//function
+	bool isOvertime();
 
 	//registering state, override the whole function without any coherance each other
 	virtual void stateRegister() override;
@@ -67,21 +77,23 @@ private:
 	void State_ToMate_OnExit(void);
 
 
-
+	
 	/*
 	neuron network decision making
 	//centralized neuron network, evolve the decision engine (which will be implemented as a controller actor class:P)
 	//find how many specific stuff in its surroundings.
 	//make decision by using neuron network
+	//state id: 0:wander, 2:hit, 3:chase, 4:toMate, 5:die
+	this will use an array of 1/0 integer to decide
 	*/
 	AEvolutionControler* DNAController;
 	float currentStateID;
-	float neuroDecide(int prayNum, int hunterNum, int killCount, int spawnCount);
+	float neuroDecide(ACreature* inPray, AHunter* inMate, bool isDead, bool isDamaged, bool  isOvertime);
 	Creature_State toState(float);
 
 	//check correctness of the current decision and the realized decision
-	bool verifyDecision();
-	void RespondDecision();
+	double verifyDecision(double inDecision, ACreature* inPray, AHunter* inMate, bool isDead, bool isDamaged, bool  isOvertime);
+	void realizeDecision(double inExpectedResult);
 	//a timer to calculate its fitness
 	double globalTimer = 0.f;
 	//a value of total killing count to determine its fitness

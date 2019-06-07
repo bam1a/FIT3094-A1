@@ -13,8 +13,41 @@ AHunter::AHunter(FVector inPos) :ACreature(inPos) {
 
 void AHunter::Tick(float DeltaTime)
 {
-	Super::Tick(DeltaTime);
+	//as Hunter is outside the logic of creature, make a fully independent tick operation based on AActor class.
+	Super::Super::Tick(DeltaTime);
+
+	//get the velocity by checking the last and current position
+	cVelocity = cPosition - cLastPosition;
+	cVelocity = cVelocity / DeltaTime;
+	//as it's a 2d plane, force the velocity of z axis only be 0.
+	cVelocity.Z = 0.f;
+
+	//update the position and last position parameter
+	cLastPosition = cPosition;
+	cPosition = GetActorLocation();
+
+	//make some value input for neuron network decision making
+	//prepare decision parameters
+	TArray<FHitResult> hitResult = getSurroundings();
+	//find pray is existed or not
+	ACreature* tempPrayTarget = getPray(&hitResult);
+	//find mating target is existed or not
+	AHunter* tempMateTarget = getMate(&hitResult);
+	//find the timer is over or not when it's in chasing state
+	isOvertime();
+	//find if the creature is dead or not
+	bool isDead = (cHP <= 0);
+	bool isDamaged = (cHP <= previousHP);
+	//make decision
+	neuroDecide(tempPrayTarget,tempMateTarget,isDead,isDamaged,isOvertime());
+	//verify decision is viable
+
+	//do the state machine tick operations
 	p_StateMachine->Tick(DeltaTime);
+	
+
+	//update the previous HP as current HP after making decision
+
 }
 
 void AHunter::TakeDmg(int inAtk, FVector inPosition)
@@ -98,6 +131,16 @@ ACreature * AHunter::getPray(TArray<FHitResult>* inHits)
 	return nullptr;
 }
 
+AHunter * AHunter::getMate(TArray<FHitResult>* inHits)
+{
+	return nullptr;
+}
+
+bool AHunter::isOvertime()
+{
+	return false;
+}
+
 void AHunter::stateRegister()
 {
 	p_StateMachine = new StateMachine<Creature_State, AHunter>(this, STATE_DO_NOTHING);
@@ -121,16 +164,16 @@ void AHunter::State_Wander_OnEnter(void){	Super::State_Wander_OnEnter();}
 void AHunter::State_Wander_OnTick(float f_DeltaTime)
 {
 	Super::State_Wander_OnTick(f_DeltaTime);
-	TArray<FHitResult> hitResult = getSurroundings();
-	ACreature* tempPrayTarget = getPray(&hitResult);
-	//chase if there's a pray and it's not meet from last time, chase that target.
-	if (tempPrayTarget != nullptr) {
-		if (prayTarget != tempPrayTarget && tempPrayTarget != this) {
-			prayTarget = tempPrayTarget;
-			cTargetCreature = prayTarget;
-			p_StateMachine->ChangeState(STATE_HUNTER_CHASE);
-		}
-	}
+	//TArray<FHitResult> hitResult = getSurroundings();
+	//ACreature* tempPrayTarget = getPray(&hitResult);
+	////chase if there's a pray and it's not meet from last time, chase that target.
+	//if (tempPrayTarget != nullptr) {
+	//	if (prayTarget != tempPrayTarget && tempPrayTarget != this) {
+	//		prayTarget = tempPrayTarget;
+	//		cTargetCreature = prayTarget;
+	//		p_StateMachine->ChangeState(STATE_HUNTER_CHASE);
+	//	}
+	//}
 
 }
 
@@ -240,3 +283,7 @@ void AHunter::State_Chase_OnTick(float f_DeltaTime)
 
 void AHunter::State_Chase_OnExit(void){	SetLastState(p_StateMachine->GetCurrentState());}
 
+float AHunter::neuroDecide(ACreature * inPray, AHunter * inMate, bool isDead, bool isDamaged, bool isOvertime)
+{
+	return 0.0f;
+}
