@@ -61,6 +61,9 @@ private:
 	//STATE_HIT:hit by something and determine is dead or not( might have some time lag)
 	virtual void State_Hit_OnTick(float f_DeltaTime)override;
 	virtual void State_Hit_OnExit(void)override;
+	//STATE_DIE:die (remove itself from render pipeline array and destory itself.)
+	virtual void State_Die_OnTick(float f_DeltaTime)override;
+
 	//STATE_TOEAT: moving towards to the food pallet which detected
 	void State_ToEat_OnEnter(void);
 	void State_ToEat_OnTick(float f_DeltaTime);

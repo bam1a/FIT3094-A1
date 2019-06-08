@@ -208,7 +208,7 @@ protected:
 	virtual void State_Spawn_OnExit(void);
 	//STATE_DIE:die (remove itself from render pipeline array and destory itself.)
 	void State_Die_OnEnter(void);
-	void State_Die_OnTick(float f_DeltaTime);
+	virtual void State_Die_OnTick(float f_DeltaTime);
 	void State_Die_OnExit(void);
 	//STATE_HIT:hit by something and determine is dead or not( might have some time lag)
 	virtual void State_Hit_OnEnter(void);

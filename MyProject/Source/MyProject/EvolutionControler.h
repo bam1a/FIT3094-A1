@@ -69,13 +69,14 @@ public:
 
 	/*
 genetic algo.
-	//breeding(make 3 seeds to swap?)
-	//mutate(use 3 variations to alter)
-	//generate new set of creatures.
+	//breeding(make 1 seed to swap?)
+	//mutate(use 1 variations to alter)
+	//generate new 3 set of creatures based on the couples
+	//load and save genomes.
 */
 	void setGenomeCouple(ACreature* inCreature, float inTimeFitness, int inKillFitness);
-	void breed();
-	void mutate();
+	void breed(int seedCount);
+	void mutate(int seedCount);
 	void generateByGenomes();
 	void loadGenome();
 	void saveGenome();

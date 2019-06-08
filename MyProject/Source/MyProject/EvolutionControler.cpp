@@ -85,7 +85,7 @@ void AEvolutionControler::saveNetwork()
 	//textStringArr.Push(TEXT("africa is the best"));
 	//temp. string
 	FString lineString="";
-	FString fileLoc = FPaths::ProjectContentDir() + "AAAAA.txt";
+	FString fileLoc = FPaths::ProjectContentDir() + "HunterNeuro.txt";
 	//adding topology
 	lineString = "topology:";
 	for (int i : NNetwork->getTopology()) {
@@ -121,7 +121,7 @@ void AEvolutionControler::loadNetwork()
 	//initialize, and make some buffers when reading file
 	FString fileString, fLine;
 	TArray<FString> fileStringArr;
-	FString fileLoc = FPaths::GameContentDir() + "HunterDNA.txt";
+	FString fileLoc = FPaths::GameContentDir() + "HunterNeuro.txt";
 	FFileHelper::LoadANSITextFileToStrings(*fileLoc, NULL, fileStringArr);
 
 	TArray<unsigned> inTopo;//line 0 of file=topology

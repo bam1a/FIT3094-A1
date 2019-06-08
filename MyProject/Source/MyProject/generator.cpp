@@ -28,6 +28,7 @@ void Agenerator::BeginPlay()
 	resetTimer();
 	//setup a location Vector
 	FVector newLocation;
+	float cSize = 4000.f;
 	//generate couple of food pallet based on the config.
 	for (int i = 0; i < foodGenCount; i++) {
 		newLocation = genRandomLocation(FVector::ZeroVector, 4000.f, true, 100.f);
@@ -35,12 +36,10 @@ void Agenerator::BeginPlay()
 	}
 	//generate Gatherer,Hider,Hunter based on the config.
 	for (int i = 0; i < GathererCount; i++) {
-		newLocation = genRandomLocation(FVector::ZeroVector, 4000.f, true, 100.f);
-		spawnActortoWorld<AGatherer>(newLocation);
+		generateGatherer(FVector::ZeroVector, 4000.f, 100.f);
 	}
 	for (int i = 0; i <HiderCount; i++) {
-		newLocation = genRandomLocation(FVector::ZeroVector, 4000.f, true, 100.f);
-		spawnActortoWorld<AHider>(newLocation);
+		generateHider(FVector::ZeroVector, 4000.f, 100.f);
 	}
 	//for (int i = 0; i < HunterCount; i++) {
 	//	newLocation = genRandomLocation(FVector::ZeroVector, 4000.f, true, 100.f);
@@ -60,16 +59,51 @@ void Agenerator::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	//when time's up, generate a new food pallet
 	if (genTimer >= genTime) {
-		FVector newLocation = genRandomLocation(FVector::ZeroVector, 4000.f, true, 100.f);
-		spawnActortoWorld<AFood>(newLocation);
+		for (int i = 0; i < 10; i++) {
+			FVector newLocation = genRandomLocation(FVector::ZeroVector, 4000.f, true, 100.f);
+			spawnActortoWorld<AFood>(newLocation);
+		}
 		//and reset the timer
 		resetTimer();
 	}
 	else {
 		genTimer += DeltaTime;
 	}
+	//if out of hider/ gatherer, regenerate them
+	if (spawnedGatherers.Num() <= 0) {
+		for (int i = 0; i < GathererCount; i++) {
+			 generateGatherer(FVector::ZeroVector, 4000.f, 100.f);
+		}
+	}
+	if (spawnedHiders.Num() <= 0) {
+		for (int i = 0; i < HiderCount; i++) {
+			generateHider(FVector::ZeroVector, 4000.f, 100.f);
+		}
+	}
 
 }
+
+
+void Agenerator::generateHider( FVector inLoc, float inSize, float inCheckRange)
+{
+	FVector newLocation = genRandomLocation(inLoc, inSize, true, inCheckRange);
+
+	//generate Gatherer,Hider,Hunter based on the config.
+	AActor* newActor=spawnActortoWorld<AHider>(newLocation);
+	spawnedHiders.Add(newActor);
+
+}
+
+void Agenerator::generateGatherer(FVector inLoc, float inSize, float inCheckRange)
+{
+	FVector newLocation = genRandomLocation(inLoc, inSize, true, inCheckRange);
+
+	//generate Gatherer,Hider,Hunter based on the default config.
+	AActor* newActor = spawnActortoWorld<AGatherer>(newLocation);
+	spawnedGatherers.Add(newActor);
+
+}
+
 
 
 FVector Agenerator::genRandomLocation(FVector initPos, float inRange, bool isNeedValidCheck, float inCheckRange)

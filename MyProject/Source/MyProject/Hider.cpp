@@ -170,7 +170,9 @@ void AHider::State_Spawn_OnEnter(void)
 void AHider::State_Spawn_OnTick(float f_DeltaTime)
 {
 	Super::State_Spawn_OnTick(f_DeltaTime);
-	cGenerator->spawnActortoWorld<AHider>(genRandomLocation(cPosition, cSize * 2, true, cSize));
+	for (int i = 0; i < 3; i++) {
+		cGenerator->generateHider(cPosition, cSize*2, cSize);
+	}
 
 	h_StateMachine->ChangeState(STATE_WANDER);
 
@@ -215,6 +217,12 @@ void AHider::State_Hit_OnTick(float f_DeltaTime)
 
 }
 void AHider::State_Hit_OnExit(void) { SetLastState(h_StateMachine->GetCurrentState()); }
+
+void AHider::State_Die_OnTick(float f_DeltaTime)
+{
+	cGenerator->spawnedHiders.Remove(this);
+	Super::State_Die_OnTick(f_DeltaTime);
+}
 
 void AHider::State_Standby_OnEnter(void)
 {

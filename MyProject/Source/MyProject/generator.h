@@ -50,8 +50,17 @@ public:
 	TArray<AActor*> SpawnedArray;
 	//containers for each generated creatures
 	TArray<AActor*> spawnedCreature;
-	//containers for each generated Hunters
+	//containers for each hiders
+	TArray<AActor*>spawnedHiders;
+	//containers for each gatherers
+	TArray<AActor*>spawnedGatherers;
+	//containers for each generated Hunters.....do it in the evolutionControler as it has its own logic of gnerating it
 	TArray<AActor*> spawnedHunters;
+
+	void generateHider(FVector inLoc, float inSize, float inCheckRange);
+	void generateGatherer(FVector inLoc, float inSize, float inCheckRange);
+	//AActor* generateHunter(int genAmount);
+
 
 	//T- the actor class which requested for spawn
 	//function to generate an object based on the position or generate itself by default

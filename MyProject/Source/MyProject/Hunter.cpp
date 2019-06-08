@@ -49,6 +49,9 @@ void AHunter::Tick(float DeltaTime)
 		//and adjust the neuro network after realise
 		DNAController->adjustDecision(realizedDecision);
 
+		DNAController->NNetwork->displayReport({}, {}, { realizedDecision });
+
+
 		Creature_State previousState = SetCurrentState();
 		Creature_State currentState = toState(realizedDecision);
 
@@ -309,10 +312,11 @@ void AHunter::State_Hit_OnTick(float f_DeltaTime)
 	else {
 		cTimer += f_DeltaTime;
 	}
+	move(f_DeltaTime, true);
 
 }
 
-void AHunter::State_Hit_OnExit(void) { SetLastState(p_StateMachine->GetCurrentState()); }
+void AHunter::State_Hit_OnExit(void) { SetLastState(p_StateMachine->GetCurrentState());  cTimer = 0.f;}
 
 void AHunter::State_Chase_OnEnter(void)
 {
@@ -355,7 +359,7 @@ void AHunter::State_Chase_OnTick(float f_DeltaTime)
 	}
 }
 
-void AHunter::State_Chase_OnExit(void){	SetLastState(p_StateMachine->GetCurrentState());}
+void AHunter::State_Chase_OnExit(void) { SetLastState(p_StateMachine->GetCurrentState()); cTimer = 0.f; }
 
 void AHunter::State_ToMate_OnEnter(void)
 {
@@ -381,6 +385,11 @@ void AHunter::State_ToMate_OnTick(float f_DeltaTime)
 		isMating = false;
 
 	}
+}
+
+void AHunter::State_ToMate_OnExit(void)
+{
+	SetLastState(p_StateMachine->GetCurrentState()); cTimer = 0.f;
 }
 
 void AHunter::setController(FString inAttr)

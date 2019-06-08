@@ -164,7 +164,10 @@ void AGatherer::State_Spawn_OnTick(float f_DeltaTime)
 {
 	Super::State_Spawn_OnTick(f_DeltaTime);
 	//use the generator to spawn the new actor nearby it
-	cGenerator->spawnActortoWorld<AGatherer>(genRandomLocation(cPosition, cSize * 2, true, cSize));
+	for (int i = 0; i < 3; i++) {
+		cGenerator->generateGatherer(cPosition, cSize*2, cSize);
+	}
+
 	g_StateMachine->ChangeState(STATE_WANDER);
 }
 
@@ -201,6 +204,13 @@ void AGatherer::State_Hit_OnTick(float f_DeltaTime)
 }
 
 void AGatherer::State_Hit_OnExit(void){SetLastState(g_StateMachine->GetCurrentState());}
+
+void AGatherer::State_Die_OnTick(float f_DeltaTime)
+{
+	cGenerator->spawnedGatherers.Remove(this);
+	Super::State_Die_OnTick(f_DeltaTime);
+
+}
 
 void AGatherer::State_ToEat_OnEnter(void)
 {
