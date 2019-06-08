@@ -32,9 +32,7 @@ void AEvolutionControler::BeginPlay()
 	//load genomes
 	loadGenome();
 
-	//generate hunters to the generator.
-	//temp. placement: saving the network
-	saveNetwork();
+	//generate hunters to the generator.(via tick)
 
 }
 
@@ -59,6 +57,10 @@ void AEvolutionControler::Tick(float DeltaTime)
 	if (generator->spawnedHunters.Num() <= 0) {
 		regenGenome();
 	}
+	if (time >= 1.f) {
+		saveSettings();
+	}
+	time += DeltaTime;
 }
 
 void AEvolutionControler::setGenomeCouple(ACreature * inCreature, float inTimeFitness, int inKillFitness)
@@ -275,6 +277,12 @@ void AEvolutionControler::saveGenome()
 	//overwrite the whole file.
 	FFileHelper::SaveStringArrayToFile(textStringArr, *fileLoc);
 
+}
+
+void AEvolutionControler::saveSettings()
+{
+	saveGenome();
+	saveNetwork();
 }
 
 double AEvolutionControler::NeuronDecision(TArray<double>& inputValue)

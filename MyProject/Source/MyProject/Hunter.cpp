@@ -31,7 +31,7 @@ void AHunter::Tick(float DeltaTime)
 	//make some value input for neuron network decision making
 	//and then change the state
 	//except if it's in the hit state and not overtimed(as it needs cooltime)
-	if (SetCurrentState() == STATE_HIT && !isOvertime()) {
+	if (p_StateMachine->GetCurrentState() != STATE_HIT && !isOvertime()) { 
 
 		//prepare decision parameters
 		TArray<FHitResult> hitResult = getSurroundings();
@@ -42,18 +42,21 @@ void AHunter::Tick(float DeltaTime)
 		//find if the creature is dead or not
 		bool isDead = (cHP <= 0);
 		bool isDamaged = (cHP <= previousHP);
-		//make decision
-		double decision = neuroDecide(prayTarget, mateTarget, isOvertime());
+		//make decision, using pray target, mate target , is mating, is overtime to decide
+		double decision = neuroDecide(prayTarget, mateTarget, isMating, isOvertime());
 		//verify decision is viable and realize it.
-		double realizedDecision = realizeDecision(decision, prayTarget, mateTarget, isOvertime());
+		double realizedDecision = realizeDecision(decision, prayTarget, mateTarget, isMating, isOvertime());
 		//and adjust the neuro network after realise
 		DNAController->adjustDecision(realizedDecision);
 
-		DNAController->NNetwork->displayReport({}, {}, { realizedDecision });
+		DNAController->NNetwork->displayReport({}, {decision}, { realizedDecision });
 
 
-		Creature_State previousState = SetCurrentState();
-		Creature_State currentState = toState(realizedDecision);
+		Creature_State previousState = p_StateMachine->GetCurrentState();
+		if (decision <= 0) {
+			decision = 0;
+		}
+		Creature_State currentState = toState(round(decision));
 
 
 		//but if it's dead, force it to dead state machine
@@ -74,7 +77,7 @@ void AHunter::Tick(float DeltaTime)
 	//update the previous HP as current HP after making decision
 	previousHP = cHP;
 	//if the adjusted decision is wandering, keep reset the timer, otherwise rise the timer
-	if (SetCurrentState() == STATE_WANDER) {
+	if (p_StateMachine->GetCurrentState() == STATE_WANDER) {
 		cTimer = 0.f;
 	}
 	else {
@@ -186,6 +189,7 @@ void AHunter::BeginPlay()
 	cSpawnCount = 2;
 	//set default state
 	p_StateMachine->ChangeState(STATE_WANDER);
+	cTime = 10.f;
 }
 
 ACreature * AHunter::getPray(TArray<FHitResult>* inHits)
@@ -412,7 +416,7 @@ void AHunter::setController(FString inAttr)
 
 }
 
-float AHunter::neuroDecide(ACreature * inPray, AHunter * inMate, bool isOvertime)
+float AHunter::neuroDecide(ACreature * inPray, AHunter * inMate, bool isMating, bool isOvertime)
 {
 	TArray<double> inputDecide;
 
@@ -432,6 +436,11 @@ float AHunter::neuroDecide(ACreature * inPray, AHunter * inMate, bool isOvertime
 	}
 	inputDecide.Push(mateValue);
 
+	int isMatingValue = 0;
+	if (isMating) {
+		isMatingValue++;
+	}
+
 	//isOvertimeValue: is chasing/mating action overtimed?
 			//if it's overtimed is not null(aka. giving up), change it to 1.
 	int isOvertimeValue = 0;
@@ -444,30 +453,37 @@ float AHunter::neuroDecide(ACreature * inPray, AHunter * inMate, bool isOvertime
 
 
 
-double AHunter::realizeDecision(double inDecision, ACreature * inPray, AHunter * inMate, bool isOvertime)
+double AHunter::realizeDecision(double inDecision, ACreature * inPray, AHunter * inMate, bool isMating, bool isOvertime)
 {
 	int adjustDecision = 0;
 	//state id: 0:wander, 1:chase, 2:toMate
 	int decision = round(inDecision);
-	//if decision is more than 5 or less than 0, it means it's an invalid decision and turn it to wander
-	//otherwise look its value is correct or not
+	//this is the situation I expected
+	//situation 1: when there's mate and hunter want to mate but not overtimed
+	if (inMate!=nullptr && isMating && !isOvertime) {
+		adjustDecision = 2;
+	}
+	//situation2: when there's a pray but not overtimed
+	if (inPray != nullptr && !isOvertime) {
+		adjustDecision = 1;
+	}
 	
 
-	//if there's no mate or got mate but overtime, keep it to wander as it's unable to mate 
-	if (decision == 2) {
-		if (inMate != nullptr) {
-			if (!isOvertime) {
-				adjustDecision = 2;
-			}
-		}
-	}
-	//if there's no pray in the sight,
-	else if (decision == 1) {
-		if (inPray != nullptr) {
-			if (!isOvertime) {
-				adjustDecision = 1;
-			}
-		}
-	}
+	////if there's no mate or got mate but overtime, keep it to wander as it's unable to mate 
+	//if (decision == 2) {
+	//	if (inMate != nullptr) {
+	//		if (!isOvertime) {
+	//			adjustDecision = 2;
+	//		}
+	//	}
+	//}
+	////if there's no pray in the sight,
+	//else if (decision == 1) {
+	//	if (inPray != nullptr) {
+	//		if (!isOvertime) {
+	//			adjustDecision = 1;
+	//		}
+	//	}
+	//}
 	return adjustDecision;
 }

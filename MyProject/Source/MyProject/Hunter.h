@@ -95,7 +95,7 @@ private:
 	AEvolutionControler* DNAController;
 	void setController(FString inAttr);
 	float currentStateID;
-	float neuroDecide(ACreature* inPray, AHunter* inMate, bool  isOvertime);
+	float neuroDecide(ACreature* inPray, AHunter* inMate, bool isMating, bool isOvertime);
 	Creature_State toState(double inStateID) {
 		if (inStateID == 0.f) {
 			return STATE_WANDER;
@@ -110,7 +110,7 @@ private:
 	}
 
 	//check correctness of the current decision and the realized decision
-	double realizeDecision(double inDecision, ACreature* inPray, AHunter* inMate, bool  isOvertime);
+	double realizeDecision(double inDecision, ACreature* inPray, AHunter* inMate, bool isMating, bool  isOvertime);
 	//a timer to calculate its fitness
 	double globalTimer = 0.f;
 	//a value of total killing count to determine its fitness

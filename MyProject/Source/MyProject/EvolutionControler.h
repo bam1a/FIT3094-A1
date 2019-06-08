@@ -62,6 +62,7 @@ protected:
 	TArray<Genome*> genomeList;
 	FVector spawnPos= FVector::ZeroVector;;
 	float spawnSize= 2000.f;
+	float time = 0.f;
 	//used to generate a new creature
 	UPROPERTY(EditAnywhere, Category = "InitialGeneratingSettings")
 		Agenerator* generator;
@@ -92,6 +93,7 @@ genetic algo.
 	void regenGenome();
 	void loadGenome();
 	void saveGenome();
+	void saveSettings();
 
 	double NeuronDecision(TArray<double>&inputValue);
 	void adjustDecision(double actualOutput);
