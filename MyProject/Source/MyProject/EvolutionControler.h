@@ -17,8 +17,7 @@ struct Genome {
 	//speed, size, sight, power, def, HP, fitness(if needed)
 	float speed, size,sight,fitness;
 	int power, def, HP;
-	FVector pos;
-	Genome(float inSpeed, float inSize, float inSight, int inPower, int inDef, int inHP, FVector inPos, float inTimeFitness, int inKillFitness) {
+	Genome(float inSpeed, float inSize, float inSight, int inPower, int inDef, int inHP, float inTimeFitness, int inKillFitness) {
 		speed = inSpeed;
 		size = inSize;
 		sight = inSight;
@@ -27,7 +26,17 @@ struct Genome {
 		HP = inHP;
 		fitness = inTimeFitness + (inKillFitness * 10.f);
 	}
-	//comparison function?
+	Genome(float inSpeed, float inSize, float inSight, int inPower, int inDef, int inHP, float inFitness) {
+		speed = inSpeed;
+		size = inSize;
+		sight = inSight;
+		power = inPower;
+		def = inDef;
+		HP = inHP;
+		fitness = inFitness;
+	}
+	//comparison function
+	//formula: living time+(kill count*10)
 };
 
 UCLASS()
@@ -49,10 +58,10 @@ protected:
 
 	//genetic evolution related
 	TArray<Genome*> breedCouples;
-	Genome* bestGenome = nullptr;
-	Genome* bestGenome2 = nullptr;
+	TArray<Genome*> bestGenome;
 	TArray<Genome*> genomeList;
-
+	FVector spawnPos= FVector::ZeroVector;;
+	float spawnSize= 2000.f;
 	//used to generate a new creature
 	UPROPERTY(EditAnywhere, Category = "InitialGeneratingSettings")
 		Agenerator* generator;
@@ -71,13 +80,16 @@ public:
 genetic algo.
 	//breeding(make 1 seed to swap?)
 	//mutate(use 1 variations to alter)
-	//generate new 3 set of creatures based on the couples
+	//generate new creatures based on the genome list.
+	//regenerate genome based on the best genomes
 	//load and save genomes.
 */
 	void setGenomeCouple(ACreature* inCreature, float inTimeFitness, int inKillFitness);
 	void breed(int seedCount);
-	void mutate(int seedCount);
-	void generateByGenomes();
+	TArray<Genome*> cross(Genome* genome1, Genome* genome2, TArray<bool>&swapSeed);
+	void mutate();
+	void generateByGenomes(FVector inPos,float inSize,float inCheckRange);
+	void regenGenome();
 	void loadGenome();
 	void saveGenome();
 

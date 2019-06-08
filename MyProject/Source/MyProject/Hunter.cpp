@@ -318,6 +318,12 @@ void AHunter::State_Hit_OnTick(float f_DeltaTime)
 
 void AHunter::State_Hit_OnExit(void) { SetLastState(p_StateMachine->GetCurrentState());  cTimer = 0.f;}
 
+void AHunter::State_Die_OnTick(float f_DeltaTime)
+{
+	cGenerator->spawnedHunters.Remove(this);
+	Super::State_Die_OnTick(f_DeltaTime);
+}
+
 void AHunter::State_Chase_OnEnter(void)
 {
 	cTargetPosition = prayTarget->GetPos();

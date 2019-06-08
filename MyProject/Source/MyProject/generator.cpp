@@ -70,7 +70,7 @@ void Agenerator::Tick(float DeltaTime)
 		genTimer += DeltaTime;
 	}
 	//if out of hider/ gatherer, regenerate them
-	if (spawnedGatherers.Num() <= 0) {
+	if (spawnedGatherers.Num() <= 0) { 
 		for (int i = 0; i < GathererCount; i++) {
 			 generateGatherer(FVector::ZeroVector, 4000.f, 100.f);
 		}
