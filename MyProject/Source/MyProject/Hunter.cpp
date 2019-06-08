@@ -1,6 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Hunter.h"
+#include "EngineUtils.h"
+
 
 AHunter::AHunter() :ACreature()
 {
@@ -27,28 +29,86 @@ void AHunter::Tick(float DeltaTime)
 	cPosition = GetActorLocation();
 
 	//make some value input for neuron network decision making
-	//prepare decision parameters
-	TArray<FHitResult> hitResult = getSurroundings();
-	//find pray is existed or not
-	ACreature* tempPrayTarget = getPray(&hitResult);
-	//find mating target is existed or not
-	AHunter* tempMateTarget = getMate(&hitResult);
-	//find the timer is over or not when it's in chasing state
-	isOvertime();
-	//find if the creature is dead or not
-	bool isDead = (cHP <= 0);
-	bool isDamaged = (cHP <= previousHP);
-	//make decision
-	neuroDecide(tempPrayTarget,tempMateTarget,isDead,isDamaged,isOvertime());
-	//verify decision is viable
+	//and then change the state
+	//except if it's in the hit state and not overtimed(as it needs cooltime)
+	if (SetCurrentState() == STATE_HIT && !isOvertime()) {
+
+		//prepare decision parameters
+		TArray<FHitResult> hitResult = getSurroundings();
+		//find pray is existed or not
+		prayTarget = getPray(&hitResult);
+		//find mating target is existed or not
+		mateTarget = getMate(&hitResult);
+		//find if the creature is dead or not
+		bool isDead = (cHP <= 0);
+		bool isDamaged = (cHP <= previousHP);
+		//make decision
+		double decision = neuroDecide(prayTarget, mateTarget, isOvertime());
+		//verify decision is viable and realize it.
+		double realizedDecision = realizeDecision(decision, prayTarget, mateTarget, isOvertime());
+		//and adjust the neuro network after realise
+		DNAController->adjustDecision(realizedDecision);
+
+		Creature_State previousState = SetCurrentState();
+		Creature_State currentState = toState(realizedDecision);
+
+
+		//but if it's dead, force it to dead state machine
+		//or if it's damaged and not over the time, force it to hit state machine
+		if (isDamaged) {
+			currentState = STATE_HIT;
+		}
+		if (isDead) {
+			currentState = STATE_DIE;
+		}
+
+		//change the final state to the state machine if the state is different from previous one.
+		if (previousState != currentState) {
+			p_StateMachine->ChangeState(currentState);
+		}
+	}
+
+	//update the previous HP as current HP after making decision
+	previousHP = cHP;
+	//if the adjusted decision is wandering, keep reset the timer, otherwise rise the timer
+	if (SetCurrentState() == STATE_WANDER) {
+		cTimer = 0.f;
+	}
+	else {
+		cTimer += DeltaTime;
+	}
+	globalTimer += DeltaTime;
 
 	//do the state machine tick operations
 	p_StateMachine->Tick(DeltaTime);
-	
 
-	//update the previous HP as current HP after making decision
 
 }
+
+//void AHunter::initialize(float inSpeed, float inSize, int inPower, int inDef, int inHP, float inSight)
+//{
+//	//random generate the parameters
+//	cSpeed = inSpeed;
+//	cSize = inSize;
+//	cPower = inPower;
+//	cDef = inDef;
+//	cHP = inHP;
+//	cSight = inSight;
+//
+//	//set its scaling
+//	float scaleMulti = (cSize / inSize);
+//	Mesh->SetRelativeScale3D(FVector(scaleMulti, scaleMulti, scaleMulti));
+//
+//	cPosition = GetActorLocation();
+//	//set position (last position should be same in this moment)
+//	cLastPosition = cPosition;
+//
+//	//StateMachine setup and register
+//	//do it in new function as it'll be inherited by others
+//	stateRegister();
+//
+//
+//}
 
 void AHunter::TakeDmg(int inAtk, FVector inPosition)
 {
@@ -62,14 +122,21 @@ void AHunter::TakeDmg(int inAtk, FVector inPosition)
 	cHP -= finalDmg;
 	//and then create a impulse based on the input position
 	Mesh->AddRadialImpulse(inPosition, 100.f, cPower * 100.f, ERadialImpulseFalloff::RIF_Linear, true);
-	//if HP is less than 0, change state to die.
-	if (cHP <= 0) {
-		p_StateMachine->ChangeState(STATE_DIE);//<--problem
-	}
-	else {
-		p_StateMachine->ChangeState(STATE_HIT);//<--problem
-	}
 
+}
+
+void AHunter::overridePara(float inSpeed, float inSize, int inPower, int inDef, int inHP, float inSight)
+{
+	//reset the parameters into the desired value
+	cSpeed = inSpeed;
+	cSize = inSize;
+	cPower = inPower;
+	cDef = inDef;
+	cHP = inHP;
+	cSight = inSight;
+
+	//set its scaling
+	float scaleMulti = (cSize / inSize);
 }
 
 void AHunter::construction()
@@ -103,15 +170,17 @@ void AHunter::BeginPlay()
 
 	setPathfinder();
 	setGenerator();
+	//getting the neuron network 
+	setController("Hunter");
 	//initialize the parameeter
 	initialize(15, 100.f, 25, 10, 15, 300.f);
 	//initialize();
 	cType = HUNTER;
 
 	//set target chasing time and the kill count
-	chaseTime = 30.f;
+	chaseTime = 10.f;
 	killCount = 0;
-	cSpawnCount = FMath::RandRange(2,5);
+	cSpawnCount = 2;
 	//set default state
 	p_StateMachine->ChangeState(STATE_WANDER);
 }
@@ -133,12 +202,29 @@ ACreature * AHunter::getPray(TArray<FHitResult>* inHits)
 
 AHunter * AHunter::getMate(TArray<FHitResult>* inHits)
 {
+	//if the hit result array has mating hunter, output it immediatly
+	for (auto& Hit : *inHits) {
+		AHunter* mate = Cast<AHunter>((Hit.GetActor()));
+		if (mate) {
+			if (mate->isMating) {
+				return mate;
+			}
+		}
+	}
+	//otherwise just return a null pointer, other function will recognize.
 	return nullptr;
 }
 
 bool AHunter::isOvertime()
 {
-	return false;
+	//do it based on the state
+	if (cTimer >= cTime) {
+		return true;
+	}
+	else {
+		return false;
+	}
+	return true;
 }
 
 void AHunter::stateRegister()
@@ -156,6 +242,9 @@ void AHunter::stateRegister()
 	p_StateMachine->RegisterState(STATE_HIT, &AHunter::State_Hit_OnEnter, &AHunter::State_Hit_OnTick, &AHunter::State_Hit_OnExit);
 	//STATE_HUNTER_CHASE
 	p_StateMachine->RegisterState(STATE_HUNTER_CHASE, &AHunter::State_Chase_OnEnter, &AHunter::State_Chase_OnTick, &AHunter::State_Chase_OnExit);
+	//STATE_HUNTER_TOMATE
+	p_StateMachine->RegisterState(STATE_HUNTER_CHASE, &AHunter::State_Chase_OnEnter, &AHunter::State_Chase_OnTick, &AHunter::State_Chase_OnExit);
+
 
 }
 
@@ -227,63 +316,143 @@ void AHunter::State_Hit_OnExit(void) { SetLastState(p_StateMachine->GetCurrentSt
 
 void AHunter::State_Chase_OnEnter(void)
 {
-	cTargetPosition = cTargetCreature->GetPos();
+	cTargetPosition = prayTarget->GetPos();
+	//set the chasing time be 3s
+	cTime = 3.f;
+	//reset the timer
 	cTimer = 0.f;
 }
 
 void AHunter::State_Chase_OnTick(float f_DeltaTime)
 {
-	//if the timer is over, or the target is gone, hunter lose the interest and find another target.
-	if (cTimer >= chaseTime||cTargetCreature==nullptr) {
-		prayTarget = nullptr;
-		p_StateMachine->ChangeState(STATE_WANDER);
-	}
-	//otherwise move the target and beat it if touched
-	else {
-		cTimer += f_DeltaTime;
-		cTargetPosition = cTargetCreature->GetPos();
+	cTargetPosition = prayTarget->GetPos();
 		//and let the actor move
-		move(f_DeltaTime, true);
+	move(f_DeltaTime, true);
 
 		//when hunter really nearby the target, both of them get hit and both shall changed to hit state
-		if (FVector::Distance(cTargetPosition, cPosition) <= (cSize*1.5)&&cTargetCreature!=nullptr) {
-			//take some recovery before taking damage
-			int recover = cTargetCreature->GetHP()-cPower+cTargetCreature->GetDef();
-			//both take damage
-			cTargetCreature->TakeDmg(cPower, cPosition);
-			//before hunter take damage, recover HP based on the damage the target takes
-			//but 1/2 of it.<==tweak to just 1/1
-			//recover -= cTargetCreature->GetHP();
-			cHP += (recover);//2/
-			TakeDmg(cTargetCreature->GetPower(), cTargetCreature->GetPos());
-			//and make a force toward each other
-				//todo
-			//if it kills the creature, add a counter
-			//if the count is reached the spawn count, it'll spawn a new hunter
-			if (cTargetCreature->GetHP() <= 0) {
-				killCount += 1;
-				if (killCount >= cSpawnCount) {
-					p_StateMachine->ChangeState(STATE_SPAWN);
-					//then reset the count.
-					killCount = 0;
-				}
+	if (FVector::Distance(cTargetPosition, cPosition) <= (cSize*1.5) && prayTarget != nullptr) {
+		//take some recovery before taking damage
+		int recover = prayTarget->GetHP() - cPower + prayTarget->GetDef();
+		//both take damage
+		prayTarget->TakeDmg(cPower, cPosition);
+		//before hunter take damage, recover HP based on the damage the target takes
+		//but 1/2 of it.<==tweak to just 1/1
+		//recover -= cTargetCreature->GetHP();
+		cHP += (recover);//2/
+		TakeDmg(cTargetCreature->GetPower(), prayTarget->GetPos());
+		//and make a force toward each other
+			//todo
+		//if it kills the creature, add a counter
+		//if the count is reached the spawn count, it'll spawn a new hunter
+		if (prayTarget->GetHP() <= 0) {
+			killCount += 1;
+			totalKillCount += 1;
+			if (killCount >= cSpawnCount) {
+				isMating = true;
 			}
-			
 		}
-		//when the pray is over its sight, change it back to wander and clear the target
-		else if (FVector::Distance(cTargetPosition, cPosition) >= (cSight*2) || cTargetCreature == nullptr) {
-			p_StateMachine->ChangeState(STATE_WANDER);
-			prayTarget = nullptr;
-		}
-
-
 
 	}
 }
 
 void AHunter::State_Chase_OnExit(void){	SetLastState(p_StateMachine->GetCurrentState());}
 
-float AHunter::neuroDecide(ACreature * inPray, AHunter * inMate, bool isDead, bool isDamaged, bool isOvertime)
+void AHunter::State_ToMate_OnEnter(void)
 {
-	return 0.0f;
+	cTargetPosition = mateTarget->GetPos();
+	//set the chasing time be 3s
+	cTime = 3.f;
+	//reset the timer
+	cTimer = 0.f;
+
+}
+
+void AHunter::State_ToMate_OnTick(float f_DeltaTime)
+{
+	cTargetPosition = mateTarget->GetPos();
+	//and let the actor move
+	move(f_DeltaTime, true);
+
+	//when hunter really nearby the target, both of them will send the pointer itself to the controler and make a  series of genome breeding and spawn various of new hunters
+	if (FVector::Distance(cTargetPosition, cPosition) <= (cSize) && mateTarget != nullptr) {
+		//mate operation, the process automatacally operated by the controler.
+		DNAController->setGenomeCouple(this, globalTimer, totalKillCount);
+		//finish mating, turn it back to false.
+		isMating = false;
+
+	}
+}
+
+void AHunter::setController(FString inAttr)
+{
+	//get the controler actor with the correcct attribute string.
+	for (TActorIterator<AEvolutionControler> ActorItr(GetWorld()); ActorItr; ++ActorItr)
+	{
+		AEvolutionControler* tempController = *ActorItr;
+		// Same as with the Object Iterator, access the subclass instance with the * or -> operators.
+		if (tempController->ServingType == inAttr) {
+			DNAController = *ActorItr;
+		}
+	}
+
+}
+
+float AHunter::neuroDecide(ACreature * inPray, AHunter * inMate, bool isOvertime)
+{
+	TArray<double> inputDecide;
+
+	//prayValue: is pray existed or not
+	int prayValue = 0;
+	//if inPray is not null(aka. found pray), change it to 1.
+	if (inPray != nullptr) {
+		prayValue++;
+	}
+	inputDecide.Push(prayValue);
+
+	//mateValue: is mateExisted or not
+		//if inMate is not null(aka. found Mate), change it to 1.
+	int mateValue = 0;
+	if (inMate != nullptr) {
+		mateValue++;
+	}
+	inputDecide.Push(mateValue);
+
+	//isOvertimeValue: is chasing/mating action overtimed?
+			//if it's overtimed is not null(aka. giving up), change it to 1.
+	int isOvertimeValue = 0;
+	if (isOvertime) {
+		isOvertimeValue++;
+	}
+	inputDecide.Push(isOvertimeValue);
+	return DNAController->NeuronDecision(inputDecide);
+}
+
+
+
+double AHunter::realizeDecision(double inDecision, ACreature * inPray, AHunter * inMate, bool isOvertime)
+{
+	int adjustDecision = 0;
+	//state id: 0:wander, 1:chase, 2:toMate
+	int decision = round(inDecision);
+	//if decision is more than 5 or less than 0, it means it's an invalid decision and turn it to wander
+	//otherwise look its value is correct or not
+	
+
+	//if there's no mate or got mate but overtime, keep it to wander as it's unable to mate 
+	if (decision == 2) {
+		if (inMate != nullptr) {
+			if (!isOvertime) {
+				adjustDecision = 2;
+			}
+		}
+	}
+	//if there's no pray in the sight,
+	else if (decision == 1) {
+		if (inPray != nullptr) {
+			if (!isOvertime) {
+				adjustDecision = 1;
+			}
+		}
+	}
+	return adjustDecision;
 }

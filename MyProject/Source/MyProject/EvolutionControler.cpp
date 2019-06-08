@@ -42,7 +42,19 @@ void AEvolutionControler::Tick(float DeltaTime)
 
 }
 
-double AEvolutionControler::NeuronDecision(TArray<double> inputValue)
+void AEvolutionControler::setGenomeCouple(ACreature * inCreature, float inTimeFitness, int inKillFitness)
+{
+	//	Genome(float inSpeed, float inSize, float inSight, int inPower, int inDef, int inHP, FVector inPos, float inTimeFitness, int inKillFitness) {
+	breedCouples.Add(new Genome(inCreature->GetSpeed(), 
+		inCreature->GetSize(), 
+		inCreature->GetSight(),
+		inCreature->GetPower(),
+		inCreature->GetDef(),
+		inCreature->GetHP(),
+		inCreature->GetPos(),inTimeFitness,inKillFitness));
+}
+
+double AEvolutionControler::NeuronDecision(TArray<double>& inputValue)
 {
 	//inputValue: a array of input value with the following format:
 		//0:prayNum, 1:hunterNum, 2:killCount, 3:spawnCount

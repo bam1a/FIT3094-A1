@@ -50,12 +50,13 @@ public:
 	TArray<AActor*> SpawnedArray;
 	//containers for each generated creatures
 	TArray<AActor*> spawnedCreature;
-
+	//containers for each generated Hunters
+	TArray<AActor*> spawnedHunters;
 
 	//T- the actor class which requested for spawn
 	//function to generate an object based on the position or generate itself by default
 	template<class T>
-	void spawnActortoWorld(FVector inPosition);
+	T* spawnActortoWorld(FVector inPosition);
 
 	FVector genRandomLocation(FVector initPos, float inRange, bool isNeedValidCheck = false, float inCheckRange = 1.f);
 	bool checkPosValid(FVector checkPos, float sweepArea);
@@ -66,10 +67,11 @@ public:
 
 
 template<class T>
-inline void Agenerator::spawnActortoWorld(FVector inPosition) {
+inline T* Agenerator::spawnActortoWorld(FVector inPosition) {
 	//using this spawnInfo force spawn the actor than spawning null actor.
 	FActorSpawnParameters SpawnInfo;
 	SpawnInfo.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 	T* newActor = GetWorld()->SpawnActor<T>(T::StaticClass(), inPosition, FRotator::ZeroRotator,SpawnInfo);
 	SpawnedArray.Add(Cast<AActor>(newActor));
+	return newActor;
 }

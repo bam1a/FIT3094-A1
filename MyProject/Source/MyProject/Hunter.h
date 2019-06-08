@@ -19,13 +19,16 @@ public:
 	AHunter(FVector inPos);
 	virtual void Tick(float DeltaTime) override;
 
+	//initialize with parameters and the neuron controler
+	//virtual void initialize(float inSpeed, float inSize, int inPower, int inDef, int inHP, float inSight) override;
+
 	//externally do when creature intetionally hit other
 	//when no more damage, will be kill itself from the screen.
 	virtual void TakeDmg(int inAtk, FVector inPosition) override;
 	//get the hunter is looking for mate
 	bool getIsMating() { return isMating; };
 	void setIsMating(bool inBool) { isMating = inBool; };
-
+	void overridePara(float inSpeed, float inSize, int inPower, int inDef, int inHP, float inSight);
 
 
 private:
@@ -71,7 +74,7 @@ private:
 	void State_Chase_OnTick(float f_DeltaTime);
 	void State_Chase_OnExit(void);
 
-	//STATE_MATING: keep wander until finding the another mating partner and mate it in a random node
+	//STATE_HUNTER_TOMATE: chase to the another mating partner and mate it
 	void State_ToMate_OnEnter(void);
 	void State_ToMate_OnTick(float f_DeltaTime);
 	void State_ToMate_OnExit(void);
@@ -83,17 +86,28 @@ private:
 	//centralized neuron network, evolve the decision engine (which will be implemented as a controller actor class:P)
 	//find how many specific stuff in its surroundings.
 	//make decision by using neuron network
-	//state id: 0:wander, 2:hit, 3:chase, 4:toMate, 5:die
+	//state id: 0:wander, 1:chase, 2:toMate
 	this will use an array of 1/0 integer to decide
 	*/
 	AEvolutionControler* DNAController;
+	void setController(FString inAttr);
 	float currentStateID;
-	float neuroDecide(ACreature* inPray, AHunter* inMate, bool isDead, bool isDamaged, bool  isOvertime);
-	Creature_State toState(float);
+	float neuroDecide(ACreature* inPray, AHunter* inMate, bool  isOvertime);
+	Creature_State toState(double inStateID) {
+		if (inStateID == 0.f) {
+			return STATE_WANDER;
+		}
+		else if (inStateID == 1.f) {
+			return STATE_HUNTER_CHASE;
+		}
+		else if (inStateID == 2.f) {
+			return STATE_HUNTER_TOMATE;
+		}
+		return STATE_WANDER;
+	}
 
 	//check correctness of the current decision and the realized decision
-	double verifyDecision(double inDecision, ACreature* inPray, AHunter* inMate, bool isDead, bool isDamaged, bool  isOvertime);
-	void realizeDecision(double inExpectedResult);
+	double realizeDecision(double inDecision, ACreature* inPray, AHunter* inMate, bool  isOvertime);
 	//a timer to calculate its fitness
 	double globalTimer = 0.f;
 	//a value of total killing count to determine its fitness

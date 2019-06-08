@@ -41,6 +41,7 @@ public:
 	~AEvolutionControler();
 	Network* NNetwork;
 
+	FString ServingType = "Hunter";
 
 protected:
 	// Called when the game starts or when spawned
@@ -58,7 +59,8 @@ protected:
 
 	//used to generate some default hunters when startup?
 	UPROPERTY(EditAnywhere, Category = "InitialGeneratingSettings")
-		int HunterCount;
+		int SpawnCount;
+
 
 
 public:	
@@ -78,7 +80,7 @@ genetic algo.
 	void loadGenome();
 	void saveGenome();
 
-	double NeuronDecision(TArray<double>inputValue);
+	double NeuronDecision(TArray<double>&inputValue);
 	void adjustDecision(double actualOutput);
 
 	void saveNetwork();

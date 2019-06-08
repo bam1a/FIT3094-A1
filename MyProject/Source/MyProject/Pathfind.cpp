@@ -71,7 +71,7 @@ TArray<FVector> APathfind::GeneratePath(FVector inStartPt, FVector inEndPt)
 	outVectors.Add(endPt);
 	//add the remainings to the array
 	//there's no need to back trace if only start node is the end node.
-	GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString::FromInt(closeNode.Num()));
+	//GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString::FromInt(closeNode.Num()));
 	if (closeNode.Num() > 1) {
 		NodeCost* tempNodeCost = closeNode[closeNode.Num()-1];
 		//loop the tempNode if there's stuff inside and until reached the start node.
@@ -88,7 +88,7 @@ TArray<FVector> APathfind::GeneratePath(FVector inStartPt, FVector inEndPt)
 			}
 		}
 	}
-	GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Green, FString::FromInt(outVectors.Num()));
+	//GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Green, FString::FromInt(outVectors.Num()));
 
 	//and then output it.
 	return outVectors;
@@ -143,7 +143,7 @@ void APathfind::search()
 	processedNode.Push(startingNodeCost);
 	//main loop
 	//keep looping unless there's no more frontier queue or already found the end node.
-	GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Orange, FString::FromInt(frontier.size()));
+	//GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Orange, FString::FromInt(frontier.size()));
 	while (frontier.size() > 0 && !isFound) {
 		//set the current node cost combination as the top frontier node.
 		NodeCost* current = frontier.top();
@@ -161,10 +161,10 @@ void APathfind::search()
 			//if it's not 
 			else {
 				//if the current node has no neighbour, break it.
-				GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Blue, FString::FromInt(current->node->GetNeighbourNode()->Num()));
+				//GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Blue, FString::FromInt(current->node->GetNeighbourNode()->Num()));
 				if (current->node->GetNeighbourNode()->Num() > 0 && (current->node->GetNeighbourNode() != nullptr)) {
 					//loop all the neighbours from the current node
-					GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Purple, FString::FromInt(getNeighbours(current->node).Num()));
+					//GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Purple, FString::FromInt(getNeighbours(current->node).Num()));
 					for (APathNode* next : getNeighbours(current->node)) {
 						//find that node is closed or not
 						//if that nodeCost it's not closed

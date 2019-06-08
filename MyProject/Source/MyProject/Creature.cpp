@@ -388,7 +388,7 @@ void ACreature::State_Die_OnTick(float f_DeltaTime) {
 void ACreature::State_Die_OnExit(void) { }
 
 void ACreature::State_Hit_OnEnter(void) {
-	//set the lag time be 3s
+	//set the lag time be 1s
 	cTime = 1.f;
 	//reset the timer
 	cTimer = 0.f;
@@ -405,6 +405,7 @@ void ACreature::State_Hit_OnTick(float f_DeltaTime) {
 	}
 	else {
 		cTimer += f_DeltaTime;
+		move(f_DeltaTime, true);
 	}
 }
 void ACreature::State_Hit_OnExit(void) { SetLastState(m_StateMachine->GetCurrentState()); }

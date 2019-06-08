@@ -33,7 +33,8 @@ public:
 		STATE_COLLECTOR_TOEAT,
 		STATE_COLLECTOR_EATING,
 		STATE_HIDER_TOSHELTER,
-		STATE_HUNTER_CHASE
+		STATE_HUNTER_CHASE,
+		STATE_HUNTER_TOMATE
 	};
 
 	static enum Creature_Type {
@@ -50,7 +51,7 @@ public:
 	//initialize without parameters?
 	void initialize();
 	//initialize with parameters
-	void initialize(float inSpeed, float inSize, int inPower, int inDef, int inHP, float inSight);
+	virtual void initialize(float inSpeed, float inSize, int inPower, int inDef, int inHP, float inSight);
 
 protected:
 	// Called when the game starts or when spawned
