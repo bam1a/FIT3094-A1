@@ -42,6 +42,8 @@ private:
 	ACreature* prayTarget;
 	AHunter* mateTarget;
 	bool isMating = false;
+	double decision;
+	Creature_State currentState;
 	float chaseTime;
 	int previousHP;
 
@@ -110,7 +112,9 @@ private:
 	}
 
 	//check correctness of the current decision and the realized decision
-	double realizeDecision(double inDecision, ACreature* inPray, AHunter* inMate, bool isMating, bool  isOvertime);
+	double actualDecision(double inDecision, ACreature* inPray, AHunter* inMate, bool isMating, bool  isOvertime);
+	//adjust the decision when technically unable to do so.
+	double adjustDecision(double inDecision, ACreature* inPray, AHunter* inMate, bool isMating, bool  isOvertime);
 	//a timer to calculate its fitness
 	double globalTimer = 0.f;
 	//a value of total killing count to determine its fitness

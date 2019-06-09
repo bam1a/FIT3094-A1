@@ -59,6 +59,7 @@ void AEvolutionControler::Tick(float DeltaTime)
 	}
 	if (time >= 1.f) {
 		saveSettings();
+		time = 0.f;
 	}
 	time += DeltaTime;
 }
@@ -233,20 +234,22 @@ void AEvolutionControler::loadGenome()
 	//from line 1 to line 2, those are the best 2 genomes.
 	bestGenome.Empty();
 	for (int i = 1; i < fileStringArr.Num(); i++) {
-		TArray<FString> tempStringArr;
-		//get the parameters based on the tabs
-		fileStringArr[i].ParseIntoArray(tempStringArr, TEXT("	"));
-		//make it into float/int
-		//	Genome(float inSpeed, float inSize, float inSight, int inPower, int inDef, int inHP, float inFitness) {
-		float inSpeed = FCString::Atof(*tempStringArr[0]);
-		float inSize = FCString::Atof(*tempStringArr[1]);
-		float inSight = FCString::Atof(*tempStringArr[2]);
-		int inPower = FCString::Atoi(*tempStringArr[3]);
-		int inDef = FCString::Atoi(*tempStringArr[4]);
-		int inHP = FCString::Atoi(*tempStringArr[5]);
-		float inFitness = FCString::Atof(*tempStringArr[6]);
-		Genome* newGenome = new Genome(inSpeed, inSize, inSight, inPower, inDef, inHP, inFitness);
-		bestGenome.Push(newGenome);
+		if (fileStringArr[i] != "") {
+			TArray<FString> tempStringArr;
+			//get the parameters based on the tabs
+			fileStringArr[i].ParseIntoArray(tempStringArr, TEXT("	"));
+			//make it into float/int
+			//	Genome(float inSpeed, float inSize, float inSight, int inPower, int inDef, int inHP, float inFitness) {
+			float inSpeed = FCString::Atof(*tempStringArr[0]);
+			float inSize = FCString::Atof(*tempStringArr[1]);
+			float inSight = FCString::Atof(*tempStringArr[2]);
+			int inPower = FCString::Atoi(*tempStringArr[3]);
+			int inDef = FCString::Atoi(*tempStringArr[4]);
+			int inHP = FCString::Atoi(*tempStringArr[5]);
+			float inFitness = FCString::Atof(*tempStringArr[6]);
+			Genome* newGenome = new Genome(inSpeed, inSize, inSight, inPower, inDef, inHP, inFitness);
+			bestGenome.Push(newGenome);
+		}
 	}
 
 }

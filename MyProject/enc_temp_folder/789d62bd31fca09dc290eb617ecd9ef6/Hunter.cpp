@@ -28,9 +28,6 @@ void AHunter::Tick(float DeltaTime)
 	cLastPosition = cPosition;
 	cPosition = GetActorLocation();
 
-	Creature_State previousState = p_StateMachine->GetCurrentState();
-
-
 	//find if the creature is dead or is being hitting or not(if not, do the neuron decision and develop the neuros
 	bool isDead = (cHP <= 0);
 	bool isDamaged = (cHP <= previousHP);
@@ -60,11 +57,14 @@ void AHunter::Tick(float DeltaTime)
 		//and also alter it if the decision is technically unable to do so
 		double realisedDecision = adjustDecision(decision, prayTarget, mateTarget, isMating, isOvertime());
 		//make a report
-		DNAController->NNetwork->displayReport({}, {ActualDecision}, { decision });
+		DNAController->NNetwork->displayReport({}, {decision}, { ActualDecision });
 
 		currentState = toState(round(realisedDecision));
 
 	}
+	
+	Creature_State previousState = p_StateMachine->GetCurrentState();
+
 
 	//change the final state to the state machine if the state is different from previous one.
 	if (previousState != currentState) {
@@ -455,7 +455,7 @@ double AHunter::actualDecision(double inDecision, ACreature * inPray, AHunter * 
 {
 	int adjustDecision = 0;
 	//state id: 0:wander, 1:chase, 2:toMate
-	//int decision = round(inDecision);
+	int decision = round(inDecision);
 	//this is the situation I expected
 	//situation 1: when there's mate and hunter want to mate but not overtimed
 	if (inMate!=nullptr && isMating && !isOvertime) {

@@ -9,7 +9,7 @@ Neuron::~Neuron()
 Neuron::Neuron(unsigned numOutouts, unsigned myindex)
 {
 	//To tweak our learning rate
-	learningRate = 0.5;
+	learningRate = 0.1;
 	alpha = 0.25;
 
 	for (unsigned c = 0; c < numOutouts; c++) {
